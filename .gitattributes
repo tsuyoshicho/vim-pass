@@ -12,5 +12,6 @@
 .gitignore     binary
 
 *.vim          text eol=lf
+*.vital        text eol=lf
 
 # EOF
