@@ -6,15 +6,19 @@
 
 scriptencoding utf-8
 
-if !exists('g:loaded_vim-pass')
+if exists('g:loaded_pass')
     finish
 endif
-let g:loaded_vim-pass = 1
+let g:loaded_pass = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
 
+" global variable option
+let g:pass_store_path = get(g:, 'pass_store_path', '~/.password-store')
+let g:pass_gpg_path   = get(g:, 'pass_gpg_path', 'gpg')
 
+command! -nargs=+ PassGet :echo pass#get(<f-args>)
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
