@@ -2,7 +2,7 @@
 <!-- [![Powered by vital-Whisky](https://img.shields.io/badge/powered%20by-vital--Whisky-80273f.svg)](https://github.com/lambdalisue/vital-Whisky) -->
 
 # vim-pass
-Vim password-store API
+Vim password-store API.
 see [Pass: The Standard Unix Password Manager](https://www.passwordstore.org/)
 
 Currenlty *get* support. usable like `auth-source` at emacs.

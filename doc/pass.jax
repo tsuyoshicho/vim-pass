@@ -38,7 +38,7 @@ TODO				|pass-todo|
 ==============================================================================
 概要						*pass-introduction*
 
-*pass* は Vim password-store APIを目標としてたプラグインです。
+*pass* は Vim password-store APIを目標としたプラグインです。
 Pass: The Standard Unix Password Manager - https://www.passwordstore.org/
 を参照してください。
 
