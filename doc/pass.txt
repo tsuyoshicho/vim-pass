@@ -1,0 +1,110 @@
+*pass.txt*	a summary
+
+Version :
+Author  : Tsuyoshi CHO <Tsuyoshi.CHO+develop@Gmail.com>
+License : MIT license  {{{
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+    The above copyright notice and this permission notice shall be included
+    in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+}}}
+
+==============================================================================
+CONTENTS					*pass-contents*
+
+INTRODUCTION			|pass-introduction|
+USAGE				|pass-usage|
+INTERFACE			|pass-interface|
+  VARIABLES			  |pass-variables|
+  COMMANDS			  |pass-commands|
+  FUNCTIONS			  |pass-functions|
+TODO				|pass-todo|
+CHANGELOG			|pass-changelog|
+
+
+==============================================================================
+INTRODUCTION					*pass-introduction*
+
+*pass* is a Vim plugin
+
+Latest version:
+https://github.com/tsuyoshicho/pass.vim
+
+
+==============================================================================
+USAGE						*pass-usage*
+
+
+
+==============================================================================
+INTERFACE					*pass-interface*
+
+------------------------------------------------------------------------------
+VARIABLES					*pass-variables*
+
+g:pass_store_path				*g:pass_store_path*
+	default value: "~/.password-store"
+
+
+g:autoloaded_pass				*g:autoloaded_pass*
+	default value: = 1
+
+
+g:pass_gpg_path					*g:pass_gpg_path*
+	default value: "gpg"
+
+
+g:pass_use_agent				*g:pass_use_agent*
+	default value: = 0 " remote force set : input only
+	default value: s:local
+
+
+------------------------------------------------------------------------------
+COMMANDS					*pass-commands*
+
+:PassGet {} ...					*:PassGet*
+
+
+:PassGetRegister {} ...				*:PassGetRegister*
+
+
+------------------------------------------------------------------------------
+FUNCTIONS					*pass-functions*
+
+pass#get({entry}, {...})			*pass#get()*
+
+
+pass#get_register({entry}, {...})		*pass#get_register()*
+
+
+						*pass#get_startup()*
+pass#get_startup({set-variable},{entry}, {...})
+
+
+pass#resolve_startup()				*pass#resolve_startup()*
+
+
+==============================================================================
+TODO						*pass-todo*
+
+
+
+==============================================================================
+CHANGELOG					*pass-changelog*
+
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:
