@@ -16,17 +16,19 @@ set cpo&vim
 
 " Vital
 let s:Process = vital#vimpass#import('System.Process')
-let s:Path = vital#vimpass#import('System.Filepath')
-let s:List = vital#vimpass#import('Data.List')
-let s:String = vital#vimpass#import('Data.String')
+let s:Path    = vital#vimpass#import('System.Filepath')
+let s:List    = vital#vimpass#import('Data.List')
+let s:String  = vital#vimpass#import('Data.String')
+
+" variable
+let s:pass_startup_request = []
+" alive only during at end of startup
+" let s:__passphrase
 
 " API get
 " return value
 function! pass#get(entry, ...) abort
-  let passphrase  = v:null
-  if g:pass_use_agent == 0
-    let passphrase = inputsecret('passphrase: ')
-  endif
+  let passphrase  = s:_get_passphrase()
   return s:_get(a:entry, passphrase, a:000)
 endfunction
 
@@ -34,11 +36,7 @@ endfunction
 " copy to register (timered clear)
 " If remote : request passphrase
 function! pass#get_register(entry, ...) abort
-  " If remote : request passphrase
-  let passphrase  = v:null
-  if g:pass_use_agent == 0
-    let passphrase = inputsecret('passphrase')
-  endif
+  let passphrase  = s:_get_passphrase()
   let value = s:_get(a:entry, passphrase, a:000)
   " set to register
   " register clear timer(at expire timer.if register remain value,then clear)
@@ -49,18 +47,31 @@ endfunction
 " all waited process execute
 function! pass#get_startup(set_variable,entry, ...) abort
   if v:vim_did_enter == 0
-    " Promise set
-    " Promise keep reslove_target_list
-    " first item, create autocmd(invoke VimEnter request passphrase and
-    " Promise.all resolve)
-    " If local : request gpg-agent resolve process(dry-run?)
-    " If remote : request passphrase
+    let Fn = function('s:_resolve_startup',[a:set_variable,a:entry,a:000])
+    call s:List.push(s:pass_startup_request, Fn)
   else
-    " startup end,not work
-    " throw error
+    throw 'Already startup done.'
   endif
 endfunction
 
+" API resolve_startup(autocmd use)
+function! pass#resolve_startup()
+  if len(s:pass_startup_request) == 0
+    return
+  endif
+
+  " resolved all promises
+  " agent process success support 1st done -> all done -> unlet passphrase
+  let s:__passphrase = s:_get_passphrase()
+  for Fn in s:pass_startup_request
+    call Fn()
+  endfor
+  unlet s:__passphrase
+
+  let s:pass_startup_request = []
+endfunction
+
+" inner get process
 function! s:_get(entry, passphrase,keywords) abort
   " get gpg-id
   let gpgid = s:_get_id()
@@ -75,8 +86,6 @@ function! s:_get(entry, passphrase,keywords) abort
 
   let entry_value = s:_execute_pass_decode(gpgid, entrypath, a:passphrase, a:keywords)
 
-
-  " set register and clear timer and echo
   return entry_value
 endfunction
 
@@ -140,6 +149,10 @@ function! s:_execute_pass_decode(gpgid, entrypath, passphrase, keywords) abort
   call s:List.push(cmd, '-')
   call s:List.push(cmd, a:entrypath)
 
+  " debug
+  " echomsg "pass cmd req " . ",id:" . a:gpgid . ",path:" . a:entrypath . ",pass:" . a:passphrase
+  " echomsg "pass cmd exec:" . join(cmd)
+
   let result = s:Process.execute(cmd)
   let entrylist = s:String.lines(result.output)
 
@@ -169,6 +182,25 @@ function! s:_execute_pass_decode(gpgid, entrypath, passphrase, keywords) abort
       return ''
     endif
   endif
+endfunction
+
+function! s:_resolve_startup(set_variable, entry, keywords) abort
+  let passphrase  = get(s:,'__passphrase',v:null)
+  let value = s:_get(a:entry, passphrase, a:keywords)
+
+  call execute('let ' . a:set_variable . '=' . "'" . value . "'")
+endfunction
+
+
+function! s:_get_passphrase() abort
+  let passphrase  = v:null
+  if g:pass_use_agent == 0
+    let passphrase = inputsecret('passphrase: ')
+    redraw
+    echo ''
+  endif
+
+  return passphrase
 endfunction
 
 let &cpo = s:save_cpo

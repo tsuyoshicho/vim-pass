@@ -25,9 +25,13 @@ if $SSH_CONNECTION != ''
 endif
 let g:pass_use_agent  = get(g:, 'pass_use_agent', s:local)
 
-
 command! -nargs=+ PassGet         :echo pass#get(<f-args>)
 command! -nargs=+ PassGetRegister :call pass#get_register(<f-args>)
+
+augroup passstartup
+  autocmd!
+  autocmd VimEnter * call pass#resolve_startup()
+augroup END
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
