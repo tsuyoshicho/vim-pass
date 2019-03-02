@@ -38,16 +38,50 @@ TODO				|pass-todo|
 ==============================================================================
 概要						*pass-introduction*
 
-*pass* は
+*pass* は Vim password-store APIを目標としてたプラグインです。
+Pass: The Standard Unix Password Manager - https://www.passwordstore.org/
+を参照してください。
+
+現在getが使えます。なので emacs の `auth-source` のように使えます。
 
 最新版:
 https://github.com/tsuyoshicho/pass.vim
 
-
 ==============================================================================
 使い方						*pass-usage*
 
+パスワード等の読み出しや設定時に利用
+>
+ " in vimrc
+ " configured at end of vim startup
+ call pass#get_startup('g:test_gh_token','Develop/Github')
+ call pass#get_startup('g:test_gh_username','Develop/Github','username')
 
+ function! test() abort
+   let password = pass#get('Service/foobar')
+   " ...
+ endfunction
+<
+
+プラグインのパスワード等の設定時に利用
+>
+ " in plugin setting(dein's toml)
+ [[plugins]]
+ repo = 'tsuyoshicho/vim-pass'
+
+ [[plugins]] # https://pixe.la/
+ repo = 'mattn/vim-pixela'
+ depends = ['open-browser.vim','vim-pass']
+ hook_add = '''
+   " let g:pixela_username = 'user'
+   " let g:pixela_token    = 'token'
+
+   call pass#get_startup('g:pixela_username','Develop/Pixela','username')
+   " VimPixela work OK
+   call pass#get_startup('g:pixela_token','Develop/Pixela')
+   " startup-time countup not work
+ '''
+<
 
 ==============================================================================
 インターフェイス				*pass-interface*
@@ -58,53 +92,74 @@ https://github.com/tsuyoshicho/pass.vim
 g:pass_store_path				*g:pass_store_path*
 	既定値: "~/.password-store"
 
-
-g:autoloaded_pass				*g:autoloaded_pass*
-	既定値: = 1
-
+password-store形式のデータの格納位置です。
 
 g:pass_gpg_path					*g:pass_gpg_path*
 	既定値: "gpg"
 
+gpg(gnupg)実行ファイルのパスです。
+単純にはコマンドだけ書けばよいです。
 
 g:pass_use_agent				*g:pass_use_agent*
-	既定値: = 0 " remote force set : input only
-	既定値: s:local
+	既定値: 1 (0 リモート接続の場合は強制設定されます)
 
+gpg-agentが利用できるか/利用するかの設定です。
+1でgpg-agentのpinentryでのパスフレーズ問い合せ、0でvim上での問い合せになります。
 
 ------------------------------------------------------------------------------
 コマンド					*pass-commands*
 
 :PassGet {} ...					*:PassGet*
 
+パスワード確認コマンドです、引数にpassword-storeのエントリを入力してください。
+2番目の引数に項目名を指定できます。
 
 :PassGetRegister {} ...				*:PassGetRegister*
 
+パスワードのレジスタ格納コマンドです、引数にpassword-storeのエントリを入力
+してください。
+まだ動作しません。
+2番目の引数に項目名を指定できます。
 
 ------------------------------------------------------------------------------
 関数						*pass-functions*
 
 pass#get({entry}, {...})			*pass#get()*
 
+パスワード取得API、戻り値に値を返します。
+entryはpassword-storeのエントリ形式。
+オプションでパスワード以外の項目を指定できます。
 
 pass#get_register({entry}, {...})		*pass#get_register()*
 
-
+パスワード取得API、レジスタに値を設定します。
+entryはpassword-storeのエントリ形式。
+オプションでパスワード以外の項目を指定できます。
+まだ動作しません。
+時間経過でレジスタから消える予定。
 						*pass#get_startup()*
 pass#get_startup({set-variable},{entry}, {...})
 
+パスワード取得API、起動時前専用で、set-variableに値を設定します。
+entryはpassword-storeのエントリ形式。
+オプションでパスワード以外の項目を指定できます。
 
 pass#resolve_startup()				*pass#resolve_startup()*
 
+autocmdで利用する専用関数。
+起動時のget_startupの解決を実施します。
 
 ==============================================================================
 TODO						*pass-todo*
 
-
+* PassGetRegisterの実装
+* set系の実装
+* エントリを補完リストにする
 
 ==============================================================================
 更新履歴					*pass-changelog*
 
+see gitlog
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:

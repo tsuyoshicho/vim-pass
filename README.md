@@ -5,6 +5,8 @@
 Vim password-store API
 see [Pass: The Standard Unix Password Manager](https://www.passwordstore.org/)
 
+Currenlty *get* support. usable like `auth-source` at emacs.
+
 ## Require
 - gpg
   - agent configuired as loopback enable
@@ -28,7 +30,7 @@ function! test() abort
 endfunction
 ```
 
-" in plugin setting
+" in plugin setting(dein's toml)
 ```toml
 [[plugins]]
 repo = 'tsuyoshicho/vim-pass'

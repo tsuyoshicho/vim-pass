@@ -38,14 +38,50 @@ CHANGELOG			|pass-changelog|
 ==============================================================================
 INTRODUCTION					*pass-introduction*
 
-*pass* is a Vim plugin
+*pass* is Vim plugin aimed at the Vim password-store API.
+see below
+Pass: The Standard Unix Password Manager - https://www.passwordstore.org/
+
+Currenlty get support. usable like `auth-source` at emacs.
 
 Latest version:
 https://github.com/tsuyoshicho/pass.vim
 
-
 ==============================================================================
 USAGE						*pass-usage*
+
+Password and other setup.
+>
+ " in vimrc
+ " configured at end of vim startup
+ call pass#get_startup('g:test_gh_token','Develop/Github')
+ call pass#get_startup('g:test_gh_username','Develop/Github','username')
+
+ function! test() abort
+   let password = pass#get('Service/foobar')
+   " ...
+ endfunction
+<
+
+Plugin password and other setup.
+>
+ " in plugin setting
+ [[plugins]]
+ repo = 'tsuyoshicho/vim-pass'
+
+ [[plugins]] # https://pixe.la/
+ repo = 'mattn/vim-pixela'
+ depends = ['open-browser.vim','vim-pass']
+ hook_add = '''
+   " let g:pixela_username = 'user'
+   " let g:pixela_token    = 'token'
+
+   call pass#get_startup('g:pixela_username','Develop/Pixela','username')
+   " VimPixela work OK
+   call pass#get_startup('g:pixela_token','Develop/Pixela')
+   " startup-time countup not work
+ '''
+<
 
 
 
@@ -58,53 +94,73 @@ VARIABLES					*pass-variables*
 g:pass_store_path				*g:pass_store_path*
 	default value: "~/.password-store"
 
-
-g:autoloaded_pass				*g:autoloaded_pass*
-	default value: = 1
-
+Store path as password-store like saved data.
 
 g:pass_gpg_path					*g:pass_gpg_path*
 	default value: "gpg"
 
+gpg(gnupg) execution path.
+Simply, command name write.
 
 g:pass_use_agent				*g:pass_use_agent*
-	default value: = 0 " remote force set : input only
-	default value: s:local
+	default value: 1 (0 remote connection foce set)
 
+Usable gpg-agent setting.
+1 as passphrase request use gpg-agent's pinentry;
+0 as passphrase request on Vim
 
 ------------------------------------------------------------------------------
 COMMANDS					*pass-commands*
 
 :PassGet {} ...					*:PassGet*
 
+Password check command, password-store entry name set to arg .
+You can specify the item name as the 2nd arg.
 
 :PassGetRegister {} ...				*:PassGetRegister*
 
+Password save ad register command, password-store entry name set to arg .
+Currently not work.
+You can specify the item name as the 2nd arg.
 
 ------------------------------------------------------------------------------
 FUNCTIONS					*pass-functions*
 
 pass#get({entry}, {...})			*pass#get()*
 
+Password get API, return value.
+entry is password-store style.
+Optionally item name.
 
 pass#get_register({entry}, {...})		*pass#get_register()*
 
+Password get API, value set to register.
+entry is password-store style.
+Optionally item name.
+Currently not work.
+It will disappear from the register as time passes.
 
 						*pass#get_startup()*
 pass#get_startup({set-variable},{entry}, {...})
 
+Password get API, startup specific; value set to set-variable
+entry is password-store style.
+Optionally item name.
 
 pass#resolve_startup()				*pass#resolve_startup()*
 
+Use at autocmd specific function.
+Resolve get_startup process at startup time.
 
 ==============================================================================
 TODO						*pass-todo*
 
-
+see Ja help.
 
 ==============================================================================
 CHANGELOG					*pass-changelog*
 
+see gitlog
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:
