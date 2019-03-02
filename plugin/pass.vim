@@ -18,7 +18,16 @@ set cpo&vim
 let g:pass_store_path = get(g:, 'pass_store_path', '~/.password-store')
 let g:pass_gpg_path   = get(g:, 'pass_gpg_path', 'gpg')
 
-command! -nargs=+ PassGet :echo pass#get(<f-args>)
+let s:local = 1
+if $SSH_CONNECTION != ''
+  let s:local = 0
+  let g:pass_use_agent = 0 " remote force set : input only
+endif
+let g:pass_use_agent  = get(g:, 'pass_use_agent', s:local)
+
+
+command! -nargs=+ PassGet         :echo pass#get(<f-args>)
+command! -nargs=+ PassGetRegister :call pass#get_register(<f-args>)
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
