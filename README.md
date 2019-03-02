@@ -5,21 +5,27 @@
 Vim password-store API
 see [Pass: The Standard Unix Password Manager](https://www.passwordstore.org/)
 
-## require
+## Require
 - gpg
   - agent configuired as loopback enable
 - password-store like saved data
 
-## installation
+## Installation
 ```vim
 dein#add('tsuyoshicho/vim-pass')
 ```
 
-## usage
+## Usage
 ```vim
 " in vimrc
+" configured at end of vim startup
 call pass#get_startup('g:test_gh_token','Develop/Github')
 call pass#get_startup('g:test_gh_username','Develop/Github','username')
+
+function! test() abort
+  let password = pass#get('Service/foobar')
+  " ...
+endfunction
 ```
 
 " in plugin setting
@@ -35,10 +41,13 @@ hook_add = '''
   " let g:pixela_token    = 'token'
 
   call pass#get_startup('g:pixela_username','Develop/Pixela','username')
+  " VimPixela work OK
   call pass#get_startup('g:pixela_token','Develop/Pixela')
+  " startup-time countup not work
 '''
 ```
 
 ## limitation
-- currently support only get(default password/entry select)
-- entry select require exact match
+- Currently support API:only get(default password/entry select)
+- Entry select require exact match
+- When plugin's variable configure at load/starup time,sometimes it works not correctly like above Pixela startup count
