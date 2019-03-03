@@ -54,7 +54,7 @@ repo = 'mizukmb/slackstatus.vim'
 depends = ['webapi-vim','vim-pass']
 hook_add = '''
   " let g:slackstatus_token = '<YOUR_SLACK_TOKEN>'
-  " team m-falcon
+  " my hoge
   call pass#get_startup('g:slackstatus_token','Message/Slack/myhoge.legacy')
   " vim-jp
   " call pass#get_startup('g:slackstatus_token','Message/Slack/vim-jp.legacy')
