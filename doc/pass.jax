@@ -65,7 +65,7 @@ https://github.com/tsuyoshicho/pass.vim
 
 プラグインのパスワード等の設定時に利用
 >
- " in plugin setting(dein's toml)
+ # in plugin setting(dein's toml)
  [[plugins]]
  repo = 'tsuyoshicho/vim-pass'
 
@@ -81,6 +81,30 @@ https://github.com/tsuyoshicho/pass.vim
    call pass#get_startup('g:pixela_token','Develop/Pixela')
    " startup-time countup not work
  '''
+
+ [[plugins]] # Slack
+ repo = 'mizukmb/slackstatus.vim'
+ depends = ['webapi-vim','vim-pass']
+ hook_add = '''
+   " let g:slackstatus_token = '<YOUR_SLACK_TOKEN>'
+   " team m-falcon
+   call pass#get_startup('g:slackstatus_token','Message/Slack/myhoge.legacy')
+   " vim-jp
+   " call pass#get_startup('g:slackstatus_token','Message/Slack/vim-jp.legacy')
+   "
+   function! s:slack_list(A,L,P) abort
+     let slacklist = ['myhoge','vim-jp']
+     return slacklist
+   endfunction
+
+   function s:slackstatus_change_token(team) abort
+     let path = 'Message/Slack/' . a:team . '.legacy'
+     let g:slackstatus_token = pass#get(path)
+   endfunction
+
+   command! -nargs=1 -complete=customlist,<SID>slack_list SlackStatusChange :call <SID>slackstatus_change_token(<f-args>)
+ '''
+
 <
 
 ==============================================================================

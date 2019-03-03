@@ -30,8 +30,8 @@ function! test() abort
 endfunction
 ```
 
-" in plugin setting(dein's toml)
 ```toml
+# in plugin setting(dein's toml)
 [[plugins]]
 repo = 'tsuyoshicho/vim-pass'
 
@@ -45,11 +45,37 @@ hook_add = '''
   call pass#get_startup('g:pixela_username','Develop/Pixela','username')
   " VimPixela work OK
   call pass#get_startup('g:pixela_token','Develop/Pixela')
-  " startup-time countup not work
+  " startup-time countup do not correct work.
+  " It work or does not work depending on the processing order of events
 '''
+
+[[plugins]] # Slack
+repo = 'mizukmb/slackstatus.vim'
+depends = ['webapi-vim','vim-pass']
+hook_add = '''
+  " let g:slackstatus_token = '<YOUR_SLACK_TOKEN>'
+  " team m-falcon
+  call pass#get_startup('g:slackstatus_token','Message/Slack/myhoge.legacy')
+  " vim-jp
+  " call pass#get_startup('g:slackstatus_token','Message/Slack/vim-jp.legacy')
+  "
+  function! s:slack_list(A,L,P) abort
+    let slacklist = ['myhoge','vim-jp']
+    return slacklist
+  endfunction
+
+  function s:slackstatus_change_token(team) abort
+    let path = 'Message/Slack/' . a:team . '.legacy'
+    let g:slackstatus_token = pass#get(path)
+  endfunction
+
+  command! -nargs=1 -complete=customlist,<SID>slack_list SlackStatusChange :call <SID>slackstatus_change_token(<f-args>)
+'''
+
 ```
 
 ## limitation
-- Currently support API:only get(default password/entry select)
+- Currently support API:get(default password/entry select) only
 - Entry select require exact match
-- When plugin's variable configure at load/starup time,sometimes it works not correctly like above Pixela startup count
+- When plugin's variable configure at load/starup time,sometimes it works not correctly like above Pixela startup-time countup
+- *nix non-GUI environment,need `g:pass_use_agent` set as 0 manually.
