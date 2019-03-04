@@ -167,6 +167,16 @@ pass#get_startup({set-variable},{entry}, {...})
 パスワード取得API、起動時前専用で、set-variableに値を設定します。
 entryはpassword-storeのエントリ形式。
 オプションでパスワード以外の項目を指定できます。
+set-variableはスコープ付きの変数を表す文字列です(ex. 'g:hoge_fuga')
+
+						*pass#get_startup_scope()*
+pass#get_startup_scope({scope},{set-variable},{entry}, {...})
+
+パスワード取得API、起動時前専用で、set-variableに値を設定します。
+entryはpassword-storeのエントリ形式。
+オプションでパスワード以外の項目を指定できます。
+scopeには |get()| と同じように、g:やw:などのスコープを設定します。
+set-variableはスコープなしの変数を表す文字列です(ex. 'hoge_fuga')
 
 pass#resolve_startup()				*pass#resolve_startup()*
 

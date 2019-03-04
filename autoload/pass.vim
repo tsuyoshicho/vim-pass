@@ -42,12 +42,24 @@ function! pass#get_register(entry, ...) abort
   " register clear timer(at expire timer.if register remain value,then clear)
 endfunction
 
+" API get_startup_scope
+" use only while startup.at end of start up,invoke passphrase input once.
+" all waited process execute
+function! pass#get_startup_scope(scope,set_variable,entry, ...) abort
+  if v:vim_did_enter == 0
+    let Fn = function('s:_resolve_startup',[a:scope,a:set_variable,a:entry,a:000])
+    call s:List.push(s:pass_startup_request, Fn)
+  else
+    throw 'Already startup done.'
+  endif
+endfunction
+
 " API get_startup
 " use only while startup.at end of start up,invoke passphrase input once.
 " all waited process execute
 function! pass#get_startup(set_variable,entry, ...) abort
   if v:vim_did_enter == 0
-    let Fn = function('s:_resolve_startup',[a:set_variable,a:entry,a:000])
+    let Fn = function('s:_resolve_startup',[v:null,a:set_variable,a:entry,a:000])
     call s:List.push(s:pass_startup_request, Fn)
   else
     throw 'Already startup done.'
@@ -184,11 +196,15 @@ function! s:_execute_pass_decode(gpgid, entrypath, passphrase, keywords) abort
   endif
 endfunction
 
-function! s:_resolve_startup(set_variable, entry, keywords) abort
+function! s:_resolve_startup(scope,set_variable, entry, keywords) abort
   let passphrase  = get(s:,'__passphrase',v:null)
   let value = s:_get(a:entry, passphrase, a:keywords)
 
-  call execute('let ' . a:set_variable . '=' . "'" . value . "'")
+  if v:null == a:scope
+    call execute('let ' . a:set_variable . '=' . "'" . value . "'")
+  else
+    let a:scope[a:set_variable] = value
+  endif
 endfunction
 
 
