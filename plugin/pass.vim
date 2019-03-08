@@ -18,12 +18,10 @@ set cpo&vim
 let g:pass_store_path = get(g:, 'pass_store_path', '~/.password-store')
 let g:pass_gpg_path   = get(g:, 'pass_gpg_path', 'gpg')
 
-let s:local = 1
-if $SSH_CONNECTION != ''
-  let s:local = 0
-  let g:pass_use_agent = 0 " remote force set : input only
+if $SSH_CONNECTION != '' || $DISPLAY == ''
+  let g:pass_use_agent = 0 " remote/non-gui force set : input only
 endif
-let g:pass_use_agent  = get(g:, 'pass_use_agent', s:local)
+let g:pass_use_agent  = get(g:, 'pass_use_agent', 1)
 
 command! -nargs=+ PassGet         :echo pass#get(<f-args>)
 command! -nargs=+ PassGetRegister :call pass#get_register(<f-args>)
