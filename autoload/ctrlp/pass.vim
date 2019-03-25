@@ -35,7 +35,14 @@ function! ctrlp#pass#id() abort
 endfunction
 
 function! ctrlp#pass#init() abort
-  return globpath(expand(g:pass_store_path, ':p'), '**/*.gpg', 1, 1)
+  let keylist = globpath(expand(g:pass_store_path, ':p'), '**/*.gpg', 1, 1)
+  " /dir/entry.gpg to dir/entry
+  call map(keylist, { idx, val -> substitute(val, expand(g:pass_store_path, ':p'), '',    "") })
+  call map(keylist, { idx, val -> substitute(val, '\',                             '/',   "") })
+  call map(keylist, { idx, val -> substitute(val, '^/',                            '',    "") })
+  call map(keylist, { idx, val -> substitute(val, '\c.gpg$',                         '',    "") })
+
+  return keylist
 endfunction
 
 function! ctrlp#pass#accept(mode, str) abort
