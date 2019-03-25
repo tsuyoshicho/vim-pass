@@ -47,8 +47,18 @@ endfunction
 
 function! ctrlp#pass#accept(mode, str) abort
   call ctrlp#exit()
-  echo "pass accept:".a:str
   " insert secret to current pos
+  let secret = pass#get(a:str)
+
+  let @* = secret
+  " currently not work direct paste : alt force copy to clipbord
+  " if g:pass_ctrlp_to_clipbord
+  "   let @* = secret
+  " else
+  "   let @" = secret
+  "   call execute('p' , "silent")
+  "   let @" = ''
+  " endif
 endfunction
 
 let &cpo = s:save_cpo
