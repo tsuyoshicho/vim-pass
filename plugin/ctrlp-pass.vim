@@ -1,7 +1,3 @@
-if !exists('g:loaded_ctrlp') || g:loaded_ctrlp == 0
-  finish
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
