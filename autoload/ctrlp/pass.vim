@@ -13,20 +13,14 @@ let g:loaded_ctrlp_pass = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:pass_var = {
+call add(g:ctrlp_ext_vars, {
       \ 'init': 'ctrlp#pass#init()',
       \ 'accept': 'ctrlp#pass#accept',
       \ 'lname': 'pass',
       \ 'sname': 'pass',
       \ 'type': 'path',
       \ 'nolim': 1
-      \}
-
-if exists('g:ctrlp_ext_vars') && !empty(g:ctrlp_ext_vars)
-  let g:ctrlp_ext_vars = add(g:ctrlp_ext_vars, s:pass_var)
-else
-  let g:ctrlp_ext_vars = [s:pass_var]
-endif
+      \})
 
 let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
 
@@ -35,14 +29,7 @@ function! ctrlp#pass#id() abort
 endfunction
 
 function! ctrlp#pass#init() abort
-  let keylist = globpath(expand(g:pass_store_path, ':p'), '**/*.gpg', 1, 1)
-  " /dir/entry.gpg to dir/entry
-  call map(keylist, { idx, val -> substitute(val, expand(g:pass_store_path, ':p'), '',    "") })
-  call map(keylist, { idx, val -> substitute(val, '\',                             '/',   "") })
-  call map(keylist, { idx, val -> substitute(val, '^/',                            '',    "") })
-  call map(keylist, { idx, val -> substitute(val, '\c.gpg$',                         '',    "") })
-
-  return keylist
+  return pass#util#list()
 endfunction
 
 function! ctrlp#pass#accept(mode, str) abort
