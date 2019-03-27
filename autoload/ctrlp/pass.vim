@@ -13,13 +13,13 @@ let g:loaded_ctrlp_pass = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-call add(g:ctrlp_ext_vars, {
-      \ 'init': 'ctrlp#pass#init()',
+let g:ctrlp_ext_vars = add(get(g:, 'ctrlp_ext_vars', []), {
+      \ 'init'  : 'ctrlp#pass#init()',
       \ 'accept': 'ctrlp#pass#accept',
-      \ 'lname': 'pass',
-      \ 'sname': 'pass',
-      \ 'type': 'path',
-      \ 'nolim': 1
+      \ 'lname' : 'pass',
+      \ 'sname' : 'pass',
+      \ 'type'  : 'path',
+      \ 'nolim' : 1
       \})
 
 let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
