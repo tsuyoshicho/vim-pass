@@ -60,7 +60,13 @@ function! s:exec(entry) abort
     let @* = secret
   else
     let @" = secret
-    call execute('normal! ""p' , "silent")
+    " command style)(need option?)
+    "      cursor pos(g or non) | paste pos           | style
+    " p    pasted text before   | current pos after   |  ab|c -> abc|xyz
+    " P    pasted text before   | current pos before  |  ab|c -> ab|xyzc
+    " gp   pasted text after    | current pos after   |  ab|c -> abcxyz|
+    " gP   pasted text after    | current pos before  |  ab|c -> abxyz|c
+    call execute('normal! ""gp' , "silent")
     let @" = ''
   endif
 endfunction
