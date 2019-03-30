@@ -40,6 +40,8 @@ function! pass#get_register(entry, ...) abort
   let value = s:_get(a:entry, passphrase, a:000)
   " set to register
   " register clear timer(at expire timer.if register remain value,then clear)
+  " currently support unnamed register.
+  let @" = value
 endfunction
 
 " API get_startup_scope

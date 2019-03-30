@@ -31,6 +31,7 @@ License : MIT license  {{{
   変数				  |pass-variables|
   コマンド			  |pass-commands|
   関数				  |pass-functions|
+拡張     			|pass-ctrlp-extensions|
 TODO				|pass-todo|
 更新履歴			|pass-changelog|
 
@@ -160,20 +161,33 @@ g:pass_use_agent				*g:pass_use_agent*
 gpg-agentが利用できるか/利用するかの設定です。
 1でgpg-agentのpinentryでのパスフレーズ問い合せ、0でvim上での問い合せになります。
 
+g:pass_ctrlp_copy_to_clipbord  			*g:pass_ctrlp_copy_to_clipbord*
+	既定値: 1 (0 でペースト)
+
+CtrlPPass が "copy clipboard" モードで動作します。
+1 でクリップボードへのコピー、0は 'p' 相当のペースト処理。
+
 ------------------------------------------------------------------------------
 コマンド					*pass-commands*
 
-:PassGet {} ...					*:PassGet*
+:PassGet {entry} ...   				*:PassGet*
 
 パスワード確認コマンドです、引数にpassword-storeのエントリを入力してください。
-2番目の引数に項目名を指定できます。
+引数を必要とし、{entry}は<tab>で自動補完できます。
 
-:PassGetRegister {} ...				*:PassGetRegister*
+:PassGetRegister {entry} ...			*:PassGetRegister*
 
 パスワードのレジスタ格納コマンドです、引数にpassword-storeのエントリを入力
 してください。
-まだ動作しません。
-2番目の引数に項目名を指定できます。
+現在限定的に無名レジスタへの永続的なコピーが動きます。
+引数を必要とし、{entry}は<tab>で自動補完できます。
+
+:CtrlPPass [entry] ...				*:CtrlPPass*
+
+パスワードのクリップボードへのコピーもしくは直接ペーストを行います。
+(|g:pass_ctrlp_copy_to_clipbord| を参照).
+[entry]は<tab>で自動補完できます。
+引数が指定されていたら、直接動作します。
 
 ------------------------------------------------------------------------------
 関数						*pass-functions*
@@ -191,6 +205,7 @@ entryはpassword-storeのエントリ形式。
 オプションでパスワード以外の項目を指定できます。
 まだ動作しません。
 時間経過でレジスタから消える予定。
+
 						*pass#get_startup()*
 pass#get_startup({set-variable},{entry}, {...})
 
@@ -214,11 +229,20 @@ autocmdで利用する専用関数。
 起動時のget_startupの解決を実施します。
 
 ==============================================================================
+拡張						*pass-ctrlp-extensions*
+
+                                                                  *:CtrlPPass*
+  * パスワードピックアップ:~
+    - 名称: 'pass'
+    - コマンド: ":CtrlPPass [entry]",
+    - 検索し、パスワードのクリップボードへのコピーもしくは
+      現在の箇所への直接ペーストを行います。
+
+==============================================================================
 TODO						*pass-todo*
 
 * PassGetRegisterの実装
 * set系の実装
-* エントリを補完リストにする
 
 ==============================================================================
 更新履歴					*pass-changelog*
