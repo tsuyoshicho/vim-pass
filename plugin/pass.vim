@@ -23,7 +23,8 @@ if ($SSH_CONNECTION != '' || ((has('win32') || has('win64')) == 0 && $DISPLAY ==
 endif
 let g:pass_use_agent  = get(g:, 'pass_use_agent', 1)
 
-command! -nargs=1 -complete=custom,pass#util#completion PassGet :echo pass#get(<f-args>)
+command! -nargs=1 -complete=custom,pass#util#completion PassGet         :echo pass#get(<f-args>)
+command! -nargs=1 -complete=custom,pass#util#completion PassGetRegister :call pass#get_register(<f-args>)
 
 augroup passstartup
   autocmd!
