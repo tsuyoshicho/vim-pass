@@ -8,16 +8,21 @@ see [Pass: The Standard Unix Password Manager](https://www.passwordstore.org/)
 Currenlty *get* support. usable like `auth-source` at emacs.
 
 ## Require
+
 - gpg
   - agent configuired as loopback enable
 - password-store like saved data
+- ctrlp plugin
+  - if use selection feature.
 
 ## Installation
+
 ```vim
 dein#add('tsuyoshicho/vim-pass')
 ```
 
 ## Usage
+
 ```vim
 " in vimrc
 " configured at end of vim startup
@@ -105,6 +110,7 @@ hook_add = '''
 ```
 
 ## limitation
+
 - Currently support API:get(default password/entry select) only
 - Entry select require exact match
 - When plugin's variable configure at load/starup time,sometimes it works not correctly like above Pixela startup-time countup

@@ -34,18 +34,35 @@ endfunction
 
 function! ctrlp#pass#accept(mode, str) abort
   call ctrlp#exit()
-  " insert secret to current pos
-  let secret = pass#get(a:str)
+  call s:exec(a:str)
+endfunction
 
-  let @* = secret
+function! ctrlp#pass#exec(...) abort
+  if 0 == a:0
+    call ctrlp#init(ctrlp#pass#id())
+  else
+    let entry = a:1
+    if index(pass#util#list(), entry) >= 0
+      call s:exec(entry)
+    else
+      call ctrlp#init(ctrlp#pass#id())
+    endif
+  endif
+endfunction
+
+function! s:exec(entry) abort
+  " insert secret to current pos
+  let secret = pass#get(a:entry)
+
+  " let @* = secret
   " currently not work direct paste : alt force copy to clipbord
-  " if g:pass_ctrlp_to_clipbord
-  "   let @* = secret
-  " else
-  "   let @" = secret
-  "   call execute('p' , "silent")
-  "   let @" = ''
-  " endif
+  if g:pass_ctrlp_copy_to_clipbord
+    let @* = secret
+  else
+    let @" = secret
+    call execute('normal! ""p' , "silent")
+    let @" = ''
+  endif
 endfunction
 
 let &cpo = s:save_cpo

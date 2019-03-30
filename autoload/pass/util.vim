@@ -20,5 +20,9 @@ function! pass#util#list() abort
   return keylist
 endfunction
 
+function! pass#util#list() abort
+  return join(pass#util#list(),"\n")
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo

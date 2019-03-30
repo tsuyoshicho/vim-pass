@@ -17,15 +17,13 @@ set cpo&vim
 " global variable option
 let g:pass_store_path = get(g:, 'pass_store_path', '~/.password-store')
 let g:pass_gpg_path   = get(g:, 'pass_gpg_path', 'gpg')
-let g:pass_ctrlp_to_clipbord = get(g:, 'pass_ctrlp_to_clipbord', 0)
 
 if ($SSH_CONNECTION != '' || ((has('win32') || has('win64')) == 0 && $DISPLAY == ''))
   let g:pass_use_agent = 0 " remote/non-gui force set : input only
 endif
 let g:pass_use_agent  = get(g:, 'pass_use_agent', 1)
 
-command! -nargs=+ PassGet         :echo pass#get(<f-args>)
-command! -nargs=+ PassGetRegister :call pass#get_register(<f-args>)
+command! -nargs=1 -complete=custom,pass#util#completion PassGet :echo pass#get(<f-args>)
 
 augroup passstartup
   autocmd!
