@@ -60,8 +60,8 @@ function! s:exec(entry) abort
     let @* = secret
   else
     let @" = secret
-    " command style)(need option?)
-    "      cursor pos(g or non) | paste pos           | style
+    " command style(need option?)
+    "      cursor pos(g or non) | paste pos(p or P)   | style
     " p    pasted text before   | current pos after   |  ab|c -> abc|xyz
     " P    pasted text before   | current pos before  |  ab|c -> ab|xyzc
     " gp   pasted text after    | current pos after   |  ab|c -> abcxyz|
