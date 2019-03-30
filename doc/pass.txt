@@ -178,6 +178,13 @@ Password check command, password-store entry name set to arg.
 This command need {entry}, You can use <tab> to auto-complete the {entry} when
 typing it.
 
+:PassGetRegister {entry} ...			*:PassGetRegister*
+
+Password save ad register command, password-store entry name set to arg .
+Currently only work unnamed register and eternaly.
+This command need {entry}, You can use <tab> to auto-complete the {entry} when
+typing it.
+
 :CtrlPPass [entry] ...				*:CtrlPPass*
 
 Password copy to clipboard or paste direct(see |g:pass_ctrlp_copy_to_clipbord|).
