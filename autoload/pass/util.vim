@@ -20,7 +20,7 @@ function! pass#util#list() abort
   return keylist
 endfunction
 
-function! pass#util#list() abort
+function! pass#util#completion() abort
   return join(pass#util#list(),"\n")
 endfunction
 
