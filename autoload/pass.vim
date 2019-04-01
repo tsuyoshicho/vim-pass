@@ -23,20 +23,17 @@ let s:pass_startup_request = []
 " API get
 " return value
 function! pass#get(entry, ...) abort
-  let passphrase = pass#get#passphrase()
-  return s:get_entry(a:entry, passphrase, a:000)
+  return s:get_entry(a:entry, a:000)
 endfunction
 
 " API get_register
 " copy to register (timered clear)
 " If remote : request passphrase
 function! pass#get_register(entry, ...) abort
-  let passphrase = pass#get#passphrase()
-  let value = s:get_entry(a:entry, passphrase, a:000)
   " set to register
   " register clear timer(at expire timer.if register remain value,then clear)
   " currently support unnamed register.
-  let @" = value
+  let @" = s:get_entry(a:entry, a:000)
 endfunction
 
 " API get_startup_scope
@@ -71,17 +68,15 @@ function! pass#resolve_startup()
 
   " resolved all promises
   " agent process success support 1st done -> all done -> unlet passphrase
-  let passphrase = pass#get#passphrase()
   for Fn in s:pass_startup_request
-    call Fn(passphrase)
+    call Fn()
   endfor
-  unlet passphrase
 
   let s:pass_startup_request = []
 endfunction
 
 " inner get process
-function! s:get_entry(entry, passphrase,keywords) abort
+function! s:get_entry(entry, keywords) abort
   " get gpg-id
   let gpgid = pass#get#id()
   " get entry
@@ -93,13 +88,14 @@ function! s:get_entry(entry, passphrase,keywords) abort
     return ''
   endif
 
-  let entry_value = pass#util#decode(gpgid, entrypath, a:passphrase, a:keywords)
+  let passphrase = pass#get#passphrase()
+  let entry_value = pass#util#decode(gpgid, entrypath, passphrase, a:keywords)
 
   return entry_value
 endfunction
 
-function! s:resolver(scope,set_variable, entry, keywords, passphrase) abort
-  let value = s:get_entry(a:entry, a:passphrase, a:keywords)
+function! s:resolver(scope,set_variable, entry, keywords) abort
+  let value = s:get_entry(a:entry, a:keywords)
 
   if v:null == a:scope
     call execute('let ' . a:set_variable . '=' . "'" . value . "'")
