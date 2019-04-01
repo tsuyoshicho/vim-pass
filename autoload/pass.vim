@@ -15,10 +15,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Vital
-let s:Process = vital#vimpass#import('System.Process')
-let s:Path    = vital#vimpass#import('System.Filepath')
 let s:List    = vital#vimpass#import('Data.List')
-let s:String  = vital#vimpass#import('Data.String')
 
 " variable
 let s:pass_startup_request = []
@@ -29,7 +26,7 @@ let s:pass_startup_request = []
 " return value
 function! pass#get(entry, ...) abort
   let passphrase  = pass#get#passphrase()
-  return s:_get(a:entry, passphrase, a:000)
+  return s:get_entry(a:entry, passphrase, a:000)
 endfunction
 
 " API get_register
@@ -37,7 +34,7 @@ endfunction
 " If remote : request passphrase
 function! pass#get_register(entry, ...) abort
   let passphrase  = pass#get#passphrase()
-  let value = s:_get(a:entry, passphrase, a:000)
+  let value = s:get_entry(a:entry, passphrase, a:000)
   " set to register
   " register clear timer(at expire timer.if register remain value,then clear)
   " currently support unnamed register.
@@ -49,7 +46,7 @@ endfunction
 " all waited process execute
 function! pass#get_startup_scope(scope,set_variable,entry, ...) abort
   if v:vim_did_enter == 0
-    let Fn = function('s:_resolve_startup',[a:scope,a:set_variable,a:entry,a:000])
+    let Fn = function('s:resolver',[a:scope,a:set_variable,a:entry,a:000])
     call s:List.push(s:pass_startup_request, Fn)
   else
     throw 'Already startup done.'
@@ -61,7 +58,7 @@ endfunction
 " all waited process execute
 function! pass#get_startup(set_variable,entry, ...) abort
   if v:vim_did_enter == 0
-    let Fn = function('s:_resolve_startup',[v:null,a:set_variable,a:entry,a:000])
+    let Fn = function('s:resolver',[v:null,a:set_variable,a:entry,a:000])
     call s:List.push(s:pass_startup_request, Fn)
   else
     throw 'Already startup done.'
@@ -86,7 +83,7 @@ function! pass#resolve_startup()
 endfunction
 
 " inner get process
-function! s:_get(entry, passphrase,keywords) abort
+function! s:get_entry(entry, passphrase,keywords) abort
   " get gpg-id
   let gpgid = pass#get#id()
   " get entry
@@ -103,9 +100,9 @@ function! s:_get(entry, passphrase,keywords) abort
   return entry_value
 endfunction
 
-function! s:_resolve_startup(scope,set_variable, entry, keywords) abort
+function! s:resolver(scope,set_variable, entry, keywords) abort
   let passphrase  = get(s:,'__passphrase',v:null)
-  let value = s:_get(a:entry, passphrase, a:keywords)
+  let value = s:get_entry(a:entry, passphrase, a:keywords)
 
   if v:null == a:scope
     call execute('let ' . a:set_variable . '=' . "'" . value . "'")
