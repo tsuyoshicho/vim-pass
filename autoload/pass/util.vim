@@ -48,7 +48,7 @@ function! s:execute_gpg(gpgid, entrypath, passphrase) abort
   call s:List.push(cmd, '--quiet')
   call s:List.push(cmd, '--batch')
   call s:List.push(cmd, '--decrypt')
-  if v:null != a:passphrase
+  if '' != a:passphrase
     call s:List.push(cmd, '--pinentry-mode')
     call s:List.push(cmd, 'loopback')
     call s:List.push(cmd, '--passphrase')

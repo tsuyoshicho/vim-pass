@@ -38,15 +38,18 @@ function! pass#get#id() abort
 endfunction
 
 " '' or passphrase
+let s:_passphrase = v:null
 function! pass#get#passphrase() abort
-  let passphrase  = v:null
-  if g:pass_use_agent == 0
-    let passphrase = inputsecret('passphrase: ')
-    redraw
-    echo ''
+  if s:_passphrase == v:null
+    let s:_passphrase = ''
+    if g:pass_use_agent == 0
+      let s:_passphrase = inputsecret('passphrase: ')
+      redraw
+      echo ''
+    endif
   endif
 
-  return passphrase
+  return s:_passphrase
 endfunction
 
 " path
