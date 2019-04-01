@@ -28,7 +28,7 @@ let s:pass_startup_request = []
 " API get
 " return value
 function! pass#get(entry, ...) abort
-  let passphrase  = s:_get_passphrase()
+  let passphrase  = pass#get#passphrase()
   return s:_get(a:entry, passphrase, a:000)
 endfunction
 
@@ -36,7 +36,7 @@ endfunction
 " copy to register (timered clear)
 " If remote : request passphrase
 function! pass#get_register(entry, ...) abort
-  let passphrase  = s:_get_passphrase()
+  let passphrase  = pass#get#passphrase()
   let value = s:_get(a:entry, passphrase, a:000)
   " set to register
   " register clear timer(at expire timer.if register remain value,then clear)
@@ -76,7 +76,7 @@ function! pass#resolve_startup()
 
   " resolved all promises
   " agent process success support 1st done -> all done -> unlet passphrase
-  let s:__passphrase = s:_get_passphrase()
+  let s:__passphrase = pass#get#passphrase()
   for Fn in s:pass_startup_request
     call Fn()
   endfor
@@ -88,9 +88,9 @@ endfunction
 " inner get process
 function! s:_get(entry, passphrase,keywords) abort
   " get gpg-id
-  let gpgid = s:_get_id()
+  let gpgid = pass#get#id()
   " get entry
-  let entrypath = s:_get_entry_path(a:entry)
+  let entrypath = pass#get#entry_path(a:entry)
 
   " work correct?
   if !(executable(g:pass_gpg_path) && filereadable(entrypath))
@@ -101,39 +101,6 @@ function! s:_get(entry, passphrase,keywords) abort
   let entry_value = s:_execute_pass_decode(gpgid, entrypath, a:passphrase, a:keywords)
 
   return entry_value
-endfunction
-
-" v:null or ID
-function! s:_get_id() abort
-  " check exist
-  if v:null == get(s:,'pass_gpg_id', v:null)
-
-    let gpgidpath = s:Path.realpath(
-                      \ s:Path.abspath(
-                        \ expand(s:Path.remove_last_separator(g:pass_store_path) . s:Path.separator()
-                                  \ . '.gpg-id')))
-
-    if !(filereadable(gpgidpath))
-      " no work
-      return v:null
-    endif
-
-    let read_result = readfile(gpgidpath)
-
-    if 0 < len(read_result)
-      let s:pass_gpg_id = read_result[0]
-    endif
-  endif
-
-  return get(s:,'pass_gpg_id', v:null)
-endfunction
-
-" path
-function! s:_get_entry_path(entry) abort
-  return s:Path.realpath(
-                  \ s:Path.abspath(
-                    \ expand(s:Path.remove_last_separator(g:pass_store_path) . s:Path.separator()
-                               \ . a:entry . '.gpg')))
 endfunction
 
 " path
@@ -207,18 +174,6 @@ function! s:_resolve_startup(scope,set_variable, entry, keywords) abort
   else
     let a:scope[a:set_variable] = value
   endif
-endfunction
-
-
-function! s:_get_passphrase() abort
-  let passphrase  = v:null
-  if g:pass_use_agent == 0
-    let passphrase = inputsecret('passphrase: ')
-    redraw
-    echo ''
-  endif
-
-  return passphrase
 endfunction
 
 let &cpo = s:save_cpo
