@@ -19,13 +19,11 @@ let s:List    = vital#vimpass#import('Data.List')
 
 " variable
 let s:pass_startup_request = []
-" alive only during at end of startup
-" let s:__passphrase
 
 " API get
 " return value
 function! pass#get(entry, ...) abort
-  let passphrase  = pass#get#passphrase()
+  let passphrase = pass#get#passphrase()
   return s:get_entry(a:entry, passphrase, a:000)
 endfunction
 
@@ -33,7 +31,7 @@ endfunction
 " copy to register (timered clear)
 " If remote : request passphrase
 function! pass#get_register(entry, ...) abort
-  let passphrase  = pass#get#passphrase()
+  let passphrase = pass#get#passphrase()
   let value = s:get_entry(a:entry, passphrase, a:000)
   " set to register
   " register clear timer(at expire timer.if register remain value,then clear)
@@ -73,11 +71,11 @@ function! pass#resolve_startup()
 
   " resolved all promises
   " agent process success support 1st done -> all done -> unlet passphrase
-  let s:__passphrase = pass#get#passphrase()
+  let passphrase = pass#get#passphrase()
   for Fn in s:pass_startup_request
-    call Fn()
+    call Fn(passphrase)
   endfor
-  unlet s:__passphrase
+  unlet passphrase
 
   let s:pass_startup_request = []
 endfunction
@@ -100,9 +98,8 @@ function! s:get_entry(entry, passphrase,keywords) abort
   return entry_value
 endfunction
 
-function! s:resolver(scope,set_variable, entry, keywords) abort
-  let passphrase  = get(s:,'__passphrase',v:null)
-  let value = s:get_entry(a:entry, passphrase, a:keywords)
+function! s:resolver(scope,set_variable, entry, keywords, passphrase) abort
+  let value = s:get_entry(a:entry, a:passphrase, a:keywords)
 
   if v:null == a:scope
     call execute('let ' . a:set_variable . '=' . "'" . value . "'")
