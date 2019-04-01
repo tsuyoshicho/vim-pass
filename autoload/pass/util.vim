@@ -54,7 +54,7 @@ function! s:execute_gpg(gpgid, entrypath, passphrase) abort
     call s:List.push(cmd, '--passphrase')
     call s:List.push(cmd, a:passphrase)
   endif
-  if v:null != a:gpgid
+  if '' != a:gpgid
     call s:List.push(cmd, '--local-user')
     call s:List.push(cmd, a:gpgid)
   endif

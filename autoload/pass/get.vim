@@ -31,10 +31,11 @@ function! pass#get#entry_value(entry, keywords) abort
   return entry_value
 endfunction
 
-" v:null or ID
+" '' or ID
 function! pass#get#id() abort
   " check exist
-  if v:null == get(s:,'pass_gpg_id', v:null)
+  if v:null == get(s:,'_pass_gpg_id', v:null)
+    let s:_pass_gpg_id = ''
 
     let gpgidpath = s:Path.realpath(
                       \ s:Path.abspath(
@@ -43,23 +44,22 @@ function! pass#get#id() abort
 
     if !(filereadable(gpgidpath))
       " no work
-      return v:null
+      return s:_pass_gpg_id
     endif
 
     let read_result = readfile(gpgidpath)
 
     if 0 < len(read_result)
-      let s:pass_gpg_id = read_result[0]
+      let s:_pass_gpg_id = read_result[0]
     endif
   endif
 
-  return get(s:,'pass_gpg_id', v:null)
+  return s:_pass_gpg_id
 endfunction
 
 " '' or passphrase
-let s:_passphrase = v:null
 function! pass#get#passphrase() abort
-  if s:_passphrase == v:null
+  if v:null == get(s:,'_passphrase ', v:null)
     let s:_passphrase = ''
     if g:pass_use_agent == 0
       let s:_passphrase = inputsecret('passphrase: ')
