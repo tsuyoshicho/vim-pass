@@ -14,12 +14,6 @@ let g:autoloaded_pass = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Vital
-let s:List    = vital#vimpass#import('Data.List')
-
-" variable
-let s:pass_startup_request = []
-
 " API get
 " return value
 function! pass#get(entry, ...) abort
@@ -41,8 +35,7 @@ endfunction
 " all waited process execute
 function! pass#get_startup_scope(scope,set_variable,entry, ...) abort
   if v:vim_did_enter == 0
-    let Fn = function('s:resolver',[a:scope,a:set_variable,a:entry,a:000])
-    call s:List.push(s:pass_startup_request, Fn)
+    call pass#startup#entry_setup(a:scope,a:set_variable,a:entry,a:000)
   else
     throw 'Already startup done.'
   endif
@@ -53,8 +46,7 @@ endfunction
 " all waited process execute
 function! pass#get_startup(set_variable,entry, ...) abort
   if v:vim_did_enter == 0
-    let Fn = function('s:resolver',[v:null,a:set_variable,a:entry,a:000])
-    call s:List.push(s:pass_startup_request, Fn)
+    call pass#startup#entry_setup(v:null,a:set_variable,a:entry,a:000)
   else
     throw 'Already startup done.'
   endif
@@ -62,27 +54,7 @@ endfunction
 
 " API resolve_startup(autocmd use)
 function! pass#resolve_startup()
-  if len(s:pass_startup_request) == 0
-    return
-  endif
-
-  " resolved all promises
-  " agent process success support 1st done -> all done -> unlet passphrase
-  for Fn in s:pass_startup_request
-    call Fn()
-  endfor
-
-  let s:pass_startup_request = []
-endfunction
-
-function! s:resolver(scope,set_variable, entry, keywords) abort
-  let value = pass#get#entry_value(a:entry, a:keywords)
-
-  if v:null == a:scope
-    call execute('let ' . a:set_variable . '=' . "'" . value . "'")
-  else
-    let a:scope[a:set_variable] = value
-  endif
+  call pass#startup#resolve()
 endfunction
 
 let &cpo = s:save_cpo
