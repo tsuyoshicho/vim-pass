@@ -23,7 +23,7 @@ let s:pass_startup_request = []
 " API get
 " return value
 function! pass#get(entry, ...) abort
-  return s:get_entry(a:entry, a:000)
+  return pass#get#entry_value(a:entry, a:000)
 endfunction
 
 " API get_register
@@ -33,7 +33,7 @@ function! pass#get_register(entry, ...) abort
   " set to register
   " register clear timer(at expire timer.if register remain value,then clear)
   " currently support unnamed register.
-  let @" = s:get_entry(a:entry, a:000)
+  let @" = pass#get#entry_value(a:entry, a:000)
 endfunction
 
 " API get_startup_scope
@@ -75,27 +75,8 @@ function! pass#resolve_startup()
   let s:pass_startup_request = []
 endfunction
 
-" inner get process
-function! s:get_entry(entry, keywords) abort
-  " get gpg-id
-  let gpgid = pass#get#id()
-  " get entry
-  let entrypath = pass#get#entry_path(a:entry)
-
-  " work correct?
-  if !(executable(g:pass_gpg_path) && filereadable(entrypath))
-    " no work
-    return ''
-  endif
-
-  let passphrase = pass#get#passphrase()
-  let entry_value = pass#util#decode(gpgid, entrypath, passphrase, a:keywords)
-
-  return entry_value
-endfunction
-
 function! s:resolver(scope,set_variable, entry, keywords) abort
-  let value = s:get_entry(a:entry, a:keywords)
+  let value = pass#get#entry_value(a:entry, a:keywords)
 
   if v:null == a:scope
     call execute('let ' . a:set_variable . '=' . "'" . value . "'")

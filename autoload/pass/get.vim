@@ -12,6 +12,25 @@ set cpo&vim
 " Vital
 let s:Path    = vital#vimpass#import('System.Filepath')
 
+" get entry data
+function! pass#get#entry_value(entry, keywords) abort
+  " get gpg-id
+  let gpgid = pass#get#id()
+  " get entry
+  let entrypath = pass#get#entry_path(a:entry)
+
+  " work correct?
+  if !(executable(g:pass_gpg_path) && filereadable(entrypath))
+    " no work
+    return ''
+  endif
+
+  let passphrase = pass#get#passphrase()
+  let entry_value = pass#util#decode(gpgid, entrypath, passphrase, a:keywords)
+
+  return entry_value
+endfunction
+
 " v:null or ID
 function! pass#get#id() abort
   " check exist
