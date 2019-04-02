@@ -7,6 +7,10 @@ see [Pass: The Standard Unix Password Manager](https://www.passwordstore.org/)
 
 Currenlty *get* support. usable like `auth-source` at emacs.
 
+## Feature
+* "Pass" style data get / get_startup (and other variant) support.
+* CtrlP plugin : selection support.
+
 ## Require
 
 - gpg
@@ -19,6 +23,22 @@ Currenlty *get* support. usable like `auth-source` at emacs.
 
 ```vim
 dein#add('tsuyoshicho/vim-pass')
+if dein#tap('ctrlp') && dein#tap('vim-pass')
+  let g:ctrlp_extensions = get(g:, 'ctrlp_extensions', [])
+        \ + ['pass']
+endif
+```
+
+or
+
+```toml
+[[plugins]]
+repo = 'tsuyoshicho/vim-pass'
+depends = ['ctrlp']
+hook_add = '''
+  let g:ctrlp_extensions = get(g:, 'ctrlp_extensions', [])
+        \ + ['pass']
+'''
 ```
 
 ## Usage

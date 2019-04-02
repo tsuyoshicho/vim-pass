@@ -69,6 +69,11 @@ Plugin password and other setup.
  # in plugin setting(dein's toml)
  [[plugins]]
  repo = 'tsuyoshicho/vim-pass'
+ depends = ['ctrlp']
+ hook_add = '''
+   let g:ctrlp_extensions = get(g:, 'ctrlp_extensions', [])
+         \ + ['pass']
+ '''
 
  [[plugins]] # https://pixe.la/
  repo = 'mattn/vim-pixela'
