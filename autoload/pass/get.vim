@@ -34,7 +34,7 @@ endfunction
 " '' or ID
 function! pass#get#id() abort
   " check exist
-  if v:null == get(s:,'_pass_gpg_id', v:null)
+  if 0 == exists('s:_pass_gpg_id')
     let s:_pass_gpg_id = ''
 
     let gpgidpath = s:Path.realpath(
@@ -59,7 +59,7 @@ endfunction
 
 " '' or passphrase
 function! pass#get#passphrase() abort
-  if v:null == get(s:,'_passphrase ', v:null)
+  if 0 == exists('s:_passphrase')
     let s:_passphrase = ''
     if g:pass_use_agent == 0
       let s:_passphrase = inputsecret('passphrase: ')
