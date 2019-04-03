@@ -16,7 +16,7 @@ set cpo&vim
 
 " global variable option
 let g:pass_store_path = get(g:, 'pass_store_path', '~/.password-store')
-let g:pass_gpg_path   = get(g:, 'pass_gpg_path', 'gpg')
+let g:pass_gpg_path   = get(g:, 'pass_gpg_path',   'gpg')
 
 if ($SSH_CONNECTION != '' || ((has('win32') || has('win64')) == 0 && $DISPLAY == ''))
   let g:pass_use_agent = 0 " remote/non-gui force set : input only
