@@ -30,20 +30,20 @@ endfunction
 
 " value
 function! pass#util#decode(gpgid, entrypath, passphrase, keywords) abort
-  let entrylist = s:execute_gpg(a:gpgid, a:entrypath, a:passphrase)
-  return s:select_entry(entrylist, a:keywords)
+  let entrylist = s:decrypt_entry_gpg(a:gpgid, a:entrypath, a:passphrase)
+  return s:select_entry_value(entrylist, a:keywords)
 endfunction
 
 " execute command
-" list strings
-function! s:execute_gpg(gpgid, entrypath, passphrase) abort
+" CRUD : READ
+" return list strings
+function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
   " execute get entry
-  let stdout = ['']
-  let stderr = ['']
   let cmd = []
 
   " build gpg command
   call s:List.push(cmd, g:pass_gpg_path)
+
   call s:List.push(cmd, '--no-verbose')
   call s:List.push(cmd, '--quiet')
   call s:List.push(cmd, '--batch')
@@ -62,18 +62,15 @@ function! s:execute_gpg(gpgid, entrypath, passphrase) abort
   call s:List.push(cmd, '-')
   call s:List.push(cmd, a:entrypath)
 
-  " debug
-  " echomsg "pass cmd req " . ",id:" . a:gpgid . ",path:" . a:entrypath . ",pass:" . a:passphrase
-  " echomsg "pass cmd exec:" . join(cmd)
-
   let result = s:Process.execute(cmd)
   let entrylist = s:String.lines(result.output)
 
   return entrylist
 endfunction
 
-" select entry
-function! s:select_entry(entrylist, keywords) abort
+" select entry value
+" input entry string list / return value string
+function! s:select_entry_value(entrylist, keywords) abort
   let entrylist = a:entrylist
   let retvalue = ''
 
