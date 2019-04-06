@@ -1,4 +1,4 @@
-*pass.txt*	日本語ヘルプ
+*ctrlp-pass.txt	日本語ヘルプ
 
 Version :
 Author  : Tsuyoshi CHO <Tsuyoshi.CHO+develop@Gmail.com>
@@ -23,148 +23,33 @@ License : MIT license  {{{
 }}}
 
 ==============================================================================
-目次						*pass-contents*
+目次						*ctrlp-pass-contents*
 
-概要				|pass-introduction|
-使い方				|pass-usage|
-インターフェイス		|pass-interface|
-  変数				  |pass-variables|
-  コマンド			  |pass-commands|
-  関数				  |pass-functions|
-拡張     			|pass-ctrlp-extensions|
-TODO				|pass-todo|
-更新履歴			|pass-changelog|
+概要						|ctrlp-pass-introduction|
+コマンド					|ctrlp-pass-commands|
+設定						|ctrlp-pass-setting|
+TODO						|ctrlp-pass-todo|
+更新履歴					|ctrlp-pass-changelog|
 
 
 ==============================================================================
 概要						*pass-introduction*
 
-*pass* は Vim password-store APIを目標としたプラグインです。
-Pass: The Standard Unix Password Manager - https://www.passwordstore.org/
-を参照してください。
+|vim-pass|の |CtrlP| 用拡張です。
 
-現在getが使えます。なので emacs の `auth-source` のように使えます。
-
-最新版:
-https://github.com/tsuyoshicho/pass.vim
 
 ==============================================================================
-使い方						*pass-usage*
+COMMANDS					*ctrlp-pass-commands*
 
-パスワード等の読み出しや設定時に利用
->
- " in vimrc
- " configured at end of vim startup
- call pass#get_startup('g:test_gh_token','Develop/Github')
- call pass#get_startup('g:test_gh_username','Develop/Github','username')
+                                                                  *:CtrlPPass*
+:CtrlPPass [entry]
+    - 名称: 'pass'
+    - 検索し、パスワードのクリップボードへのコピーもしくは
+      現在の箇所への直接ペーストを行います。
 
- function! test() abort
-   let password = pass#get('Service/foobar')
-   " ...
- endfunction
-<
-
-プラグインのパスワード等の設定時に利用
->
- # in plugin setting(dein's toml)
- [[plugins]]
- repo = 'tsuyoshicho/vim-pass'
- depends = ['ctrlp']
- hook_add = '''
-   let g:ctrlp_extensions = get(g:, 'ctrlp_extensions', [])
-         \ + ['pass']
- '''
-
- [[plugins]] # https://pixe.la/
- repo = 'mattn/vim-pixela'
- depends = ['open-browser.vim','vim-pass']
- hook_add = '''
-   " let g:pixela_username = 'user'
-   " let g:pixela_token    = 'token'
-
-   call pass#get_startup('g:pixela_username','Develop/Pixela','username')
-   " VimPixela work OK
-   call pass#get_startup('g:pixela_token','Develop/Pixela')
-   " startup-time countup do not correct work.
-   " It work or does not work depending on the processing order of events
- '''
-
- [[plugins]]
- repo = 'tpope/vim-rhubarb'
- depends = ['vim-fugitive','vim-pass']
- # on_if= 'executable("hub")'
- hook_add = '''
-   call pass#get_startup('g:RHUBARB_TOKEN','Develop/Github')
- '''
-
- [[plugins]] # Slack
- repo = 'mizukmb/slackstatus.vim'
- depends = ['webapi-vim','vim-pass']
- hook_add = '''
-   " let g:slackstatus_token = '<YOUR_SLACK_TOKEN>'
-   " my hoge
-   call pass#get_startup('g:slackstatus_token','Message/Slack/myhoge.legacy')
-   " vim-jp
-   " call pass#get_startup('g:slackstatus_token','Message/Slack/vim-jp.legacy')
-   "
-   function! s:slack_list(A,L,P) abort
-     let slacklist = ['myhoge','vim-jp']
-     return slacklist
-   endfunction
-
-   function s:slackstatus_change_token(team) abort
-     let path = 'Message/Slack/' . a:team . '.legacy'
-     let g:slackstatus_token = pass#get(path)
-   endfunction
-
-   command! -nargs=1 -complete=customlist,<SID>slack_list SlackStatusChange :call <SID>slackstatus_change_token(<f-args>)
- '''
-
- [[plugins]] # Mastodon
- repo = 'mattn/vim-mastodon'
- depends = ['webapi-vim','vim-pass']
- hook_add = '''
-   " mstdn.jp
-   " let g:mastodon_host = 'mstdn.jp'
-   " call pass#get_startup('g:mastodon_access_token','Message/Mastodon/mstdn.jp')
-
-   function! s:mastodon_completion(A,L,P) abort
-     let host_list = ['mstdn.jp']
-     return join(host_list,"\n")
-   endfunction
-
-   function s:mastodon_change_hosttoken(host) abort
-     let path = 'Message/Mastodon/' . a:host
-     let g:mastodon_host = a:host
-     let g:mastodon_access_token = pass#get(path)
-   endfunction
-
-   command! -nargs=1 -complete=custom,<SID>mastodon_completion MastodonHostChange :call <SID>mastodon_change_hosttoken(<f-args>)
- '''
-<
 
 ==============================================================================
-インターフェイス				*pass-interface*
-
-------------------------------------------------------------------------------
-変数						*pass-variables*
-
-g:pass_store_path				*g:pass_store_path*
-	既定値: "~/.password-store"
-
-password-store形式のデータの格納位置です。
-
-g:pass_gpg_path					*g:pass_gpg_path*
-	既定値: "gpg"
-
-gpg(gnupg)実行ファイルのパスです。
-単純にはコマンドだけ書けばよいです。
-
-g:pass_use_agent				*g:pass_use_agent*
-	既定値: 1 (0 リモート接続の場合は強制設定されます)
-
-gpg-agentが利用できるか/利用するかの設定です。
-1でgpg-agentのpinentryでのパスフレーズ問い合せ、0でvim上での問い合せになります。
+SETTINGS					*ctrlp-pass-setting*
 
 g:pass_ctrlp_copy_to_clipbord  			*g:pass_ctrlp_copy_to_clipbord*
 	既定値: 1 (0 でペースト)
@@ -172,82 +57,10 @@ g:pass_ctrlp_copy_to_clipbord  			*g:pass_ctrlp_copy_to_clipbord*
 CtrlPPass が "copy clipboard" モードで動作します。
 1 でクリップボードへのコピー、0は 'p' 相当のペースト処理。
 
-------------------------------------------------------------------------------
-コマンド					*pass-commands*
-
-:PassGet {entry} ...   				*:PassGet*
-
-パスワード確認コマンドです、引数にpassword-storeのエントリを入力してください。
-引数を必要とし、{entry}は<tab>で自動補完できます。
-
-:PassGetRegister {entry} ...			*:PassGetRegister*
-
-パスワードのレジスタ格納コマンドです、引数にpassword-storeのエントリを入力
-してください。
-現在限定的に無名レジスタへの永続的なコピーが動きます。
-引数を必要とし、{entry}は<tab>で自動補完できます。
-
-:CtrlPPass [entry] ...				*:CtrlPPass*
-
-パスワードのクリップボードへのコピーもしくは直接ペーストを行います。
-(|g:pass_ctrlp_copy_to_clipbord| を参照).
-[entry]は<tab>で自動補完できます。
-引数が指定されていたら、直接動作します。
-
-------------------------------------------------------------------------------
-関数						*pass-functions*
-
-pass#get({entry}, {...})			*pass#get()*
-
-パスワード取得API、戻り値に値を返します。
-entryはpassword-storeのエントリ形式。
-オプションでパスワード以外の項目を指定できます。
-
-pass#get_register({entry}, {...})		*pass#get_register()*
-
-パスワード取得API、レジスタに値を設定します。
-entryはpassword-storeのエントリ形式。
-オプションでパスワード以外の項目を指定できます。
-まだ動作しません。
-時間経過でレジスタから消える予定。
-
-						*pass#get_startup()*
-pass#get_startup({set-variable},{entry}, {...})
-
-パスワード取得API、起動時前専用で、set-variableに値を設定します。
-entryはpassword-storeのエントリ形式。
-オプションでパスワード以外の項目を指定できます。
-set-variableはスコープ付きの変数を表す文字列です(ex. 'g:hoge_fuga')
-
-						*pass#get_startup_scope()*
-pass#get_startup_scope({scope},{set-variable},{entry}, {...})
-
-パスワード取得API、起動時前専用で、set-variableに値を設定します。
-entryはpassword-storeのエントリ形式。
-オプションでパスワード以外の項目を指定できます。
-scopeには |get()| と同じように、g:やw:などのスコープを設定します。
-set-variableはスコープなしの変数を表す文字列です(ex. 'hoge_fuga')
-
-pass#resolve_startup()				*pass#resolve_startup()*
-
-autocmdで利用する専用関数。
-起動時のget_startupの解決を実施します。
-
-==============================================================================
-拡張						*pass-ctrlp-extensions*
-
-                                                                  *:CtrlPPass*
-  * パスワードピックアップ:~
-    - 名称: 'pass'
-    - コマンド: ":CtrlPPass [entry]",
-    - 検索し、パスワードのクリップボードへのコピーもしくは
-      現在の箇所への直接ペーストを行います。
-
 ==============================================================================
 TODO						*pass-todo*
 
-* PassGetRegisterの実装
-* set系の実装
+|pass| のヘルプを参照のこと。
 
 ==============================================================================
 更新履歴					*pass-changelog*

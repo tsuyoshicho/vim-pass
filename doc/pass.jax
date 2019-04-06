@@ -48,6 +48,8 @@ Pass: The Standard Unix Password Manager - https://www.passwordstore.org/
 最新版:
 https://github.com/tsuyoshicho/pass.vim
 
+CtrlPのプラグインとしては |ctrlp-pass| を参照してください。
+
 ==============================================================================
 使い方						*pass-usage*
 
@@ -166,12 +168,6 @@ g:pass_use_agent				*g:pass_use_agent*
 gpg-agentが利用できるか/利用するかの設定です。
 1でgpg-agentのpinentryでのパスフレーズ問い合せ、0でvim上での問い合せになります。
 
-g:pass_ctrlp_copy_to_clipbord  			*g:pass_ctrlp_copy_to_clipbord*
-	既定値: 1 (0 でペースト)
-
-CtrlPPass が "copy clipboard" モードで動作します。
-1 でクリップボードへのコピー、0は 'p' 相当のペースト処理。
-
 ------------------------------------------------------------------------------
 コマンド					*pass-commands*
 
@@ -186,13 +182,6 @@ CtrlPPass が "copy clipboard" モードで動作します。
 してください。
 現在限定的に無名レジスタへの永続的なコピーが動きます。
 引数を必要とし、{entry}は<tab>で自動補完できます。
-
-:CtrlPPass [entry] ...				*:CtrlPPass*
-
-パスワードのクリップボードへのコピーもしくは直接ペーストを行います。
-(|g:pass_ctrlp_copy_to_clipbord| を参照).
-[entry]は<tab>で自動補完できます。
-引数が指定されていたら、直接動作します。
 
 ------------------------------------------------------------------------------
 関数						*pass-functions*
@@ -232,16 +221,6 @@ pass#resolve_startup()				*pass#resolve_startup()*
 
 autocmdで利用する専用関数。
 起動時のget_startupの解決を実施します。
-
-==============================================================================
-拡張						*pass-ctrlp-extensions*
-
-                                                                  *:CtrlPPass*
-  * パスワードピックアップ:~
-    - 名称: 'pass'
-    - コマンド: ":CtrlPPass [entry]",
-    - 検索し、パスワードのクリップボードへのコピーもしくは
-      現在の箇所への直接ペーストを行います。
 
 ==============================================================================
 TODO						*pass-todo*

@@ -48,6 +48,8 @@ Currenlty get support. usable like `auth-source` at emacs.
 Latest version:
 https://github.com/tsuyoshicho/pass.vim
 
+See also CtrlP plugin feature |ctrlp-pass|.
+
 ==============================================================================
 USAGE						*pass-usage*
 
@@ -167,13 +169,6 @@ Usable gpg-agent setting.
 1 as passphrase request use gpg-agent's pinentry;
 0 as passphrase request on Vim.
 
-g:pass_ctrlp_copy_to_clipbord  			*g:pass_ctrlp_copy_to_clipbord*
-	default value: 1 (0 is paste)
-
-CtrlPPass work "copy clipboard" mode.
-1 as copy to clipboard;
-0 as direct paste current cursor(like 'p').
-
 ------------------------------------------------------------------------------
 COMMANDS					*pass-commands*
 
@@ -189,12 +184,6 @@ Password save ad register command, password-store entry name set to arg .
 Currently only work unnamed register and eternaly.
 This command need {entry}, You can use <tab> to auto-complete the {entry} when
 typing it.
-
-:CtrlPPass [entry] ...				*:CtrlPPass*
-
-Password copy to clipboard or paste direct(see |g:pass_ctrlp_copy_to_clipbord|).
-You can use <tab> to auto-complete the [entry] when typing it.
-If args are not empty, directory work.
 
 ------------------------------------------------------------------------------
 FUNCTIONS					*pass-functions*
@@ -234,15 +223,6 @@ pass#resolve_startup()				*pass#resolve_startup()*
 
 Use at autocmd specific function.
 Resolve get_startup process at startup time.
-
-==============================================================================
-EXTENSIONS					*pass-ctrlp-extensions*
-
-                                                                  *:CtrlPPass*
-  * Password pickup:~
-    - Name: 'pass'
-    - Commands: ":CtrlPPass [entry]",
-    - Search for and copy to clipboard or direct past current pos.
 
 ==============================================================================
 TODO						*pass-todo*

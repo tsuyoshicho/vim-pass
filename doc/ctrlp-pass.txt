@@ -1,4 +1,4 @@
-*pass.txt*	a summary
+*ctrlp-pass.txt*	a summary
 
 Version :
 Author  : Tsuyoshi CHO <Tsuyoshi.CHO+develop@Gmail.com>
@@ -23,149 +23,31 @@ License : MIT license  {{{
 }}}
 
 ==============================================================================
-CONTENTS					*pass-contents*
+CONTENTS					*ctrlp-pass-contents*
 
-INTRODUCTION			|pass-introduction|
-USAGE				|pass-usage|
-INTERFACE			|pass-interface|
-  VARIABLES			  |pass-variables|
-  COMMANDS			  |pass-commands|
-  FUNCTIONS			  |pass-functions|
-EXTENSIONS     			|pass-ctrlp-extensions|
-TODO				|pass-todo|
-CHANGELOG			|pass-changelog|
+INTRODUCTION					|ctrlp-pass-introduction|
+COMMANDS					|ctrlp-pass-commands|
+SETTINGS					|ctrlp-pass-setting|
+TODO						|ctrlp-pass-todo|
+CHANGELOG					|ctrlp-pass-changelog|
 
 
 ==============================================================================
-INTRODUCTION					*pass-introduction*
+INTRODUCTION					*ctrlp-pass-introduction*
 
-*pass* is Vim plugin aimed at the Vim password-store API.
-see below
-Pass: The Standard Unix Password Manager - https://www.passwordstore.org/
-
-Currenlty get support. usable like `auth-source` at emacs.
-
-Latest version:
-https://github.com/tsuyoshicho/pass.vim
+|vim-pass|'s |CtrlP| extention.
 
 ==============================================================================
-USAGE						*pass-usage*
+COMMANDS					*ctrlp-pass-commands*
 
-Password and other setup.
->
- " in vimrc
- " configured at end of vim startup
- call pass#get_startup('g:test_gh_token','Develop/Github')
- call pass#get_startup('g:test_gh_username','Develop/Github','username')
+                                                                  *:CtrlPPass*
+:CtrlPPass [entry]
+    - Name: 'pass'
+    - Search for and copy to clipboard or direct past current pos.
 
- function! test() abort
-   let password = pass#get('Service/foobar')
-   " ...
- endfunction
-<
-
-Plugin password and other setup.
->
- # in plugin setting(dein's toml)
- [[plugins]]
- repo = 'tsuyoshicho/vim-pass'
- depends = ['ctrlp']
- hook_add = '''
-   let g:ctrlp_extensions = get(g:, 'ctrlp_extensions', [])
-         \ + ['pass']
- '''
-
- [[plugins]] # https://pixe.la/
- repo = 'mattn/vim-pixela'
- depends = ['open-browser.vim','vim-pass']
- hook_add = '''
-   " let g:pixela_username = 'user'
-   " let g:pixela_token    = 'token'
-
-   call pass#get_startup('g:pixela_username','Develop/Pixela','username')
-   " VimPixela work OK
-   call pass#get_startup('g:pixela_token','Develop/Pixela')
-   " startup-time countup do not correct work.
-   " It work or does not work depending on the processing order of events
- '''
-
- [[plugins]]
- repo = 'tpope/vim-rhubarb'
- depends = ['vim-fugitive','vim-pass']
- # on_if= 'executable("hub")'
- hook_add = '''
-   call pass#get_startup('g:RHUBARB_TOKEN','Develop/Github')
- '''
-
- [[plugins]] # Slack
- repo = 'mizukmb/slackstatus.vim'
- depends = ['webapi-vim','vim-pass']
- hook_add = '''
-   " let g:slackstatus_token = '<YOUR_SLACK_TOKEN>'
-   " my hoge
-   call pass#get_startup('g:slackstatus_token','Message/Slack/myhoge.legacy')
-   " vim-jp
-   " call pass#get_startup('g:slackstatus_token','Message/Slack/vim-jp.legacy')
-   "
-   function! s:slack_list(A,L,P) abort
-     let slacklist = ['myhoge','vim-jp']
-     return slacklist
-   endfunction
-
-   function s:slackstatus_change_token(team) abort
-     let path = 'Message/Slack/' . a:team . '.legacy'
-     let g:slackstatus_token = pass#get(path)
-   endfunction
-
-   command! -nargs=1 -complete=customlist,<SID>slack_list SlackStatusChange :call <SID>slackstatus_change_token(<f-args>)
- '''
-
- [[plugins]] # Mastodon
- repo = 'mattn/vim-mastodon'
- depends = ['webapi-vim','vim-pass']
- hook_add = '''
-   " mstdn.jp
-   " let g:mastodon_host = 'mstdn.jp'
-   " call pass#get_startup('g:mastodon_access_token','Message/Mastodon/mstdn.jp')
-
-   function! s:mastodon_completion(A,L,P) abort
-     let host_list = ['mstdn.jp']
-     return join(host_list,"\n")
-   endfunction
-
-   function s:mastodon_change_hosttoken(host) abort
-     let path = 'Message/Mastodon/' . a:host
-     let g:mastodon_host = a:host
-     let g:mastodon_access_token = pass#get(path)
-   endfunction
-
-   command! -nargs=1 -complete=custom,<SID>mastodon_completion MastodonHostChange :call <SID>mastodon_change_hosttoken(<f-args>)
- '''
-<
 
 ==============================================================================
-INTERFACE					*pass-interface*
-
-------------------------------------------------------------------------------
-VARIABLES					*pass-variables*
-
-g:pass_store_path				*g:pass_store_path*
-	default value: "~/.password-store"
-
-Store path as password-store like saved data.
-
-g:pass_gpg_path					*g:pass_gpg_path*
-	default value: "gpg"
-
-gpg(gnupg) execution path.
-Simply, command name write.
-
-g:pass_use_agent				*g:pass_use_agent*
-	default value: 1 (0 remote connection foce set)
-
-Usable gpg-agent setting.
-1 as passphrase request use gpg-agent's pinentry;
-0 as passphrase request on Vim.
+SETTINGS					*ctrlp-pass-setting*
 
 g:pass_ctrlp_copy_to_clipbord  			*g:pass_ctrlp_copy_to_clipbord*
 	default value: 1 (0 is paste)
@@ -174,80 +56,10 @@ CtrlPPass work "copy clipboard" mode.
 1 as copy to clipboard;
 0 as direct paste current cursor(like 'p').
 
-------------------------------------------------------------------------------
-COMMANDS					*pass-commands*
-
-:PassGet {entry} ...   				*:PassGet*
-
-Password check command, password-store entry name set to arg.
-This command need {entry}, You can use <tab> to auto-complete the {entry} when
-typing it.
-
-:PassGetRegister {entry} ...			*:PassGetRegister*
-
-Password save ad register command, password-store entry name set to arg .
-Currently only work unnamed register and eternaly.
-This command need {entry}, You can use <tab> to auto-complete the {entry} when
-typing it.
-
-:CtrlPPass [entry] ...				*:CtrlPPass*
-
-Password copy to clipboard or paste direct(see |g:pass_ctrlp_copy_to_clipbord|).
-You can use <tab> to auto-complete the [entry] when typing it.
-If args are not empty, directory work.
-
-------------------------------------------------------------------------------
-FUNCTIONS					*pass-functions*
-
-pass#get({entry}, {...})			*pass#get()*
-
-Password get API, return value.
-entry is password-store style.
-Optionally item name.
-
-pass#get_register({entry}, {...})		*pass#get_register()*
-
-Password get API, value set to register.
-entry is password-store style.
-Optionally item name.
-Currently not work.
-It will disappear from the register as time passes.
-
-						*pass#get_startup()*
-pass#get_startup({set-variable},{entry}, {...})
-
-Password get API, startup specific; value set to set-variable
-entry is password-store style.
-Optionally item name.
-set-variable is scoped-variable string.(ex. 'g:hoge_fuga')
-
-						*pass#get_startup_scope()*
-pass#get_startup_scope({scope},{set-variable},{entry}, {...})
-
-Password get API, startup specific; value set to set-variable
-entry is password-store style.
-Optionally item name.
-scope is value of g:, w: or other scope signature like as |get()|
-set-variable is non-scoped-variable string.(ex. 'hoge_fuga')
-
-pass#resolve_startup()				*pass#resolve_startup()*
-
-Use at autocmd specific function.
-Resolve get_startup process at startup time.
-
-==============================================================================
-EXTENSIONS					*pass-ctrlp-extensions*
-
-                                                                  *:CtrlPPass*
-  * Password pickup:~
-    - Name: 'pass'
-    - Commands: ":CtrlPPass [entry]",
-    - Search for and copy to clipboard or direct past current pos.
-
 ==============================================================================
 TODO						*pass-todo*
 
-see Ja help.
+see |pass| help.
 
 ==============================================================================
 CHANGELOG					*pass-changelog*
