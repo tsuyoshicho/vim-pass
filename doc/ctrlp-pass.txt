@@ -35,7 +35,7 @@ CHANGELOG					|ctrlp-pass-changelog|
 ==============================================================================
 INTRODUCTION					*ctrlp-pass-introduction*
 
-|vim-pass|'s |CtrlP| extention.
+*ctrlp-pass* is |vim-pass|'s |CtrlP| extention.
 
 ==============================================================================
 COMMANDS					*ctrlp-pass-commands*
