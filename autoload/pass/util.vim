@@ -48,13 +48,13 @@ function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
   call s:List.push(cmd, '--quiet')
   call s:List.push(cmd, '--batch')
   call s:List.push(cmd, '--decrypt')
-  if '' != a:passphrase
+  if !empty(a:passphrase)
     call s:List.push(cmd, '--pinentry-mode')
     call s:List.push(cmd, 'loopback')
     call s:List.push(cmd, '--passphrase')
     call s:List.push(cmd, a:passphrase)
   endif
-  if '' != a:gpgid
+  if !empty(a:gpgid)
     call s:List.push(cmd, '--local-user')
     call s:List.push(cmd, a:gpgid)
   endif
@@ -72,19 +72,17 @@ endfunction
 " input entry string list / return value string
 function! s:select_entry_value(entrylist, keywords) abort
   let entrylist = a:entrylist
-  let retvalue = ''
 
-  if len(entrylist) == 0
+  if empty(entrylist)
     " no work
-    return retvalue
+    return ''
   endif
 
-  if len(a:keywords) == 0 || a:keywords[0] == 'password'
+  if empty(a:keywords) || a:keywords[0] == 'password'
     " need default -> first line password
     let retvalue = entrylist[0]
   else
     " generate dict(key,value)
-    let key = a:keywords[0]
     let entrymap = {}
 
     " ignore password(first line)
@@ -93,9 +91,7 @@ function! s:select_entry_value(entrylist, keywords) abort
       let entrymap[split_data[0]] = split_data[1]
     endfor
 
-    if has_key(entrymap, key)
-      let retvalue = entrymap[key]
-    endif
+    let retvalue = get(entrymap, a:keywords[0], '')
   endif
 
   return retvalue
