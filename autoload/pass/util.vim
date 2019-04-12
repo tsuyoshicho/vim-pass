@@ -78,7 +78,29 @@ function! s:select_entry_value(entrylist, keywords) abort
     return ''
   endif
 
-  if empty(a:keywords) || a:keywords[0] == 'password'
+  if empty(a:keywords)
+    " need default -> first line password
+    return entrylist[0]
+  endif
+
+  let key = a:keywords[0]
+  let keylist = [key]
+
+  " password entry required.
+  let entry_altmap  = extend(get(g:, 'pass_entry_altmap', {}),{
+        \ 'password' : ['password', 'secret'],
+        \}, "keep")
+
+  for [k,v] in items(entry_altmap)
+    if -1 != match(v, '\c\V' . escape(key,'\'))
+      let keyname = k
+      let keylist = v
+      break
+    endif
+  endfor
+
+  let retvalue = ''
+  if keyname == 'password'
     " need default -> first line password
     let retvalue = entrylist[0]
   else
@@ -88,10 +110,16 @@ function! s:select_entry_value(entrylist, keywords) abort
     " ignore password(first line)
     for e in entrylist[1:]
       let split_data = s:String.split_leftright(e, '^[^:]*\zs:\s*')
-      let entrymap[split_data[0]] = split_data[1]
+      let entrymap[tolower(split_data[0])] = split_data[1]
     endfor
 
-    let retvalue = get(entrymap, a:keywords[0], '')
+    " search value
+    for k in keylist
+      let retvalue = get(entrymap, tolower(k), '')
+      if !empty(retvalue)
+        break
+      endif
+    endfor
   endif
 
   return retvalue

@@ -23,6 +23,13 @@ if ($SSH_CONNECTION != '' || ((has('win32') || has('win64')) == 0 && $DISPLAY ==
 endif
 let g:pass_use_agent  = get(g:, 'pass_use_agent', 1)
 
+" case-insensitive
+" password entry required. add default (in code process)
+let g:pass_entry_altmap  = extend(get(g:, 'pass_entry_altmap', {}),{
+      \ 'username' : ['user', 'username', 'id', 'account'],
+      \ 'host'     : ['host', 'url',      'uri'          ],
+      \}, "keep")
+
 command! -nargs=1 -complete=custom,pass#util#completion PassGet         :echo pass#get(<f-args>)
 command! -nargs=1 -complete=custom,pass#util#completion PassGetRegister :call pass#get_register(<f-args>)
 
