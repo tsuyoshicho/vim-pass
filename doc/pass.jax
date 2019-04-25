@@ -168,6 +168,23 @@ g:pass_use_agent				*g:pass_use_agent*
 gpg-agentが利用できるか/利用するかの設定です。
 1でgpg-agentのpinentryでのパスフレーズ問い合せ、0でvim上での問い合せになります。
 
+g:pass_entry_altmap				*g:pass_entry_altmap*
+	既定値:
+>
+  {
+  \ 'password' : ['password', 'secret'],
+  \ 'username' : ['user', 'username', 'id', 'account'],
+  \ 'host'     : ['host', 'url',      'uri'          ],
+  \},
+>
+
+エントリの代替名の辞書 *Dictonary* ; キーはラベル、値はリスト *List*
+で、代替名のリストになっている。
+"password" は特別なラベルで、デフォルトパスワード情報を指す。
+もし、辞書 *Dictonary*
+をスクリプトロード前に定義したときに項目がないと、内部デフォルト値を使う。
+(定義時に "password" ラベルで上書きはできる。)
+
 ------------------------------------------------------------------------------
 コマンド					*pass-commands*
 
