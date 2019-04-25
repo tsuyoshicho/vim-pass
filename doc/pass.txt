@@ -169,6 +169,23 @@ Usable gpg-agent setting.
 1 as passphrase request use gpg-agent's pinentry;
 0 as passphrase request on Vim.
 
+
+g:pass_entry_altmap				*g:pass_entry_altmap*
+	default value:
+>
+  {
+  \ 'password' : ['password', 'secret'],
+  \ 'username' : ['user', 'username', 'id', 'account'],
+  \ 'host'     : ['host', 'url',      'uri'          ],
+  \},
+>
+
+Entry's altnative name *Dictonary* ; key as label, value as *List* that is
+altnative entry name list.
+"password" is special entry label. This mean as default password info.
+If this is not defined in *Dictonary* at before loading, use internal default.
+(You can overwrite it, set "password" label entry.)
+
 ------------------------------------------------------------------------------
 COMMANDS					*pass-commands*
 
