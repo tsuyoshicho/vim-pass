@@ -190,15 +190,28 @@ at before loading, use internal default.
 ------------------------------------------------------------------------------
 COMMANDS					*pass-commands*
 
-:PassGet {entry} ...   				*:PassGet*
+:PassGet {entry} ...				*:PassGet*
 
 Password check command, password-store entry name set to arg.
 This command need {entry}, You can use <tab> to auto-complete the {entry} when
 typing it.
 
+:PassGetOtp {entry} ...				*:PassGetOtp*
+
+Password otp check command, password-store entry name set to arg.
+This command need {entry}, You can use <tab> to auto-complete the {entry} when
+typing it.
+
 :PassGetRegister {entry} ...			*:PassGetRegister*
 
-Password save ad register command, password-store entry name set to arg .
+Password save ad register command, password-store entry name set to arg.
+Currently only work unnamed register and eternaly.
+This command need {entry}, You can use <tab> to auto-complete the {entry} when
+typing it.
+
+:PassGetOtpRegister {entry} ...			*:PassGetOtpRegister*
+
+Password otp save ad register command, password-store entry name set to arg.
 Currently only work unnamed register and eternaly.
 This command need {entry}, You can use <tab> to auto-complete the {entry} when
 typing it.
@@ -212,12 +225,24 @@ Password get API, return value.
 entry is password-store style.
 Optionally item name.
 
+pass#get_otp({entry}})				*pass#get_otp()*
+
+Password get API, return otp value.
+entry is password-store style.
+
 pass#get_register({entry}, {...})		*pass#get_register()*
 
 Password get API, value set to register.
 entry is password-store style.
 Optionally item name.
-Currently not work.
+Currently limited work, copy to unnamed register.
+It will disappear from the register as time passes.
+
+pass#get_otp_register({entry})		*pass#get_otp_register()*
+
+Password get API, otp value set to register.
+entry is password-store style.
+Currently limited work, copy to unnamed register.
 It will disappear from the register as time passes.
 
 						*pass#get_startup()*

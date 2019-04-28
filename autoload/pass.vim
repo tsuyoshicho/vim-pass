@@ -20,6 +20,13 @@ function! pass#get(entry, ...) abort
   return pass#get#entry_value(a:entry, a:000)
 endfunction
 
+" API get_otp
+" return value
+function! pass#get_otp(entry) abort
+  let uri = pass#get#entry_value(a:entry, ['otp'])
+  return pass#otp#value(uri)
+endfunction
+
 " API get_register
 " copy to register (timered clear)
 " If remote : request passphrase
@@ -28,6 +35,17 @@ function! pass#get_register(entry, ...) abort
   " register clear timer(at expire timer.if register remain value,then clear)
   " currently support unnamed register.
   let @" = pass#get#entry_value(a:entry, a:000)
+endfunction
+
+" API get_otp_register
+" copy to register otp (timered clear)
+" If remote : request passphrase
+function! pass#get_otp_register(entry) abort
+  " set to register
+  " register clear timer(at expire timer.if register remain value,then clear)
+  " currently support unnamed register.
+  let uri = pass#get#entry_value(a:entry, ['otp'])
+  let @" = pass#otp#value(uri)
 endfunction
 
 " API get_startup_scope

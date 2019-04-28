@@ -104,6 +104,14 @@ function! s:select_entry_value(entrylist, keywords) abort
   if keyname == 'password'
     " need default -> first line password
     let retvalue = entrylist[0]
+  elseif key == 'otp'
+    " special value otpauth://
+    for e in entrylist[1:]
+      if 0 == match(e, '\c\V' . escape('otpauth://','\'))
+        let retvalue = e
+        break
+      endif
+    endfor
   else
     " generate dict(key,value)
     let entrymap = {}
