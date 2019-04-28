@@ -31,6 +31,7 @@ let g:pass_entry_altmap  = extend(get(g:, 'pass_entry_altmap', {}),{
       \}, "keep")
 
 command! -nargs=1 -complete=custom,pass#util#completion PassGet         :echo pass#get(<f-args>)
+command! -nargs=1 -complete=custom,pass#util#completion PassGetOtp      :echo pass#get_otp(<f-args>)
 command! -nargs=1 -complete=custom,pass#util#completion PassGetRegister :call pass#get_register(<f-args>)
 
 augroup passstartup

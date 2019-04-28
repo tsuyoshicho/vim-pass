@@ -1,12 +1,12 @@
 vimpass
 ccc69e2a0fd3ed1fb1576b217dbc6236e1a9b018
 
+Data.Base32
 Data.List
 Data.String
-System.Process
-System.Filepath
-Data.Base32
-Hash.SHA1
-Web.HTTP
-Hash.HMAC
+Hash.MD5
 Hash.OTP
+Hash.SHA1
+System.Filepath
+System.Process
+Web.URI
