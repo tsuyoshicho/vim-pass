@@ -19,7 +19,7 @@ function! pass#otp#value(otpauth) abort
   " like otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example
 
   let otpauth_result = s:URI.new(a:otpauth)
-  let type = s:otpauth_result.host()
+  let type = otpauth_result.host()
 
   let paramlist = split(otpauth_result.query(),'&')
   let parammap  = {}
