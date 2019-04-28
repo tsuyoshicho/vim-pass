@@ -84,6 +84,7 @@ function! s:select_entry_value(entrylist, keywords) abort
   endif
 
   let key = a:keywords[0]
+  let keyname = ''
   let keylist = [key]
 
   " password entry required.
