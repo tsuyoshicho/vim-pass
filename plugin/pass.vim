@@ -35,9 +35,9 @@ command! -nargs=1 -complete=custom,pass#util#completion PassGetOtp :echo pass#ge
 command! -nargs=1 -complete=custom,pass#util#completion PassGetRegister    :call pass#get_register(<f-args>)
 command! -nargs=1 -complete=custom,pass#util#completion PassGetOtpRegister :call pass#get_otp_register(<f-args>)
 
-augroup passstartup
+augroup pass-startup
   autocmd!
-  autocmd VimEnter * call pass#resolve_startup()
+  autocmd VimEnter * call pass#resolve_startup() | autocmd! pass-startup
 augroup END
 
 let &cpo = s:save_cpo
