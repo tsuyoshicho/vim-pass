@@ -8,3 +8,4 @@ System.Filepath
 Data.Base32
 Hash.SHA1
 Web.HTTP
+Hash.HMAC

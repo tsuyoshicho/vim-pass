@@ -4,7 +4,7 @@
 function! s:_SID() abort
   return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze__SID$')
 endfunction
-execute join(['function! vital#_vimpass#Hash#SHA1#import() abort', printf("return map({'_vital_depends': '', 'sha1circular_shift': '', 'digest': '', 'sum': '', '_vital_loaded': ''}, \"vital#_vimpass#function('<SNR>%s_' . v:key)\")", s:_SID()), 'endfunction'], "\n")
+execute join(['function! vital#_vimpass#Hash#SHA1#import() abort', printf("return map({'_vital_depends': '', 'sum_raw': '', 'sha1circular_shift': '', 'digest': '', 'digest_raw': '', 'sum': '', '_vital_loaded': ''}, \"vital#_vimpass#function('<SNR>%s_' . v:key)\")", s:_SID()), 'endfunction'], "\n")
 delfunction s:_SID
 " ___vital___
 " Utilities for SHA1.
@@ -57,10 +57,20 @@ function! s:_vital_depends() abort
 endfunction
 
 function! s:sum(data) abort
-  return s:digest(s:_str2bytes(a:data))
+  let bytes = s:_str2bytes(a:data)
+  return s:sum_raw(bytes)
 endfunction
 
-function! s:digest(bytes) abort
+function! s:sum_raw(bytes) abort
+  return s:_bytes2str(s:digest_raw(a:bytes))
+endfunction
+
+function! s:digest(data) abort
+  let bytes = s:_str2bytes(a:data)
+  return s:digest_raw(a:bytes)
+endfunction
+
+function! s:digest_raw(bytes) abort
   let sha = deepcopy(s:sha1context, 1)
   let digest = repeat([0], s:sha1hashsize)
 
@@ -76,7 +86,7 @@ function! s:digest(bytes) abort
     throw printf('vital: Hash.SHA1: result Error %d', err)
   endif
 
-  return s:_bytes2str(digest)
+  return digest
 endfunction
 
 " enum
