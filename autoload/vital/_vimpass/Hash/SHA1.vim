@@ -4,7 +4,7 @@
 function! s:_SID() abort
   return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze__SID$')
 endfunction
-execute join(['function! vital#_vimpass#Hash#SHA1#import() abort', printf("return map({'_vital_depends': '', 'sum_raw': '', 'sha1circular_shift': '', 'digest': '', 'digest_raw': '', 'sum': '', '_vital_loaded': ''}, \"vital#_vimpass#function('<SNR>%s_' . v:key)\")", s:_SID()), 'endfunction'], "\n")
+execute join(['function! vital#_vimpass#Hash#SHA1#import() abort', printf("return map({'_vital_depends': '', 'sum_raw': '', 'sum': '', 'digest': '', 'digest_raw': '', '_vital_loaded': ''}, \"vital#_vimpass#function('<SNR>%s_' . v:key)\")", s:_SID()), 'endfunction'], "\n")
 delfunction s:_SID
 " ___vital___
 " Utilities for SHA1.
@@ -67,16 +67,17 @@ endfunction
 
 function! s:digest(data) abort
   let bytes = s:_str2bytes(a:data)
-  return s:digest_raw(a:bytes)
+  return s:digest_raw(bytes)
 endfunction
 
 function! s:digest_raw(bytes) abort
+  let bytes = copy(a:bytes)
   let sha = deepcopy(s:sha1context, 1)
   let digest = repeat([0], s:sha1hashsize)
 
   call sha.init()
 
-  let err = sha.input(a:bytes)
+  let err = sha.input(bytes)
   if err
     throw printf('vital: Hash.SHA1: input Error %d', err)
   endif
@@ -114,7 +115,7 @@ let s:sha1context = {
       \ 'Corrupted'          : 0,
       \}
 
-function! s:sha1circular_shift(bits, word) abort
+function! s:_sha1circular_shift(bits, word) abort
   return s:bitwise.or(s:bitwise.lshift32(a:word, a:bits), s:bitwise.rshift32(a:word, 32 - a:bits))
 endfunction
 
@@ -216,7 +217,7 @@ function! s:sha1context.process() dict abort
   endfor
 
   for t in range(16, 79)
-    let W[t] = s:sha1circular_shift(1, s:bitwise.xor(s:bitwise.xor(s:bitwise.xor(W[t-3], W[t-8]), W[t-14]), W[t-16]))
+    let W[t] = s:_sha1circular_shift(1, s:bitwise.xor(s:bitwise.xor(s:bitwise.xor(W[t-3], W[t-8]), W[t-14]), W[t-16]))
   endfor
 
   let A = self.intermediatehash[0]
@@ -226,42 +227,42 @@ function! s:sha1context.process() dict abort
   let E = self.intermediatehash[4]
 
   for t in range(20)
-    let temp = s:sha1circular_shift(5,A) +
+    let temp = s:_sha1circular_shift(5,A) +
           \ s:bitwise.or(s:bitwise.and(B, C), s:bitwise.and(s:bitwise.invert(B), D)) +
           \ E + W[t] + K[0]
     let E = D
     let D = C
-    let C = s:sha1circular_shift(30,B)
+    let C = s:_sha1circular_shift(30,B)
     let B = A
     let A = temp
   endfor
 
   for t in range(20, 39)
-    let temp = s:sha1circular_shift(5,A) + s:bitwise.xor(s:bitwise.xor(B, C), D) + E + W[t] + K[1]
+    let temp = s:_sha1circular_shift(5,A) + s:bitwise.xor(s:bitwise.xor(B, C), D) + E + W[t] + K[1]
     let E = D
     let D = C
-    let C = s:sha1circular_shift(30,B)
+    let C = s:_sha1circular_shift(30,B)
     let B = A
     let A = temp
   endfor
 
   for t in range(40, 59)
-    let temp = s:sha1circular_shift(5,A) +
+    let temp = s:_sha1circular_shift(5,A) +
           \ s:bitwise.or(s:bitwise.or(s:bitwise.and(B, C), s:bitwise.and(B, D)), s:bitwise.and(C, D)) +
           \ E + W[t] + K[2]
     let E = D
     let D = C
-    let C = s:sha1circular_shift(30,B)
+    let C = s:_sha1circular_shift(30,B)
     let B = A
     let A = temp
   endfor
 
   for t in range(60, 79)
-    let temp = s:sha1circular_shift(5,A) +
+    let temp = s:_sha1circular_shift(5,A) +
           \ s:bitwise.xor(s:bitwise.xor(B, C), D) + E + W[t] + K[3]
     let E = D
     let D = C
-    let C = s:sha1circular_shift(30,B)
+    let C = s:_sha1circular_shift(30,B)
     let B = A
     let A = temp
   endfor
