@@ -45,7 +45,7 @@ function! pass#otp#value(otpauth) abort
   let secret = s:Base32.decode(parammap['secret'])
 
   let default = s:OTP.default()
-  return  s:OTP.totp(secret, default.TOTP.period, g:V.import('Hash.' . default.TOTP.algo), default.TOTP.digit)
+  return s:OTP.totp(secret, default.TOTP.period, vital#vimpass#import('Hash.' . default.TOTP.algo), default.TOTP.digit)
 endfunction
 
 let &cpo = s:save_cpo
