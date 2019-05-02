@@ -82,7 +82,7 @@ function! s:HMAC.calc(data) abort
   endif
 
   if len(key) > 64
-    let key = hash.digest_raw(a:key)
+    let key = hash.digest_raw(key)
   endif
 
   let ipad = s:List.new(64,0)
