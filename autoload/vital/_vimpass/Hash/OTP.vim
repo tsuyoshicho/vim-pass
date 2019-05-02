@@ -30,8 +30,8 @@ let s:DEFAULT = {
 function! s:_vital_loaded(V) abort
   let s:V = a:V
   let s:bitwise = s:V.import('Bitwise')
-  let s:HMAC = g:V.import('Hash.HMAC')
-  let s:List = g:V.import('Data.List')
+  let s:HMAC    = s:V.import('Hash.HMAC')
+  let s:List    = s:V.import('Data.List')
 endfunction
 
 function! s:_vital_depends() abort
