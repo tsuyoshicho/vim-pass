@@ -8,7 +8,6 @@ execute join(['function! vital#_vimpass#Hash#OTP#import() abort', printf("return
 delfunction s:_SID
 " ___vital___
 " Utilities for HOTP/TOTP
-" tp
 " RFC 4226 - HOTP: An HMAC-Based One-Time Password Algorithm https://tools.ietf.org/html/rfc4226
 " RFC 6238 - TOTP: Time-Based One-Time Password Algorithm https://tools.ietf.org/html/rfc6238
 
@@ -44,7 +43,7 @@ endfunction
 function! s:hotp(key, counter, algo, digit) abort
   let hmac = s:HMAC.new(a:algo, a:key)
   if s:DEFAULT.HOTP.counter == len(a:counter)
-    let counter = a:counter
+    let counter = copy(a:counter)
   elseif s:DEFAULT.HOTP.counter > len(a:counter)
     let counter = s:List.new(s:DEFAULT.HOTP.counter,0)
     for i in range(s:DEFAULT.HOTP.counter)
@@ -71,7 +70,12 @@ function! s:totp(key, period, algo, digit) abort
   let now_sec = localtime()
   let epoch_sec = 0
 
-  let counter = s:_int322bytes_be(float2nr(floor((now_sec - epoch_sec) / a:period)))
+  if has('num64')
+    let counter = s:_int642bytes_be(float2nr(floor((now_sec - epoch_sec) / a:period)))
+  else
+    let counter = s:_int322bytes_be(float2nr(floor((now_sec - epoch_sec) / a:period)))
+  endif
+
   return s:hotp(a:key, counter, a:algo, a:digit)
 endfunction
 
@@ -99,7 +103,7 @@ function! s:_bytes2str(bytes) abort
 endfunction
 
 function! s:_bytes2int32_be(bytes) abort
-  return  s:bitwise.or(s:bitwise.lshift(a:bytes[0], 24), 
+  return  s:bitwise.or(s:bitwise.lshift(a:bytes[0], 24),
         \ s:bitwise.or(s:bitwise.lshift(a:bytes[1], 16),
         \ s:bitwise.or(s:bitwise.lshift(a:bytes[2], 8),
         \ a:bytes[3])))
@@ -107,6 +111,17 @@ endfunction
 
 function! s:_int322bytes_be(value) abort
   return [s:_uint8(s:bitwise.rshift(a:value, 24)),
+        \ s:_uint8(s:bitwise.rshift(a:value, 16)),
+        \ s:_uint8(s:bitwise.rshift(a:value, 8)),
+        \ s:_uint8(a:value)]
+endfunction
+
+function! s:_int642bytes_be(value) abort
+  return [s:_uint8(s:bitwise.rshift(a:value, 56)),
+        \ s:_uint8(s:bitwise.rshift(a:value, 48)),
+        \ s:_uint8(s:bitwise.rshift(a:value, 40)),
+        \ s:_uint8(s:bitwise.rshift(a:value, 32)),
+        \ s:_uint8(s:bitwise.rshift(a:value, 24)),
         \ s:_uint8(s:bitwise.rshift(a:value, 16)),
         \ s:_uint8(s:bitwise.rshift(a:value, 8)),
         \ s:_uint8(a:value)]
