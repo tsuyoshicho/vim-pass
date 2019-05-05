@@ -20,6 +20,10 @@ function! pass#startup#entry_setup(scope, set_variable, entry, keywords) abort
   call s:List.push(s:pass_startup_request, Fn)
 endfunction
 
+function! pass#startup#entry_setup_funcall(func, entry, keywords) abort
+  let Fn = function('s:funcresolver',[a:func,a:entry,a:keywords])
+  call s:List.push(s:pass_startup_request, Fn)
+endfunction
 
 " API resolve_startup(autocmd use)
 function! pass#startup#resolve() abort
@@ -44,6 +48,12 @@ function! s:resolver(scope,set_variable, entry, keywords) abort
   else
     let a:scope[a:set_variable] = value
   endif
+endfunction
+
+function! s:funcresolver(func, entry, keywords) abort
+  let value = pass#get#entry_value(a:entry, a:keywords)
+
+  call(a:func,[value])
 endfunction
 
 let &cpo = s:save_cpo
