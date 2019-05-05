@@ -98,7 +98,36 @@ CtrlPのプラグインとしては |ctrlp-pass| を参照してください。
  hook_add = '''
    call pass#get_startup('g:RHUBARB_TOKEN','Develop/Github')
  '''
-
+ 
+ [[plugins]]
+ repo = 'kyoh86/vim-docbase'
+ depends = ['vim-pass']
+ hook_add = '''
+   let g:docbase = []
+   call pass#get_startup_funcall(
+         \ { v ->
+         \ add(g:docbase,
+         \   {
+         \     'domain': 'example1',
+         \     'token' : v
+         \   }
+         \  )
+         \ },
+         \ 'Develop/DocBase1'
+         \)
+   call pass#get_startup_funcall(
+         \ { v ->
+         \ add(g:docbase,
+         \   {
+         \     'domain': 'example2',
+         \     'token' : v
+         \   }
+         \  )
+         \ },
+         \ 'Develop/DocBase2'
+         \)
+ '''
+ 
  [[plugins]] # Slack
  repo = 'mizukmb/slackstatus.vim'
  depends = ['webapi-vim','vim-pass']
@@ -259,6 +288,14 @@ entryはpassword-storeのエントリ形式。
 オプションでパスワード以外の項目を指定できます。
 scopeには |get()| と同じように、g:やw:などのスコープを設定します。
 set-variableはスコープなしの変数を表す文字列です(ex. 'hoge_fuga')
+
+						*pass#get_startup_funcall()*
+pass#get_startup_funcall({funcref},{entry}, {...})
+
+パスワード取得API、起動時前専用で、値付きで{funcref}を呼びます。
+entryはpassword-storeのエントリ形式。
+オプションでパスワード以外の項目を指定できます。
+{funcref}を解決したパスワードを引数一つとして呼びます。
 
 pass#resolve_startup()				*pass#resolve_startup()*
 

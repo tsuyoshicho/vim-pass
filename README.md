@@ -82,6 +82,35 @@ hook_add = '''
   call pass#get_startup('g:RHUBARB_TOKEN','Develop/Github')
 '''
 
+[[plugins]]
+repo = 'kyoh86/vim-docbase'
+depends = ['vim-pass']
+hook_add = '''
+  let g:docbase = []
+  call pass#get_startup_funcall(
+        \ { v ->
+        \ add(g:docbase,
+        \   {
+        \     'domain': 'example1',
+        \     'token' : v
+        \   }
+        \  )
+        \ },
+        \ 'Develop/DocBase1'
+        \)
+  call pass#get_startup_funcall(
+        \ { v ->
+        \ add(g:docbase,
+        \   {
+        \     'domain': 'example2',
+        \     'token' : v
+        \   }
+        \  )
+        \ },
+        \ 'Develop/DocBase2'
+        \)
+'''
+
 [[plugins]] # Slack
 repo = 'mizukmb/slackstatus.vim'
 depends = ['webapi-vim','vim-pass']
