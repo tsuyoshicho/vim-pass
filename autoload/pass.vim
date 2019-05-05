@@ -24,7 +24,12 @@ endfunction
 " return value
 function! pass#get_otp(entry) abort
   let uri = pass#get#entry_value(a:entry, ['otp'])
-  return pass#otp#value(uri)
+  if empty(uri)
+    echo 'no entry otpauth://'
+    return ''
+  else
+    return pass#otp#value(uri)
+  endif
 endfunction
 
 " API get_register
@@ -45,7 +50,11 @@ function! pass#get_otp_register(entry) abort
   " register clear timer(at expire timer.if register remain value,then clear)
   " currently support unnamed register.
   let uri = pass#get#entry_value(a:entry, ['otp'])
-  let @" = pass#otp#value(uri)
+  if empty(uri)
+    echo 'no entry otpauth://'
+  else
+    let @" = pass#otp#value(uri)
+  endif
 endfunction
 
 " API get_startup_scope
