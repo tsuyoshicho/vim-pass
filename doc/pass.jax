@@ -59,7 +59,7 @@ CtrlPのプラグインとしては |ctrlp-pass| を参照してください。
  " configured at end of vim startup
  call pass#get_startup('g:test_gh_token','Develop/Github')
  call pass#get_startup('g:test_gh_username','Develop/Github','username')
-
+ 
  function! test() abort
    let password = pass#get('Service/foobar')
    " ...
@@ -76,21 +76,21 @@ CtrlPのプラグインとしては |ctrlp-pass| を参照してください。
    let g:ctrlp_extensions = get(g:, 'ctrlp_extensions', [])
          \ + ['pass']
  '''
-
+ 
  [[plugins]] # https://pixe.la/
  repo = 'mattn/vim-pixela'
  depends = ['open-browser.vim','vim-pass']
  hook_add = '''
    " let g:pixela_username = 'user'
    " let g:pixela_token    = 'token'
-
+ 
    call pass#get_startup('g:pixela_username','Develop/Pixela','username')
    " VimPixela work OK
    call pass#get_startup('g:pixela_token','Develop/Pixela')
    " startup-time countup do not correct work.
    " It work or does not work depending on the processing order of events
  '''
-
+ 
  [[plugins]]
  repo = 'tpope/vim-rhubarb'
  depends = ['vim-fugitive','vim-pass']
@@ -113,15 +113,15 @@ CtrlPのプラグインとしては |ctrlp-pass| を参照してください。
      let slacklist = ['myhoge','vim-jp']
      return slacklist
    endfunction
-
+ 
    function s:slackstatus_change_token(team) abort
      let path = 'Message/Slack/' . a:team . '.legacy'
      let g:slackstatus_token = pass#get(path)
    endfunction
-
+ 
    command! -nargs=1 -complete=customlist,<SID>slack_list SlackStatusChange :call <SID>slackstatus_change_token(<f-args>)
  '''
-
+ 
  [[plugins]] # Mastodon
  repo = 'mattn/vim-mastodon'
  depends = ['webapi-vim','vim-pass']
@@ -129,18 +129,18 @@ CtrlPのプラグインとしては |ctrlp-pass| を参照してください。
    " mstdn.jp
    " let g:mastodon_host = 'mstdn.jp'
    " call pass#get_startup('g:mastodon_access_token','Message/Mastodon/mstdn.jp')
-
+ 
    function! s:mastodon_completion(A,L,P) abort
      let host_list = ['mstdn.jp']
      return join(host_list,"\n")
    endfunction
-
+ 
    function s:mastodon_change_hosttoken(host) abort
      let path = 'Message/Mastodon/' . a:host
      let g:mastodon_host = a:host
      let g:mastodon_access_token = pass#get(path)
    endfunction
-
+ 
    command! -nargs=1 -complete=custom,<SID>mastodon_completion MastodonHostChange :call <SID>mastodon_change_hosttoken(<f-args>)
  '''
 <
@@ -235,7 +235,7 @@ entryはpassword-storeのエントリ形式。
 まだ動作しません。
 時間経過でレジスタから消える予定。
 
-pass#get_otp_register({entry})		*pass#get_otp_register()*
+pass#get_otp_register({entry})			*pass#get_otp_register()*
 
 パスワード取得API、レジスタにOTP値を設定します。
 entryはpassword-storeのエントリ形式。
