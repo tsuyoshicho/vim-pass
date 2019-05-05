@@ -53,7 +53,7 @@ endfunction
 function! s:funcresolver(func, entry, keywords) abort
   let value = pass#get#entry_value(a:entry, a:keywords)
 
-  call(a:func,[value])
+  call call(a:func,[value])
 endfunction
 
 let &cpo = s:save_cpo
