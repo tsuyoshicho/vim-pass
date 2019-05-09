@@ -57,7 +57,7 @@ function! pass#get_otp_register(entry) abort
   endif
 endfunction
 
-" API get_startup_scope
+" API get_startup_funcall
 " use only while startup.at end of start up,invoke passphrase input once.
 " all waited process execute
 function! pass#get_startup_funcall(func,entry, ...) abort
@@ -73,7 +73,7 @@ endfunction
 " all waited process execute
 function! pass#get_startup_scope(scope,set_variable,entry, ...) abort
   if v:vim_did_enter == 0
-    call pass#startup#entry_setup(a:scope,a:set_variable,a:entry,a:000)
+    call pass#startup#entry_setup_letval(a:scope,a:set_variable,a:entry,a:000)
   else
     throw 'Already startup done.'
   endif
@@ -84,7 +84,7 @@ endfunction
 " all waited process execute
 function! pass#get_startup(set_variable,entry, ...) abort
   if v:vim_did_enter == 0
-    call pass#startup#entry_setup(v:null,a:set_variable,a:entry,a:000)
+    call pass#startup#entry_setup_letval(v:null,a:set_variable,a:entry,a:000)
   else
     throw 'Already startup done.'
   endif

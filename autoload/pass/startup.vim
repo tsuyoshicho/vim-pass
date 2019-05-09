@@ -15,13 +15,13 @@ let s:List    = vital#vimpass#import('Data.List')
 " variable
 let s:pass_startup_request = []
 
-function! pass#startup#entry_setup(scope, set_variable, entry, keywords) abort
-  let Fn = function('s:resolver',[a:scope,a:set_variable,a:entry,a:keywords])
+function! pass#startup#entry_setup_letval(scope, set_variable, entry, keywords) abort
+  let Fn = function('s:letval_resolver',[a:scope,a:set_variable,a:entry,a:keywords])
   call s:List.push(s:pass_startup_request, Fn)
 endfunction
 
 function! pass#startup#entry_setup_funcall(func, entry, keywords) abort
-  let Fn = function('s:funcresolver',[a:func,a:entry,a:keywords])
+  let Fn = function('s:funcall_resolver',[a:func,a:entry,a:keywords])
   call s:List.push(s:pass_startup_request, Fn)
 endfunction
 
@@ -40,7 +40,7 @@ function! pass#startup#resolve() abort
   let s:pass_startup_request = []
 endfunction
 
-function! s:resolver(scope,set_variable, entry, keywords) abort
+function! s:letval_resolver(scope,set_variable, entry, keywords) abort
   let value = pass#get#entry_value(a:entry, a:keywords)
 
   if v:null == a:scope
@@ -50,7 +50,7 @@ function! s:resolver(scope,set_variable, entry, keywords) abort
   endif
 endfunction
 
-function! s:funcresolver(func, entry, keywords) abort
+function! s:funcall_resolver(func, entry, keywords) abort
   let value = pass#get#entry_value(a:entry, a:keywords)
 
   call call(a:func,[value])
