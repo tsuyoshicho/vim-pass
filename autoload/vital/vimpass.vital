@@ -10,3 +10,4 @@ Hash.SHA1
 System.Filepath
 System.Process
 Web.URI
+Async.Promise.Process

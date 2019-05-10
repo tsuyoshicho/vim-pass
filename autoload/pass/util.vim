@@ -12,6 +12,7 @@ set cpo&vim
 let s:Process = vital#vimpass#import('System.Process')
 let s:List    = vital#vimpass#import('Data.List')
 let s:String  = vital#vimpass#import('Data.String')
+let s:AsyncProcess = vital#vimpass#import('Async.Promise.Process')
 
 function! pass#util#list() abort
   let keylist = globpath(expand(g:pass_store_path, ':p'), '**/*.gpg', 1, 1)
@@ -64,6 +65,9 @@ function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
 
   let result = s:Process.execute(cmd)
   let entrylist = s:String.lines(result.output)
+
+  " debug
+  call s:AsyncProcess.start(cmd).then(v -> let g:test = v)
 
   return entrylist
 endfunction
