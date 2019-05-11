@@ -70,11 +70,11 @@ function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
   let g:Testfunc = { ->
         \ s:AsyncProcess.start(cmd)
         \  .then({v -> s:select_entry_value(v.stdout, [])})
-        \  .finally({v -> execute('echomsg v')})
+        \  .then({v -> execute('echomsg v')})
         \}
   call s:AsyncProcess.start(cmd)
         \  .then({v -> s:select_entry_value(v.stdout, [])})
-        \  .finally({v -> execute('let g:test = v')})
+        \  .then({v -> execute('let g:test = v')})
 
   return entrylist
 endfunction
