@@ -15,6 +15,15 @@ let s:List    = vital#vimpass#import('Data.List')
 " variable
 let s:pass_startup_request = []
 
+
+" Provide startup operation
+" pass#startup#entry_setup_letval   let val style startup registration function
+" pass#startup#entry_setup_funcall  funcall style startup registration function
+" pass#startup#resolve              registration function resolve routine
+"
+" letval_resolver                   let val resolver
+" funcall_resolver                  funcall resolver
+
 function! pass#startup#entry_setup_letval(scope, set_variable, entry, keywords) abort
   let Fn = function('s:letval_resolver',[a:scope,a:set_variable,a:entry,a:keywords])
   call s:List.push(s:pass_startup_request, Fn)

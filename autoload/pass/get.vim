@@ -12,6 +12,19 @@ set cpo&vim
 " Vital
 let s:Path    = vital#vimpass#import('System.Filepath')
 
+" Provide information get operation
+" pass#get#id            get gpg-id
+" pass#get#passphrase    get passphrase (passphrase management ...)
+" pass#get#entry_value   get entry value
+" pass#get#entry_path    get entry real file path util....
+"
+" new API define
+" passphrase retry-able checker's result use
+" pass#get#entry_async?   return Process Promise ?
+"  return promise
+"   has method resolve() call process
+"   then chainable
+
 " get entry data
 function! pass#get#entry_value(entry, keywords) abort
   " get gpg-id

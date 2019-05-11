@@ -14,6 +14,23 @@ let s:List    = vital#vimpass#import('Data.List')
 let s:String  = vital#vimpass#import('Data.String')
 let s:AsyncProcess = vital#vimpass#import('Async.Promise.Process')
 
+" Provide GPG operation and other utility
+" pass#util#list       entry list
+" pass#util#completion entry completion
+" pass#util#decode     entry decode utility
+"
+" decrypt_entry_gpg    gpg command utililty decode
+" select_entry_value   gpg decoded value selection  utililty
+"
+" new API define
+" passphrase retry-able checker
+"  need startup/every call
+"  n-retry / dry-run check (list top use)
+"  if success passphrase getter always return success value
+"  if failer  passphrase ng message echo and call fail/startup retire
+" wrap pass#get#entry_async?
+"  return promise value get success set value / get failed echo msg?
+
 function! pass#util#list() abort
   let keylist = globpath(expand(g:pass_store_path, ':p'), '**/*.gpg', 1, 1)
   " /dir/entry.gpg to dir/entry
@@ -66,7 +83,7 @@ function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
   let result = s:Process.execute(cmd)
   let entrylist = s:String.lines(result.output)
 
-  " debug
+  " debug                                                                                                           utililty
   let g:Testfunc = { ->
        \ s:AsyncProcess.start(cmd)
        \.then({v -> s:select_entry_value(v.stdout, [])})
