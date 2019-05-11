@@ -68,13 +68,13 @@ function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
 
   " debug
   let g:Testfunc = { ->
-        \ s:AsyncProcess.start(cmd)
-        \  .then({v -> s:select_entry_value(v.stdout, [])})
-        \  .then({v -> execute('echomsg v')})
-        \}
+       \ s:AsyncProcess.start(cmd)
+       \.then({v -> s:select_entry_value(v.stdout, [])})
+       \.then({v -> execute('echomsg v', '')})
+       \}
   call s:AsyncProcess.start(cmd)
-        \  .then({v -> s:select_entry_value(v.stdout, [])})
-        \  .then({v -> execute('let g:test = v')})
+       \.then({v -> s:select_entry_value(v.stdout, [])})
+       \.then({v -> execute('let g:test = v', '')})
 
   return entrylist
 endfunction
