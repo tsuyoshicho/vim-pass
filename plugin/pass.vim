@@ -30,7 +30,8 @@ let g:pass_entry_altmap  = extend(get(g:, 'pass_entry_altmap', {}),{
       \ 'host'     : ['host', 'url',      'uri'          ],
       \}, "keep")
 
-command! -nargs=1 -complete=custom,pass#util#completion PassGet    :echo pass#get(<f-args>)
+command! -nargs=1 -complete=custom,pass#util#completion PassGet     :echo pass#get(<f-args>)
+command! -nargs=1 -complete=custom,pass#util#completion PassGetTest :echo pass#get_test(<f-args>)
 command! -nargs=1 -complete=custom,pass#util#completion PassGetOtp :echo pass#get_otp(<f-args>)
 command! -nargs=1 -complete=custom,pass#util#completion PassGetRegister    :call pass#get_register(<f-args>)
 command! -nargs=1 -complete=custom,pass#util#completion PassGetOtpRegister :call pass#get_otp_register(<f-args>)

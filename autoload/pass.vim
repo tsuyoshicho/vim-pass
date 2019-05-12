@@ -20,6 +20,10 @@ function! pass#get(entry, ...) abort
   return pass#get#entry_value(a:entry, a:000)
 endfunction
 
+function! pass#get_test(entry, ...) abort
+  return pass#test#entry_value(a:entry, a:000)
+endfunction
+
 " API get_otp
 " return value
 function! pass#get_otp(entry) abort

@@ -14,13 +14,47 @@ let s:Path    = vital#vimpass#import('System.Filepath')
 let s:Process = vital#vimpass#import('System.Process')
 let s:List    = vital#vimpass#import('Data.List')
 let s:String  = vital#vimpass#import('Data.String')
-let s:AsyncProcess = vital#vimpass#import('Async.Promise.Process')
+" let s:AsyncProcess = vital#vimpass#import('Async.Promise.Process')
 let s:List    = vital#vimpass#import('Data.List')
 
 " variable
 let s:pass_startup_request = []
 
 " test code
+" almost fixed
+" '' or ID
+function! pass#test#id() abort
+  " check exist
+  if 0 == exists('s:_pass_gpg_id')
+    let s:_pass_gpg_id = ''
+
+    let gpgidpath = s:Path.realpath(
+                      \ s:Path.abspath(
+                        \ expand(s:Path.remove_last_separator(g:pass_store_path) . s:Path.separator()
+                                  \ . '.gpg-id')))
+
+    if !(filereadable(gpgidpath))
+      " no work
+      return s:_pass_gpg_id
+    endif
+
+    let read_result = readfile(gpgidpath)
+
+    if 0 < len(read_result)
+      let s:_pass_gpg_id = read_result[0]
+    endif
+  endif
+
+  return s:_pass_gpg_id
+endfunction
+
+" path
+function! pass#test#entry_path(entry) abort
+  return s:Path.realpath(
+                  \ s:Path.abspath(
+                    \ expand(s:Path.remove_last_separator(g:pass_store_path) . s:Path.separator()
+                               \ . a:entry . '.gpg')))
+endfunction
 
 function! pass#test#list() abort
   let keylist = globpath(expand(g:pass_store_path, ':p'), '**/*.gpg', 1, 1)
@@ -36,6 +70,8 @@ endfunction
 function! pass#test#completion(A,L,P) abort
   return join(pass#test#list(),"\n")
 endfunction
+
+" ==========================================================================================
 
 " value
 function! pass#test#decode(gpgid, entrypath, passphrase, keywords) abort
@@ -74,14 +110,15 @@ function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
   let result = s:Process.execute(cmd)
   let entrylist = s:String.lines(result.output)
 
-  let g:Testfunc = { ->
-       \ s:AsyncProcess.start(cmd)
-       \.then({v -> s:select_entry_value(v.stdout, [])})
-       \.then({v -> execute('echomsg v', '')})
-       \}
-  call s:AsyncProcess.start(cmd)
-       \.then({v -> s:select_entry_value(v.stdout, [])})
-       \.then({v -> execute('let g:test = v', '')})
+  " debug test
+  " let g:Testfunc = { ->
+  "     \ s:AsyncProcess.start(cmd)
+  "     \.then({v -> s:select_entry_value(v.stdout, [])})
+  "     \.then({v -> execute('echomsg v', '')})
+  "     \}
+  " call s:AsyncProcess.start(cmd)
+  "     \.then({v -> s:select_entry_value(v.stdout, [])})
+  "     \.then({v -> execute('let g:test = v', '')})
 
   return entrylist
 endfunction
@@ -171,31 +208,6 @@ function! pass#test#entry_value(entry, keywords) abort
   return entry_value
 endfunction
 
-" '' or ID
-function! pass#test#id() abort
-  " check exist
-  if 0 == exists('s:_pass_gpg_id')
-    let s:_pass_gpg_id = ''
-
-    let gpgidpath = s:Path.realpath(
-                      \ s:Path.abspath(
-                        \ expand(s:Path.remove_last_separator(g:pass_store_path) . s:Path.separator()
-                                  \ . '.gpg-id')))
-
-    if !(filereadable(gpgidpath))
-      " no work
-      return s:_pass_gpg_id
-    endif
-
-    let read_result = readfile(gpgidpath)
-
-    if 0 < len(read_result)
-      let s:_pass_gpg_id = read_result[0]
-    endif
-  endif
-
-  return s:_pass_gpg_id
-endfunction
 
 " '' or passphrase
 function! pass#test#passphrase() abort
@@ -211,13 +223,7 @@ function! pass#test#passphrase() abort
   return s:_passphrase
 endfunction
 
-" path
-function! pass#test#entry_path(entry) abort
-  return s:Path.realpath(
-                  \ s:Path.abspath(
-                    \ expand(s:Path.remove_last_separator(g:pass_store_path) . s:Path.separator()
-                               \ . a:entry . '.gpg')))
-endfunction
+" ==========================================================================================
 
 function! pass#test#entry_setup_letval(scope, set_variable, entry, keywords) abort
   let Fn = function('s:letval_resolver',[a:scope,a:set_variable,a:entry,a:keywords])
