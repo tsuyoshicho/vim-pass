@@ -12,7 +12,6 @@ set cpo&vim
 let s:Process = vital#vimpass#import('System.Process')
 let s:List    = vital#vimpass#import('Data.List')
 let s:String  = vital#vimpass#import('Data.String')
-let s:AsyncProcess = vital#vimpass#import('Async.Promise.Process')
 
 " Provide GPG operation and other utility
 " pass#util#list       entry list
@@ -82,16 +81,6 @@ function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
 
   let result = s:Process.execute(cmd)
   let entrylist = s:String.lines(result.output)
-
-  " debug                                                                                                           utililty
-  let g:Testfunc = { ->
-       \ s:AsyncProcess.start(cmd)
-       \.then({v -> s:select_entry_value(v.stdout, [])})
-       \.then({v -> execute('echomsg v', '')})
-       \}
-  call s:AsyncProcess.start(cmd)
-       \.then({v -> s:select_entry_value(v.stdout, [])})
-       \.then({v -> execute('let g:test = v', '')})
 
   return entrylist
 endfunction
