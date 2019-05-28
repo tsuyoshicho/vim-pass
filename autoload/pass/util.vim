@@ -63,10 +63,7 @@ function! s:build_gpg_command(gpgid, entrypath, passphrase, appendcmds) abort
   call s:List.push(cmd, '-')
   call s:List.push(cmd, a:entrypath)
 
-  let result = s:Process.execute(cmd)
-  let entrylist = s:String.lines(result.output)
-
-  return entrylist
+  return cmd
 endfunction
 
 " execute command
