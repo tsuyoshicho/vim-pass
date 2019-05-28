@@ -10,10 +10,10 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Vital
-let s:Path    = vital#vimpass#import('System.Filepath')
+let s:Path = vital#vimpass#import('System.Filepath')
 
 " get entry data
-function! pass#get#entry_value(entry, keywords) abort
+function! pass#get#entry_value(entry, keyword) abort
   " get gpg-id
   let gpgid = pass#get#id()
   " get entry
@@ -26,7 +26,7 @@ function! pass#get#entry_value(entry, keywords) abort
   endif
 
   let passphrase = pass#get#passphrase()
-  let entry_value = pass#util#decode(gpgid, entrypath, passphrase, a:keywords)
+  let entry_value = pass#util#decode(gpgid, entrypath, passphrase, a:keyword)
 
   return entry_value
 endfunction

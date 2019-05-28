@@ -10,18 +10,18 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Vital
-let s:List    = vital#vimpass#import('Data.List')
+let s:List = vital#vimpass#import('Data.List')
 
 " variable
 let s:pass_startup_request = []
 
-function! pass#startup#entry_setup_letval(scope, set_variable, entry, keywords) abort
-  let Fn = function('s:letval_resolver',[a:scope,a:set_variable,a:entry,a:keywords])
+function! pass#startup#entry_setup_letval(scope, set_variable, entry, keyword) abort
+  let Fn = function('s:letval_resolver',[a:scope,a:set_variable,a:entry,a:keyword])
   call s:List.push(s:pass_startup_request, Fn)
 endfunction
 
-function! pass#startup#entry_setup_funcall(func, entry, keywords) abort
-  let Fn = function('s:funcall_resolver',[a:func,a:entry,a:keywords])
+function! pass#startup#entry_setup_funcall(func, entry, keyword) abort
+  let Fn = function('s:funcall_resolver',[a:func,a:entry,a:keyword])
   call s:List.push(s:pass_startup_request, Fn)
 endfunction
 
@@ -40,8 +40,8 @@ function! pass#startup#resolve() abort
   let s:pass_startup_request = []
 endfunction
 
-function! s:letval_resolver(scope,set_variable, entry, keywords) abort
-  let value = pass#get#entry_value(a:entry, a:keywords)
+function! s:letval_resolver(scope,set_variable, entry, keyword) abort
+  let value = pass#get#entry_value(a:entry, a:keyword)
 
   if v:null == a:scope
     call execute('let ' . a:set_variable . '=' . "'" . value . "'")
@@ -50,8 +50,8 @@ function! s:letval_resolver(scope,set_variable, entry, keywords) abort
   endif
 endfunction
 
-function! s:funcall_resolver(func, entry, keywords) abort
-  let value = pass#get#entry_value(a:entry, a:keywords)
+function! s:funcall_resolver(func, entry, keyword) abort
+  let value = pass#get#entry_value(a:entry, a:keyword)
 
   call call(a:func,[value])
 endfunction

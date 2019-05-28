@@ -29,9 +29,9 @@ function! pass#util#completion(A,L,P) abort
 endfunction
 
 " value
-function! pass#util#decode(gpgid, entrypath, passphrase, keywords) abort
+function! pass#util#decode(gpgid, entrypath, passphrase, keyword) abort
   let entrylist = s:decrypt_entry_gpg(a:gpgid, a:entrypath, a:passphrase)
-  return s:select_entry_value(entrylist, a:keywords)
+  return s:select_entry_value(entrylist, a:keyword)
 endfunction
 
 " execute command
@@ -70,7 +70,7 @@ endfunction
 
 " select entry value
 " input entry string list / return value string
-function! s:select_entry_value(entrylist, keywords) abort
+function! s:select_entry_value(entrylist, keyword) abort
   let entrylist = a:entrylist
 
   if empty(entrylist)
@@ -78,14 +78,9 @@ function! s:select_entry_value(entrylist, keywords) abort
     return ''
   endif
 
-  if empty(a:keywords)
-    " need default -> first line password
-    return entrylist[0]
-  endif
-
-  let key = a:keywords[0]
+  let keyword = a:keyword
   let keyname = ''
-  let keylist = [key]
+  let keylist = [keyword]
 
   " password entry required.
   let entry_altmap  = extend(get(g:, 'pass_entry_altmap', {}),{
@@ -93,7 +88,7 @@ function! s:select_entry_value(entrylist, keywords) abort
         \}, "keep")
 
   for [k,v] in items(entry_altmap)
-    if -1 != match(v, '\c\V' . escape(key,'\'))
+    if -1 != match(v, '\c\<' . escape(keyword,'\') . '\>')
       let keyname = k
       let keylist = v
       break
@@ -101,10 +96,10 @@ function! s:select_entry_value(entrylist, keywords) abort
   endfor
 
   let retvalue = ''
-  if keyname == 'password'
+  if (keyword == '') || (keyname == 'password')
     " need default -> first line password
     let retvalue = entrylist[0]
-  elseif key == 'otp'
+  elseif keyword == 'otp'
     " special value otpauth://
     for e in entrylist[1:]
       if 0 == match(e, '\c\V' . escape('otpauth://','\'))
@@ -113,7 +108,7 @@ function! s:select_entry_value(entrylist, keywords) abort
       endif
     endfor
   else
-    " generate dict(key,value)
+    " generate dict(key, value)
     let entrymap = {}
 
     " ignore password(first line)

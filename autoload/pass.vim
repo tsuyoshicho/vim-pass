@@ -17,7 +17,8 @@ set cpo&vim
 " API get
 " return value
 function! pass#get(entry, ...) abort
-  return pass#get#entry_value(a:entry, a:000)
+  let keyword = (a:0 > 0) ? a:1 : ''
+  return pass#get#entry_value(a:entry, keyword)
 endfunction
 
 " API get_otp
@@ -39,7 +40,8 @@ function! pass#get_register(entry, ...) abort
   " set to register
   " register clear timer(at expire timer.if register remain value,then clear)
   " currently support unnamed register.
-  let @" = pass#get#entry_value(a:entry, a:000)
+  let keyword = (a:0 > 0) ? a:1 : ''
+  let @" = pass#get#entry_value(a:entry, keyword)
 endfunction
 
 " API get_otp_register
@@ -61,8 +63,9 @@ endfunction
 " use only while startup.at end of start up,invoke passphrase input once.
 " all waited process execute
 function! pass#get_startup_funcall(func,entry, ...) abort
+  let keyword = (a:0 > 0) ? a:1 : ''
   if v:vim_did_enter == 0
-    call pass#startup#entry_setup_funcall(a:func,a:entry,a:000)
+    call pass#startup#entry_setup_funcall(a:func, a:entry, keyword)
   else
     throw 'Already startup done.'
   endif
@@ -72,8 +75,9 @@ endfunction
 " use only while startup.at end of start up,invoke passphrase input once.
 " all waited process execute
 function! pass#get_startup_scope(scope,set_variable,entry, ...) abort
+  let keyword =  (a:0 > 0) ? a:1 : ''
   if v:vim_did_enter == 0
-    call pass#startup#entry_setup_letval(a:scope,a:set_variable,a:entry,a:000)
+    call pass#startup#entry_setup_letval(a:scope, a:set_variable, a:entry, keyword)
   else
     throw 'Already startup done.'
   endif
@@ -83,8 +87,9 @@ endfunction
 " use only while startup.at end of start up,invoke passphrase input once.
 " all waited process execute
 function! pass#get_startup(set_variable,entry, ...) abort
+  let keyword =  (a:0 > 0) ? a:1 : ''
   if v:vim_did_enter == 0
-    call pass#startup#entry_setup_letval(v:null,a:set_variable,a:entry,a:000)
+    call pass#startup#entry_setup_letval(v:null, a:set_variable, a:entry, keyword)
   else
     throw 'Already startup done.'
   endif
