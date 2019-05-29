@@ -31,14 +31,13 @@ function! pass#startup#resolve() abort
     return
   endif
 
-
-  let passphrase = pass#get#passphrase()
-
-  " passphrase correct?
-  if empty(passphrase)
+  try
+    let passphrase = pass#get#passphrase()
+  catch
+    " passphrase correct?
     " no work
     return
-  endif
+  endtry
 
   " resolved all promises
   for Fn in s:pass_startup_request

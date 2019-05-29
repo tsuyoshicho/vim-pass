@@ -25,13 +25,13 @@ function! pass#get#entry_value(entry, keyword) abort
     return ''
   endif
 
-  let passphrase = pass#get#passphrase()
-
-  " passphrase correct?
-  if empty(passphrase)
+  try
+    let passphrase = pass#get#passphrase()
+  catch
+    " passphrase correct?
     " no work
     return ''
-  endif
+  endtry
 
   let entry_value = pass#util#decode(gpgid, entrypath, passphrase, a:keyword)
 
@@ -94,9 +94,9 @@ function! pass#get#passphrase() abort
       " failure
       echo 'passphrase verify failed, (re)try: '
             \ . '[' . string(i + 1) . '/'. string(g:pass_passphrase_verify_retry) . ']'
-      if i < (g:pass_passphrase_verify_retry - 1)
-        echo 'passphrase verify all failed'
+      if i == (g:pass_passphrase_verify_retry - 1)
         unlet s:_passphrase
+        throw 'vim-pss: passphrase verify all failed'
       endif
 
       sleep 3
