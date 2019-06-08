@@ -86,22 +86,26 @@ function! pass#get#passphrase() abort
     " verify
     if pass#util#passphrase_verify(pass#get#id(), s:_passphrase)
       " success
-      redraw
-      echo ''
+      redraw!
       " exit
       break
-    else
-      " failure
-      echo 'passphrase verify failed, (re)try: '
-            \ . '[' . string(i + 1) . '/'. string(g:pass_passphrase_verify_retry) . ']'
-      if i == (g:pass_passphrase_verify_retry - 1)
-        unlet s:_passphrase
-        throw 'vim-pss: passphrase verify all failed'
-      endif
+    endif
 
+    " failure
+    redraw!
+    if (i + 1) == g:pass_passphrase_verify_retry
+      echo 'passphrase verify failed [' .
+            \ string(i + 1) . '/' .
+            \ string(g:pass_passphrase_verify_retry) . ']'
+      unlet s:_passphrase
+      throw 'vim-pss: passphrase verify all failed'
+    else
+      echo 'passphrase verify failed [' .
+            \ string(i + 1) . '/' .
+            \ string(g:pass_passphrase_verify_retry) . ']' .
+            \ ' retry'
       sleep 3
-      redraw
-      echo ''
+      redraw!
     endif
   endfor
 
