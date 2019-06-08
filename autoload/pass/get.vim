@@ -96,7 +96,8 @@ function! pass#get#passphrase() abort
     if (i + 1) == g:pass_passphrase_verify_retry
       echo 'passphrase verify failed [' .
             \ string(i + 1) . '/' .
-            \ string(g:pass_passphrase_verify_retry) . ']'
+            \ string(g:pass_passphrase_verify_retry) . ']' .
+            \ ' abort'
       unlet s:_passphrase
       throw 'vim-pss: passphrase verify all failed'
     else
