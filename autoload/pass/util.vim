@@ -55,7 +55,7 @@ function! s:build_gpg_command(gpgid, entrypath, passphrase, appendcmds) abort
   call s:List.push(cmd, '--no-verbose')
   call s:List.push(cmd, '--quiet')
   call s:List.push(cmd, '--batch')
-  if !empty(a:appendcmd)
+  if !empty(a:appendcmds)
     let cmd = s:List.concat(cmd, a:appendcmds)
   endif
   if !empty(a:passphrase)
