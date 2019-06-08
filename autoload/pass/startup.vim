@@ -31,8 +31,15 @@ function! pass#startup#resolve() abort
     return
   endif
 
+  try
+    let passphrase = pass#get#passphrase()
+  catch
+    " passphrase correct?
+    " no work
+    return
+  endtry
+
   " resolved all promises
-  " agent process success support 1st done -> all done -> unlet passphrase
   for Fn in s:pass_startup_request
     call Fn()
   endfor

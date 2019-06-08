@@ -25,7 +25,14 @@ function! pass#get#entry_value(entry, keyword) abort
     return ''
   endif
 
-  let passphrase = pass#get#passphrase()
+  try
+    let passphrase = pass#get#passphrase()
+  catch
+    " passphrase correct?
+    " no work
+    return ''
+  endtry
+
   let entry_value = pass#util#decode(gpgid, entrypath, passphrase, a:keyword)
 
   return entry_value
@@ -34,24 +41,27 @@ endfunction
 " '' or ID
 function! pass#get#id() abort
   " check exist
-  if 0 == exists('s:_pass_gpg_id')
-    let s:_pass_gpg_id = ''
+  if exists('s:_pass_gpg_id')
+    return s:_pass_gpg_id
+  endif
 
-    let gpgidpath = s:Path.realpath(
-                      \ s:Path.abspath(
-                        \ expand(s:Path.remove_last_separator(g:pass_store_path) . s:Path.separator()
-                                  \ . '.gpg-id')))
+  " id detect
+  let s:_pass_gpg_id = ''
 
-    if !(filereadable(gpgidpath))
-      " no work
-      return s:_pass_gpg_id
-    endif
+  let gpgidpath = s:Path.realpath(
+        \ s:Path.abspath(
+        \ expand(s:Path.remove_last_separator(g:pass_store_path) . s:Path.separator()
+        \ . '.gpg-id')))
 
-    let read_result = readfile(gpgidpath)
+  if !(filereadable(gpgidpath))
+    " no work
+    return s:_pass_gpg_id
+  endif
 
-    if 0 < len(read_result)
-      let s:_pass_gpg_id = read_result[0]
-    endif
+  let read_result = readfile(gpgidpath)
+
+  if 0 < len(read_result)
+    let s:_pass_gpg_id = read_result[0]
   endif
 
   return s:_pass_gpg_id
@@ -59,16 +69,48 @@ endfunction
 
 " '' or passphrase
 function! pass#get#passphrase() abort
-  if 0 == exists('s:_passphrase')
-    let s:_passphrase = ''
-    if g:pass_use_agent == 0
-      let s:_passphrase = inputsecret('passphrase: ')
-      redraw
-      echo ''
-    endif
+  if exists('s:_passphrase')
+    return s:_passphrase
   endif
 
-  return s:_passphrase
+  " passphrase detect
+  let s:_passphrase = ''
+  if g:pass_use_agent
+    " work pinentry
+    return s:_passphrase
+  endif
+
+  " check loop
+  for i in range(g:pass_passphrase_verify_retry)
+    let s:_passphrase = inputsecret('passphrase: ')
+    " verify
+    if pass#util#passphrase_verify(pass#get#id(), s:_passphrase)
+      " success
+      redraw!
+      " exit
+      break
+    endif
+
+    " failure
+    redraw!
+    if (i + 1) == g:pass_passphrase_verify_retry
+      echo 'passphrase verify failed [' .
+            \ string(i + 1) . '/' .
+            \ string(g:pass_passphrase_verify_retry) . ']' .
+            \ ' abort'
+      unlet s:_passphrase
+      throw 'vim-pss: passphrase verify all failed'
+    else
+      echo 'passphrase verify failed [' .
+            \ string(i + 1) . '/' .
+            \ string(g:pass_passphrase_verify_retry) . ']' .
+            \ ' retry'
+      sleep 3
+      redraw!
+    endif
+  endfor
+
+  return get(s:, '_passphrase', '')
 endfunction
 
 " path

@@ -30,14 +30,22 @@ endfunction
 
 " value
 function! pass#util#decode(gpgid, entrypath, passphrase, keyword) abort
-  let entrylist = s:decrypt_entry_gpg(a:gpgid, a:entrypath, a:passphrase)
-  return s:select_entry_value(entrylist, a:keyword)
+  let entrycontent = s:decrypt_entry_gpg(a:gpgid, a:entrypath, a:passphrase)
+  return s:select_entry_value(entrycontent, a:keyword)
 endfunction
 
-" execute command
-" CRUD : READ
-" return list strings
-function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
+" passphrase
+function! pass#util#passphrase_verify(gpgid, passphrase) abort
+  let entrylist = pass#util#list()
+  if empty(entrylist)
+    return 0
+  else
+    return s:check_entry_gpg_passphrase(a:gpgid, pass#get#entry_path(entrylist[0]), a:passphrase)
+  endif
+endfunction
+
+" return cmd list
+function! s:build_gpg_command(gpgid, entrypath, passphrase, appendcmds) abort
   " execute get entry
   let cmd = []
 
@@ -47,7 +55,9 @@ function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
   call s:List.push(cmd, '--no-verbose')
   call s:List.push(cmd, '--quiet')
   call s:List.push(cmd, '--batch')
-  call s:List.push(cmd, '--decrypt')
+  if !empty(a:appendcmds)
+    let cmd = s:List.concat([cmd, a:appendcmds])
+  endif
   if !empty(a:passphrase)
     call s:List.push(cmd, '--pinentry-mode')
     call s:List.push(cmd, 'loopback')
@@ -62,18 +72,39 @@ function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
   call s:List.push(cmd, '-')
   call s:List.push(cmd, a:entrypath)
 
-  let result = s:Process.execute(cmd)
-  let entrylist = s:String.lines(result.output)
+  return cmd
+endfunction
 
-  return entrylist
+" execute command
+" CRUD : READ
+" return list strings
+function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
+  " execute get entry
+  let cmd = s:build_gpg_command(a:gpgid, a:entrypath, a:passphrase, ['--decrypt'])
+
+  let result = s:Process.execute(cmd)
+  let entrycontent = s:String.lines(result.output)
+
+  return entrycontent
+endfunction
+
+" execute command
+" CRUD : (check)
+" return bool (1 success)
+function! s:check_entry_gpg_passphrase(gpgid, entrypath, passphrase) abort
+  " execute get entry
+  let cmd = s:build_gpg_command(a:gpgid, a:entrypath, a:passphrase, ['--dry-run']) " with decrypt (default)
+
+  let result = s:Process.execute(cmd)
+  return result.success
 endfunction
 
 " select entry value
 " input entry string list / return value string
-function! s:select_entry_value(entrylist, keyword) abort
-  let entrylist = a:entrylist
+function! s:select_entry_value(entrycontent, keyword) abort
+  let entrycontent = a:entrycontent
 
-  if empty(entrylist)
+  if empty(entrycontent)
     " no work
     return ''
   endif
@@ -98,10 +129,10 @@ function! s:select_entry_value(entrylist, keyword) abort
   let retvalue = ''
   if (keyword == '') || (keyname == 'password')
     " need default -> first line password
-    let retvalue = entrylist[0]
+    let retvalue = entrycontent[0]
   elseif keyword == 'otp'
     " special value otpauth://
-    for e in entrylist[1:]
+    for e in entrycontent[1:]
       if 0 == match(e, '\c\V' . escape('otpauth://','\'))
         let retvalue = e
         break
@@ -112,7 +143,7 @@ function! s:select_entry_value(entrylist, keyword) abort
     let entrymap = {}
 
     " ignore password(first line)
-    for e in entrylist[1:]
+    for e in entrycontent[1:]
       let split_data = s:String.split_leftright(e, '^[^:]*\zs:\s*')
       let entrymap[tolower(split_data[0])] = split_data[1]
     endfor
