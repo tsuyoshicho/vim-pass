@@ -4,7 +4,7 @@
 function! s:_SID() abort
   return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze__SID$')
 endfunction
-execute join(['function! vital#_vimpass#Hash#SHA1#import() abort', printf("return map({'_vital_depends': '', 'sum_raw': '', 'sum': '', 'digest': '', 'digest_raw': '', '_vital_loaded': ''}, \"vital#_vimpass#function('<SNR>%s_' . v:key)\")", s:_SID()), 'endfunction'], "\n")
+execute join(['function! vital#_vimpass#Hash#SHA1#import() abort', printf("return map({'_vital_depends': '', 'sum_raw': '', '_vital_created': '', 'sum': '', 'digest': '', 'digest_raw': '', '_vital_loaded': ''}, \"vital#_vimpass#function('<SNR>%s_' . v:key)\")", s:_SID()), 'endfunction'], "\n")
 delfunction s:_SID
 " ___vital___
 " Utilities for SHA1.
@@ -17,26 +17,32 @@ delfunction s:_SID
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! s:_vital_created(module) abort
+  let a:module.name = 'SHA'
+  let a:module.hash_length = 160
+endfunction
+
 function! s:_vital_loaded(V) abort
   let s:V = a:V
   let s:bitwise = s:V.import('Bitwise')
+  let s:ByteList = s:V.import('Data.List.Byte')
 endfunction
 
 function! s:_vital_depends() abort
-  return ['Bitwise']
+  return ['Bitwise', 'Data.List.Byte']
 endfunction
 
 function! s:sum(data) abort
-  let bytes = s:_str2bytes(a:data)
+  let bytes = s:ByteList.from_string(a:data)
   return s:sum_raw(bytes)
 endfunction
 
 function! s:sum_raw(bytes) abort
-  return s:_bytes2str(s:digest_raw(a:bytes))
+  return s:ByteList.to_hexstring(s:digest_raw(a:bytes))
 endfunction
 
 function! s:digest(data) abort
-  let bytes = s:_str2bytes(a:data)
+  let bytes = s:ByteList.from_string(a:data)
   return s:digest_raw(bytes)
 endfunction
 
@@ -336,14 +342,6 @@ endfunction
 
 function! s:_uint32(n) abort
   return s:bitwise.and(a:n, 0xFFFFFFFF)
-endfunction
-
-function! s:_str2bytes(str) abort
-  return map(range(len(a:str)), 'char2nr(a:str[v:val])')
-endfunction
-
-function! s:_bytes2str(bytes) abort
-  return join(map(a:bytes, 'printf(''%02x'', v:val)'), '')
 endfunction
 
 let &cpo = s:save_cpo

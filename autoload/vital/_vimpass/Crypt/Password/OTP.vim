@@ -4,7 +4,7 @@
 function! s:_SID() abort
   return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze__SID$')
 endfunction
-execute join(['function! vital#_vimpass#Hash#OTP#import() abort', printf("return map({'_vital_depends': '', 'hotp': '', 'totp': '', 'default': '', '_vital_loaded': ''}, \"vital#_vimpass#function('<SNR>%s_' . v:key)\")", s:_SID()), 'endfunction'], "\n")
+execute join(['function! vital#_vimpass#Crypt#Password#OTP#import() abort', printf("return map({'_vital_depends': '', 'hotp': '', '_vital_created': '', 'totp': '', '_vital_loaded': ''}, \"vital#_vimpass#function('<SNR>%s_' . v:key)\")", s:_SID()), 'endfunction'], "\n")
 delfunction s:_SID
 " ___vital___
 " Utilities for HOTP/TOTP
@@ -14,7 +14,7 @@ delfunction s:_SID
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:DEFAULT = {
+let s:DEFAULTS = {
       \ 'HOTP' : {
       \   'digit'   : 6,
       \   'algo'    : 'SHA1',
@@ -27,28 +27,36 @@ let s:DEFAULT = {
       \ },
       \}
 
+function! s:_vital_created(module) abort
+  let a:module.defaults = s:DEFAULTS
+endfunction
+
 function! s:_vital_loaded(V) abort
   let s:V = a:V
   let s:bitwise = s:V.import('Bitwise')
+  let s:type    = s:V.import('Vim.Type')
   let s:HMAC    = s:V.import('Hash.HMAC')
   let s:List    = s:V.import('Data.List')
+  let s:DateTime= s:V.import('DateTime')
 endfunction
 
 function! s:_vital_depends() abort
   return ['Bitwise',
+        \ 'Vim.Type',
         \ 'Hash.HMAC',
-        \ 'Data.List']
+        \ 'Data.List',
+        \ 'DateTime']
 endfunction
 
 function! s:hotp(key, counter, algo, digit) abort
   let hmac = s:HMAC.new(a:algo, a:key)
-  if s:DEFAULT.HOTP.counter == len(a:counter)
+  if s:DEFAULTS.HOTP.counter == len(a:counter)
     let counter = copy(a:counter)
-  elseif s:DEFAULT.HOTP.counter > len(a:counter)
-    let counter = s:List.new(s:DEFAULT.HOTP.counter,0)
-    for i in range(s:DEFAULT.HOTP.counter)
-      if 0 <= (i - (s:DEFAULT.HOTP.counter - len(a:counter)))
-        let counter[i] = a:counter[i - (s:DEFAULT.HOTP.counter - len(a:counter))]
+  elseif s:DEFAULTS.HOTP.counter > len(a:counter)
+    let counter = s:List.new(s:DEFAULTS.HOTP.counter, {-> 0})
+    for i in range(s:DEFAULTS.HOTP.counter)
+      if 0 <= (i - (s:DEFAULTS.HOTP.counter - len(a:counter)))
+        let counter[i] = a:counter[i - (s:DEFAULTS.HOTP.counter - len(a:counter))]
       endif
     endfor
   else
@@ -66,8 +74,22 @@ function! s:hotp(key, counter, algo, digit) abort
   return printf('%0' . string(a:digit) . 'd', hotp_value)
 endfunction
 
-function! s:totp(key, period, algo, digit) abort
-  let now_sec = localtime()
+function! s:totp(key, period, algo, digit, ...) abort
+  if a:0
+    let typeval = type(a:1)
+    if typeval == s:type.types.number
+      let datetime = s:DateTime.from_unix_time(a:1)
+    elseif typeval == s:type.types.dict && 'DateTime' == get(a:1,'class','')
+      let datetime = a:1
+    else
+      call s:_throw('non-support extra datetime data (support only unix epoch int value or DateTime object)')
+    endif
+  endif
+  if !exists('datetime')
+    let datetime = s:DateTime.now()
+  endif
+
+  let now_sec = datetime.unix_time()
   let epoch_sec = 0
 
   if has('num64')
@@ -79,27 +101,11 @@ function! s:totp(key, period, algo, digit) abort
   return s:hotp(a:key, counter, a:algo, a:digit)
 endfunction
 
-function! s:default() abort
-  return deepcopy(s:DEFAULT)
-endfunction
-
 "---------------------------------------------------------------------
 " misc
 
 function! s:_uint8(n) abort
   return s:bitwise.and(a:n, 0xFF)
-endfunction
-
-function! s:_uint32(n) abort
-  return s:bitwise.and(a:n, 0xFFFFFFFF)
-endfunction
-
-function! s:_str2bytes(str) abort
-  return map(range(len(a:str)), 'char2nr(a:str[v:val])')
-endfunction
-
-function! s:_bytes2str(bytes) abort
-  return join(map(a:bytes, 'printf(''%02x'', v:val)'), '')
 endfunction
 
 function! s:_bytes2int32_be(bytes) abort
@@ -128,7 +134,7 @@ function! s:_int642bytes_be(value) abort
 endfunction
 
 function! s:_throw(message) abort
-  throw 'vital: Hash.OTP: ' . a:message
+  throw 'vital: Crypt.Password.OTP: ' . a:message
 endfunction
 
 let &cpo = s:save_cpo
