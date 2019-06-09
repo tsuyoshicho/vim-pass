@@ -1,5 +1,6 @@
 [![Powered by vital.vim](https://img.shields.io/badge/powered%20by-vital.vim-80273f.svg)](https://github.com/vim-jp/vital.vim)
 <!-- [![Powered by vital-Whisky](https://img.shields.io/badge/powered%20by-vital--Whisky-80273f.svg)](https://github.com/lambdalisue/vital-Whisky) -->
+[![Powered by vital-codec](https://img.shields.io/badge/powerd%20by-vital--codec-80273f.svg)](https://github.com/tsuyoshicho/vital-codec)
 
 # vim-pass
 Vim password-store API.
@@ -10,6 +11,7 @@ Currenlty *get* support. usable like `auth-source` at emacs.
 ## Feature
 * "Pass" style data get / get_startup (and other variant) support.
 * CtrlP plugin : selection support.
+* Limited support OTP(HOTP).
 
 ## Require
 
