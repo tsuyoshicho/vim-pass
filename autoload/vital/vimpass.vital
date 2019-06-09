@@ -1,12 +1,12 @@
 vimpass
-ccc69e2a0fd3ed1fb1576b217dbc6236e1a9b018
+002cfe52a83253c2fb40c0a8f9d7e79146a61e7c
 
-Data.Base32
 Data.List
 Data.String
 Hash.MD5
-Hash.OTP
 Hash.SHA1
 System.Filepath
 System.Process
 Web.URI
+Data.Base32.Crockford
+Crypt.Password.OTP
