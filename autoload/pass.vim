@@ -24,7 +24,7 @@ endfunction
 " API get_otp
 " return value
 function! pass#get_otp(entry) abort
-  let uri = pass#get#entry_value(a:entry, ['otp'])
+  let uri = pass#get#entry_value(a:entry, 'otp')
   if empty(uri)
     echo 'no entry otpauth://'
     return ''
