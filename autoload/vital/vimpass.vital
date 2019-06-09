@@ -8,5 +8,5 @@ Hash.SHA1
 System.Filepath
 System.Process
 Web.URI
-Data.Base32.Crockford
 Crypt.Password.OTP
+Data.Base32.RFC4648

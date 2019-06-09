@@ -10,9 +10,9 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Vital
-let s:URI      = vital#vimpass#import('Web.URI')
-let s:Base32cf = vital#vimpass#import('Data.Base32.Crockford')
-let s:OTP      = vital#vimpass#import('Crypt.Password.OTP')
+let s:URI    = vital#vimpass#import('Web.URI')
+let s:Base32 = vital#vimpass#import('Data.Base32.RFC4648')
+let s:OTP    = vital#vimpass#import('Crypt.Password.OTP')
 
 " get entry data
 function! pass#otp#value(otpauth) abort
@@ -42,7 +42,7 @@ function! pass#otp#value(otpauth) abort
     throw 'vim-pass: otp: need secret'
   endif
 
-  let secret = s:Base32cf.decode(parammap['secret'])
+  let secret = s:Base32.decode(parammap['secret'])
 
   return s:OTP.totp(secret,
         \ s:OTP.defaults.TOTP.period,
