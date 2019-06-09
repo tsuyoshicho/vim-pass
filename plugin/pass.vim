@@ -32,9 +32,9 @@ let g:pass_entry_altmap  = extend(get(g:, 'pass_entry_altmap', {}),{
 
 let g:pass_passphrase_verify_retry = get(g:, 'pass_passphrase_verify_retry', 3)
 
-command! -nargs=1 -complete=custom,pass#util#completion PassGet    :echo pass#get(<f-args>)
+command! -nargs=+ -complete=custom,pass#util#completion PassGet    :echo pass#get(<f-args>)
 command! -nargs=1 -complete=custom,pass#util#completion PassGetOtp :echo pass#get_otp(<f-args>)
-command! -nargs=1 -complete=custom,pass#util#completion PassGetRegister    :call pass#get_register(<f-args>)
+command! -nargs=+ -complete=custom,pass#util#completion PassGetRegister    :call pass#get_register(<f-args>)
 command! -nargs=1 -complete=custom,pass#util#completion PassGetOtpRegister :call pass#get_otp_register(<f-args>)
 
 augroup pass-startup
