@@ -83,9 +83,7 @@ function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
   let cmd = s:build_gpg_command(a:gpgid, a:entrypath, a:passphrase, ['--decrypt'])
 
   let result = s:Process.execute(cmd)
-  let entrycontent = s:String.lines(result.output)
-
-  return entrycontent
+  return result.content
 endfunction
 
 " execute command
