@@ -207,7 +207,7 @@ g:pass_entry_altmap				*g:pass_entry_altmap*
   \ 'username' : ['user', 'username', 'id', 'account'],
   \ 'host'     : ['host', 'url',      'uri'          ],
   \},
->
+<
 
 Entry's altnative name |Dictonary| ; key as label, value as |List| that is
 altnative entry name list.
