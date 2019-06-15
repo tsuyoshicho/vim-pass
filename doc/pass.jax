@@ -205,7 +205,7 @@ g:pass_entry_altmap				*g:pass_entry_altmap*
   \ 'username' : ['user', 'username', 'id', 'account'],
   \ 'host'     : ['host', 'url',      'uri'          ],
   \},
->
+<
 
 エントリの代替名の辞書 |Dictonary| ; キーはラベル、値はリスト |List|
 で、代替名のリストになっている。
