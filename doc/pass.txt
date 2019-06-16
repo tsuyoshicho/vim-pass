@@ -39,7 +39,7 @@ CHANGELOG			|pass-changelog|
 ==============================================================================
 INTRODUCTION					*pass-introduction*
 
-*pass* is Vim plugin aimed at the Vim password-store API.
+*pass* is targeted Vim password-store API plugin.
 see below
 Pass: The Standard Unix Password Manager - https://www.passwordstore.org/
 
@@ -209,12 +209,13 @@ g:pass_entry_altmap				*g:pass_entry_altmap*
   \},
 <
 
-Entry's altnative name |Dictonary| ; key as label, value as |List| that is
+Entry's altnative name |Dictonary|, key as label, value as |List| that is
 altnative entry name list.
 "password" is special entry label. This mean as default password info.
-If this is not defined "password" label entry in g:pass_entry_altmap
-at before loading, use internal default.
-(You can overwrite it, set "password" label entry.)
+"password" label entry use inner defined value.
+"otp" is special entry label. only use OTP param; altnative name nothing.
+Define g:pass_entry_altmap at before loading, add above setting
+
 
 ------------------------------------------------------------------------------
 COMMANDS					*pass-commands*
@@ -227,7 +228,7 @@ typing it.
 
 :PassGetOtp {entry} ...				*:PassGetOtp*
 
-Password otp check command, password-store entry name set to arg.
+OTP check command, password-store entry name set to arg.
 This command need {entry}, You can use <tab> to auto-complete the {entry} when
 typing it.
 
@@ -240,7 +241,7 @@ typing it.
 
 :PassGetOtpRegister {entry} ...			*:PassGetOtpRegister*
 
-Password otp save ad register command, password-store entry name set to arg.
+OTP save ad register command, password-store entry name set to arg.
 Currently only work unnamed register and eternaly.
 This command need {entry}, You can use <tab> to auto-complete the {entry} when
 typing it.
@@ -254,7 +255,7 @@ Password get API, return value.
 entry is password-store style.
 Optionally item name.
 
-pass#get_otp({entry}})				*pass#get_otp()*
+pass#get_otp({entry})				*pass#get_otp()*
 
 Password get API, return otp value.
 entry is password-store style.
@@ -265,6 +266,7 @@ Password get API, value set to register.
 entry is password-store style.
 Optionally item name.
 Currently limited work, copy to unnamed register.
+{NOT WORK BELOW}
 It will disappear from the register as time passes.
 
 pass#get_otp_register({entry})			*pass#get_otp_register()*
@@ -272,6 +274,7 @@ pass#get_otp_register({entry})			*pass#get_otp_register()*
 Password get API, otp value set to register.
 entry is password-store style.
 Currently limited work, copy to unnamed register.
+{NOT WORK BELOW}
 It will disappear from the register as time passes.
 
 						*pass#get_startup()*
@@ -315,4 +318,4 @@ CHANGELOG					*pass-changelog*
 see gitlog
 
 ==============================================================================
-vim:tw=78:ts=8:ft=help:norl:noet:fen:
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl:noet:fen:
