@@ -57,12 +57,12 @@ CtrlPPass work "copy clipboard" mode.
 0 as direct paste current cursor(like 'p').
 
 ==============================================================================
-TODO						*pass-todo*
+TODO						*ctrlp-pass-todo*
 
 see |pass| help.
 
 ==============================================================================
-CHANGELOG					*pass-changelog*
+CHANGELOG					*ctrlp-pass-changelog*
 
 see gitlog
 
