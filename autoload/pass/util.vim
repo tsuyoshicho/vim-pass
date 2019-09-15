@@ -9,17 +9,36 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:Process = vital#vimpass#import('System.Process')
-let s:List    = vital#vimpass#import('Data.List')
-let s:String  = vital#vimpass#import('Data.String')
+let s:Process  = vital#vimpass#import('System.Process')
+let s:List     = vital#vimpass#import('Data.List')
+let s:String   = vital#vimpass#import('Data.String')
+let s:Filepath = vital#vimpass#import('System.Filepath')
 
 function! pass#util#list() abort
-  let keylist = globpath(expand(g:pass_store_path, ':p'), '**/*.gpg', 1, 1)
+  if exists('+shellslash')
+    let ss = &shellslash
+    set noshellslash
+  endif
+  if exists('+completeslash')
+    let cs = &completeslash
+    set completeslash=
+  endif
+  let root = glob(s:Filepath.abspath(expand(g:pass_store_path)))
+  let keylist = globpath(root, '**/*.gpg', 1, 1)
+  if exists('ss')
+    let &shellslash = ss
+  endif
+  if exists('cs')
+    let &completeslash = cs
+  endif
+  unlet ss
+  unlet cs
+
   " /dir/entry.gpg to dir/entry
-  call map(keylist, { idx, val -> substitute(val, expand(g:pass_store_path, ':p'), '',    "") })
-  call map(keylist, { idx, val -> substitute(val, '\',                             '/',   "") })
-  call map(keylist, { idx, val -> substitute(val, '\v^/',                          '',    "") })
-  call map(keylist, { idx, val -> substitute(val, '\c\v\.gpg$',                    '',    "") })
+  call map(keylist, { idx, val -> substitute(val, escape(root,'\'), '',  "" ) })
+  call map(keylist, { idx, val -> substitute(val, '\\',             '/', "g") })
+  call map(keylist, { idx, val -> substitute(val, '\v^/',           '',  "" ) })
+  call map(keylist, { idx, val -> substitute(val, '\c\v\.gpg$',     '',  "" ) })
 
   return keylist
 endfunction
