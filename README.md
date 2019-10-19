@@ -9,6 +9,9 @@ Currenlty *get* support. usable like `auth-source` at emacs.
 ## Feature
 * "Pass" style data get / get_startup (and other variant) support.
 * CtrlP plugin : selection support.
+  - '<C-x>' : only copy to register
+  - '<CR>'  : put before cursor, 'P'
+  - '<C-v>' : put after  cursor, 'p'
 * Limited support OTP(HOTP).
 
 ## Require

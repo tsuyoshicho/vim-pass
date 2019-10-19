@@ -37,6 +37,9 @@ TODO						|ctrlp-pass-todo|
 
 *ctrlp-pass* は |vim-pass|の |CtrlP| 用拡張です。
 
+- CTRL-x :レジスタへコピーするのみ
+- <CR>   :カーソル前へプットします、|P| 相当
+- CTRL-v :カーソル後へプットします、|p| 相当
 
 ==============================================================================
 COMMANDS					*ctrlp-pass-commands*
