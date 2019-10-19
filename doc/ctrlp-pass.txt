@@ -37,9 +37,9 @@ INTRODUCTION					*ctrlp-pass-introduction*
 
 *ctrlp-pass* is |vim-pass|'s |CtrlP| extention.
 
-- <C-x> : only copy to register
-- <CR>  : put before cursor, 'P'
-- <C-v> : put after  cursor, 'p'
+- CTRL-x : only copy to register
+- <CR>   : put before cursor, |P|
+- CTRL-v : put after  cursor, |p|
 
 ==============================================================================
 COMMANDS					*ctrlp-pass-commands*
