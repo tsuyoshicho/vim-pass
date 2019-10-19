@@ -85,6 +85,10 @@ function! s:exec(mode, entry) abort
   elseif a:mode ==? 'v'
     call execute('normal! "' . regname . 'gp' , "silent")
     call setreg(regname, '', 'c') " secret is characterwise only
+  else
+    " all other unsupport mode
+    " clear register
+    call setreg(regname, '', 'c') " secret is characterwise only
   endif
 endfunction
 
