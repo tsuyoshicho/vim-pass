@@ -9,6 +9,7 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
+let s:Prelude  = vital#vimpass#import('Prelude')
 let s:Job      = vital#vimpass#import('System.Job')
 let s:List     = vital#vimpass#import('Data.List')
 let s:String   = vital#vimpass#import('Data.String')
@@ -124,7 +125,14 @@ function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
         \ 'on_exit': function('s:on_exit'),
         \})
   call job.wait()
-  return job.stdout
+  if s:Prelude.is_windows()
+    " remove process output crlf's cr
+    " if string has contain cr, last crcrlf to cr(cr is remove)lf
+    return s:List.filter(job.stdout, {v -> substitute(v , '^.*\zs\r\ze$', '', '')})
+  else
+    " non windows keep origin
+    return job.stdout
+  endif
 endfunction
 
 " execute command
