@@ -9,7 +9,8 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:Process  = vital#vimpass#import('System.Process')
+let s:Prelude  = vital#vimpass#import('Prelude')
+let s:Job      = vital#vimpass#import('System.Job')
 let s:List     = vital#vimpass#import('Data.List')
 let s:String   = vital#vimpass#import('Data.String')
 let s:Filepath = vital#vimpass#import('System.Filepath')
@@ -94,6 +95,20 @@ function! s:build_gpg_command(gpgid, entrypath, passphrase, appendcmds) abort
   return cmd
 endfunction
 
+function! s:on_stdout(data) abort dict
+  let self.stdout[-1] .= a:data[0]
+  call extend(self.stdout, a:data[1:])
+endfunction
+
+function! s:on_stderr(data) abort dict
+  let self.stderr[-1] .= a:data[0]
+  call extend(self.stderr, a:data[1:])
+endfunction
+
+function! s:on_exit(exitval) abort dict
+  let self.exit_status = a:exitval
+endfunction
+
 " execute command
 " CRUD : READ
 " return list strings
@@ -101,8 +116,23 @@ function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
   " execute get entry
   let cmd = s:build_gpg_command(a:gpgid, a:entrypath, a:passphrase, ['--decrypt'])
 
-  let result = s:Process.execute(cmd)
-  return result.content
+  let job = s:Job.start(cmd, {
+        \ 'stdout': [''],
+        \ 'stderr': [''],
+        \ 'exit_status': -1,
+        \ 'on_stdout': function('s:on_stdout'),
+        \ 'on_stderr': function('s:on_stderr'),
+        \ 'on_exit': function('s:on_exit'),
+        \})
+  call job.wait()
+  if s:Prelude.is_windows()
+    " remove process output crlf's cr
+    " if string has contain cr, last crcrlf to cr(cr is remove)lf
+    return s:List.map(job.stdout, {v -> substitute(v , '\(.*\)\r', '\1', '')})
+  else
+    " non windows keep origin
+    return job.stdout
+  endif
 endfunction
 
 " execute command
@@ -112,8 +142,16 @@ function! s:check_entry_gpg_passphrase(gpgid, entrypath, passphrase) abort
   " execute get entry
   let cmd = s:build_gpg_command(a:gpgid, a:entrypath, a:passphrase, ['--dry-run']) " with decrypt (default)
 
-  let result = s:Process.execute(cmd)
-  return result.success
+  let job = s:Job.start(cmd, {
+        \ 'stdout': [''],
+        \ 'stderr': [''],
+        \ 'exit_status': -1,
+        \ 'on_stdout': function('on_stdout'),
+        \ 'on_stderr': function('on_stderr'),
+        \ 'on_exit': function('on_exit'),
+        \})
+  call job.wait()
+  return job.exit_status
 endfunction
 
 " select entry value
