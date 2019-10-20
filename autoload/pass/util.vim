@@ -128,7 +128,7 @@ function! s:decrypt_entry_gpg(gpgid, entrypath, passphrase) abort
   if s:Prelude.is_windows()
     " remove process output crlf's cr
     " if string has contain cr, last crcrlf to cr(cr is remove)lf
-    return s:List.filter(job.stdout, {v -> substitute(v , '^.*\zs\r\ze$', '', '')})
+    return s:List.map(job.stdout, {v -> substitute(v , '\(.*\)\r', '\1', '')})
   else
     " non windows keep origin
     return job.stdout
