@@ -33,7 +33,7 @@ TODO						|ctrlp-pass-todo|
 
 
 ==============================================================================
-概要						*ctrl-pass-introduction*
+概要						*ctrlp-pass-introduction*
 
 *ctrlp-pass* は |vim-pass|の |CtrlP| 用拡張です。
 
