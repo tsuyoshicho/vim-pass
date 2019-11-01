@@ -35,7 +35,7 @@ CHANGELOG					|ctrlp-pass-changelog|
 ==============================================================================
 INTRODUCTION					*ctrlp-pass-introduction*
 
-*ctrlp-pass* is |vim-pass|'s |CtrlP| extention.
+*ctrlp-pass* is |pass|'s |CtrlP| extention.
 
 - CTRL-x : only copy to register
 - <CR>   : put before cursor, |P|

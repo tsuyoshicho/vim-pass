@@ -211,10 +211,10 @@ g:pass_entry_altmap				    *g:pass_entry_altmap*
   \},
 <
 
-Entry's altnative name |Dictonary|, key as label, value as |List| that is
-altnative entry name list.  "password" is special entry label. This mean as
-default password info.  "password" label entry use inner defined value.  "otp"
-is special entry label. only use OTP param; altnative name nothing.  Define
+Entry's alternative name |Dictionary|, key as label, value as |List| that is
+alternative entry name list. "password" is special entry label. This mean as
+default password info. "password" label entry use inner defined value. "otp"
+is special entry label. only use OTP param; alternative name nothing. Define
 g:pass_entry_altmap at before loading, add above setting
 
 
