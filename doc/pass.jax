@@ -27,7 +27,7 @@ License : MIT license  {{{
 
 概要						|pass-introduction|
 使い方						|pass-usage|
-インターフェイス				|pass-interface|
+インタフェース					|pass-interface|
   変数						  |pass-variables|
   コマンド					  |pass-commands|
   関数						  |pass-functions|
