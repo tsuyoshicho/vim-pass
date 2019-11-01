@@ -1,4 +1,4 @@
-*ctrlp-pass.txt*	a summary
+*ctrlp-pass.txt*						a summary
 
 Version :
 Author  : Tsuyoshi CHO <Tsuyoshi.CHO+develop@Gmail.com>
@@ -44,16 +44,16 @@ INTRODUCTION					*ctrlp-pass-introduction*
 ==============================================================================
 COMMANDS					*ctrlp-pass-commands*
 
-                                                                  *:CtrlPPass*
+						  *:CtrlPPass*
 :CtrlPPass [entry]
-    - Name: 'pass'
+    - Name: "pass"
     - Search for and copy to clipboard or direct past current pos.
 
 
 ==============================================================================
 SETTINGS					*ctrlp-pass-setting*
 
-g:pass_ctrlp_copy_to_clipbord  			*g:pass_ctrlp_copy_to_clipbord*
+g:pass_ctrlp_copy_to_clipbord  			  *g:pass_ctrlp_copy_to_clipbord*
 	default value: 1 (0 is paste)
 
 CtrlPPass work "copy clipboard" mode.

@@ -1,4 +1,4 @@
-*ctrlp-pass.txt*	日本語ヘルプ
+*ctrlp-pass.txt*						日本語ヘルプ
 
 Version :
 Author  : Tsuyoshi CHO <Tsuyoshi.CHO+develop@Gmail.com>
@@ -44,9 +44,9 @@ TODO						|ctrlp-pass-todo|
 ==============================================================================
 COMMANDS					*ctrlp-pass-commands*
 
-                                                                  *:CtrlPPass*
+						  *:CtrlPPass*
 :CtrlPPass [entry]
-    - 名称: 'pass'
+    - 名称: "pass"
     - 検索し、パスワードのクリップボードへのコピーもしくは
       現在の箇所への直接ペーストを行います。
 
@@ -54,7 +54,7 @@ COMMANDS					*ctrlp-pass-commands*
 ==============================================================================
 SETTINGS					*ctrlp-pass-setting*
 
-g:pass_ctrlp_copy_to_clipbord  			*g:pass_ctrlp_copy_to_clipbord*
+g:pass_ctrlp_copy_to_clipbord  			  *g:pass_ctrlp_copy_to_clipbord*
 	既定値: 1 (0 でペースト)
 
 CtrlPPass が "copy clipboard" モードで動作します。
