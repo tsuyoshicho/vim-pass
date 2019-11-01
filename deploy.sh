@@ -7,5 +7,6 @@ set -u # Undefined variable use error
 mkdir build
 
 # File Deploy
+make html
 
 # EOF

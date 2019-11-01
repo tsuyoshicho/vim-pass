@@ -16,6 +16,7 @@ html:
 	cd build/generate; vim -eu ../../tools/buildhtml.vim -c "qall!"; cd -
 	cp build/generate/*.html build/
 	rm -rf build/generate
+	cd build;sh ../tools/genindex.sh > index.html; cd -
 
 clean:
 	rm -rf build

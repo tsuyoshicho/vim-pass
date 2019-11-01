@@ -11,6 +11,7 @@
 # skip formatcheck
 .gitignore     binary
 
+Makefile       text eol=lf
 *.vim          text eol=lf
 *.sh           text eol=lf
 *.vital        text eol=lf
