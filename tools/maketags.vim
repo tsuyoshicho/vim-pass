@@ -1,2 +1,0 @@
-helptags doc
-qa!

@@ -10,10 +10,10 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@master
-      - name: add vim
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y vim-nox
+      - name: generate html
+        uses: tsuyoshicho/action-vimhelp-html-generate@master
+        env:
+          FOLDER: build
       - name: deploy gh-pages
         uses: JamesIves/github-pages-deploy-action@master
         env:
@@ -21,4 +21,3 @@ jobs:
           BASE_BRANCH: master
           BRANCH: gh-pages
           FOLDER: build
-          BUILD_SCRIPT: bash ./deploy.sh
