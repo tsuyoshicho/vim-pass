@@ -16,14 +16,16 @@ set cpo&vim
 
 let s:ctrlp_builtins = ctrlp#getvar('g:ctrlp_builtins')
 
-let g:ctrlp_ext_vars = add(get(g:, 'ctrlp_ext_vars', []), {
-      \ 'init'  : 'ctrlp#pass#init()',
-      \ 'accept': 'ctrlp#pass#accept',
-      \ 'lname' : 'pass',
-      \ 'sname' : 'pass',
-      \ 'type'  : 'path',
-      \ 'nolim' : 1
-      \})
+let g:ctrlp_ext_vars = extend(get(g:, 'ctrlp_ext_vars', []), [
+      \  {
+      \    'init'  : 'ctrlp#pass#init()',
+      \    'accept': 'ctrlp#pass#accept',
+      \    'lname' : 'pass',
+      \    'sname' : 'pass',
+      \    'type'  : 'path',
+      \    'nolim' : 1
+      \  }
+      \])
 
 let s:id = s:ctrlp_builtins + len(g:ctrlp_ext_vars)
 unlet s:ctrlp_builtins
