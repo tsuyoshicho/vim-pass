@@ -16,7 +16,7 @@ set cpo&vim
 
 let s:ctrlp_builtins = ctrlp#getvar('g:ctrlp_builtins')
 
-let g:ctrlp_ext_vars = extend(get(g:, 'ctrlp_ext_vars', []), [
+let g:ctrlp_ext_vars = get(g:, 'ctrlp_ext_vars', []) + [
       \  {
       \    'init'  : 'ctrlp#pass#init()',
       \    'accept': 'ctrlp#pass#accept',
@@ -25,7 +25,7 @@ let g:ctrlp_ext_vars = extend(get(g:, 'ctrlp_ext_vars', []), [
       \    'type'  : 'path',
       \    'nolim' : 1
       \  }
-      \])
+      \]
 
 let s:id = s:ctrlp_builtins + len(g:ctrlp_ext_vars)
 unlet s:ctrlp_builtins
