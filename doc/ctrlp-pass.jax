@@ -42,7 +42,7 @@ TODO						|ctrlp-pass-todo|
 - CTRL-v :カーソル後へプットします、|p| 相当
 
 ==============================================================================
-COMMANDS					*ctrlp-pass-commands*
+コマンド					*ctrlp-pass-commands*
 
 						  *:CtrlPPass*
 :CtrlPPass [entry]
@@ -52,7 +52,7 @@ COMMANDS					*ctrlp-pass-commands*
 
 
 ==============================================================================
-SETTINGS					*ctrlp-pass-setting*
+設定						*ctrlp-pass-setting*
 
 g:pass_ctrlp_copy_to_clipbord  			  *g:pass_ctrlp_copy_to_clipbord*
 	既定値: 1 (0 でペースト)
