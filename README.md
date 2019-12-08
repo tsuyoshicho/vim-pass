@@ -8,10 +8,12 @@ Currenlty *get* support. usable like `auth-source` at emacs.
 
 ## Feature
 * "Pass" style data get / get_startup (and other variant) support.
-* CtrlP plugin : selection support.
+* [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim) plugin : selection support.
   - `<C-x>` : only copy to register
   - `<CR>`  : put before cursor, 'P'
   - `<C-v>` : put after  cursor, 'p'
+* [vim-clap](https://github.com/liuchengxu/vim-clap) plugin : selection support.
+  - only work put like 'gP'.
 * Limited support OTP(HOTP).
 
 ## Require
@@ -19,7 +21,9 @@ Currenlty *get* support. usable like `auth-source` at emacs.
 - gpg
   - agent configuired as loopback enable
 - password-store like saved data
-- ctrlp plugin
+- ctrlp.vim plugin
+  - if use selection feature.
+- vim-clap plugin
   - if use selection feature.
 
 ## Installation
@@ -37,7 +41,7 @@ or
 ```toml
 [[plugins]]
 repo = 'tsuyoshicho/vim-pass'
-depends = ['ctrlp']
+depends = ['ctrlp.vim','vim-clap']
 hook_add = '''
   let g:ctrlp_extensions = get(g:, 'ctrlp_extensions', [])
         \ + ['pass']

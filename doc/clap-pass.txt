@@ -1,4 +1,4 @@
-*ctrlp-pass.txt*						日本語ヘルプ
+*clap-pass.txt*						a summary
 
 Version :
 Author  : Tsuyoshi CHO <Tsuyoshi.CHO+develop@Gmail.com>
@@ -23,50 +23,33 @@ License : MIT license  {{{
 }}}
 
 ==============================================================================
-目次						*ctrlp-pass-contents*
+CONTENTS					*clap-pass-contents*
 
-概要						|ctrlp-pass-introduction|
-コマンド					|ctrlp-pass-commands|
-設定						|ctrlp-pass-setting|
-TODO						|ctrlp-pass-todo|
-更新履歴					|ctrlp-pass-changelog|
-
-
-==============================================================================
-概要						*ctrlp-pass-introduction*
-
-*ctrlp-pass* は |pass| の |CtrlP| 用拡張です。
-
-- CTRL-x :レジスタへコピーするのみ
-- <CR>   :カーソル前へプットします、|P| 相当
-- CTRL-v :カーソル後へプットします、|p| 相当
-
-==============================================================================
-コマンド					*ctrlp-pass-commands*
-
-						  *:CtrlPPass*
-:CtrlPPass [entry]
-    - 名称: "pass"
-    - 検索し、パスワードのクリップボードへのコピーもしくは
-      現在の箇所への直接ペーストを行います。
+INTRODUCTION					|clap-pass-introduction|
+USAGE						|clap-pass-usage|
+TODO						|clap-pass-todo|
+CHANGELOG					|clap-pass-changelog|
 
 
 ==============================================================================
-設定						*ctrlp-pass-setting*
+INTRODUCTION					*clap-pass-introduction*
 
-g:pass_ctrlp_copy_to_clipbord  			  *g:pass_ctrlp_copy_to_clipbord*
-	既定値: 1 (0 でペースト)
+*clap-pass* is |pass|'s |clap| extention.
 
-CtrlPPass が "copy clipboard" モードで動作します。
-1 でクリップボードへのコピー、0は 'p' 相当のペースト処理。
+- put before cursor, |gP|
 
 ==============================================================================
-TODO						*ctrlp-pass-todo*
+USAGE						*clap-pass-usage*
 
-|pass| のヘルプを参照のこと。
+When vim-clap is installed, automatically enabed.
 
 ==============================================================================
-更新履歴					*ctrlp-pass-changelog*
+TODO						*clap-pass-todo*
+
+see |pass| help.
+
+==============================================================================
+CHANGELOG					*clap-pass-changelog*
 
 see gitlog
 
