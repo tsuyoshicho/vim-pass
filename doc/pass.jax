@@ -48,6 +48,7 @@ TODO						|pass-todo|
 https://github.com/tsuyoshicho/pass.vim
 
 CtrlPのプラグインとしては |ctrlp-pass| を参照してください。
+Clapのプラグインとしては |clap-pass| を参照してください。
 
 ==============================================================================
 使い方						*pass-usage*

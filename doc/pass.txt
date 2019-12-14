@@ -48,6 +48,7 @@ Latest version:
 https://github.com/tsuyoshicho/pass.vim
 
 See also CtrlP plugin feature |ctrlp-pass|.
+See also Clap plugin feature |clap-pass|.
 
 ==============================================================================
 USAGE						*pass-usage*
