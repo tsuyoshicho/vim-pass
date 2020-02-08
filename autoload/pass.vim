@@ -6,11 +6,6 @@
 
 scriptencoding utf-8
 
-if exists('g:autoloaded_pass')
-    finish
-endif
-let g:autoloaded_pass = 1
-
 let s:save_cpo = &cpo
 set cpo&vim
 
