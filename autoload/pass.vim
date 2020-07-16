@@ -9,6 +9,11 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
+" API set/edit
+function! pass#edit(...) abort
+  call pass#edit#new(a:000)
+endfunction
+
 " API get
 " return value
 function! pass#get(entry, ...) abort
