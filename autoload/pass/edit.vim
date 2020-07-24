@@ -20,6 +20,7 @@ function! pass#edit#new(args) abort
   " read
   " create secure scratch
   new
+  " setup (need same setting in editing at read item)
   setlocal filetype=pass-gpg
   setlocal bufhidden=hide
   setlocal buftype=nofile
@@ -30,6 +31,14 @@ function! pass#edit#new(args) abort
 
   " buffer save hook/autocmd
   nnoremap w call pass#set#save_entry(b:entry,getline(0,?))
+  " edit mapping
+  " i item insert(suggest keys (username))
+  " p password edit
+  " o otp secret edit
+  " format
+  "   <password>
+  "   <otp> (if exists)
+  "   <item1>:...
 endfunction
 
 let &cpo = s:save_cpo
