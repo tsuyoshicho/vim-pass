@@ -2,6 +2,9 @@
 " File: vim-pass startup subroutine
 " Author: Tsuyoshi CHO
 " Created: 2019-04-01
+"
+" Remove this file when pass#get_startup series API are removed.
+"
 "=============================================================================
 
 scriptencoding utf-8
