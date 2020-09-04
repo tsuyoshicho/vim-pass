@@ -127,7 +127,7 @@ command! -nargs=1 -complete=custom,pass#util#completion PassGetOtpRegister :call
 
 augroup pass-startup
   autocmd!
-  autocmd VimEnter * call <SID>pass_resolve_startup()
+  autocmd VimEnter * call s:pass_resolve_startup()
   " deprecated API
   autocmd VimEnter * call pass#resolve_startup()
   autocmd VimEnter * autocmd! pass-startup
