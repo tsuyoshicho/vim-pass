@@ -57,8 +57,8 @@ Password and other setup.
 >
  " in vimrc
  " configured at end of vim startup
- call pass#get_startup('g:test_gh_token','Develop/Github')
- call pass#get_startup('g:test_gh_username','Develop/Github','username')
+ call Pass_get_startup('g:test_gh_token','Develop/Github')
+ call Pass_get_startup('g:test_gh_username','Develop/Github','username')
  
  function! s:test() abort
    let password = pass#get('Service/foobar')
@@ -84,9 +84,9 @@ Plugin password and other setup.
    " let g:pixela_username = 'user'
    " let g:pixela_token    = 'token'
  
-   call pass#get_startup('g:pixela_username','Develop/Pixela','username')
+   call Pass_get_startup('g:pixela_username','Develop/Pixela','username')
    " VimPixela work OK
-   call pass#get_startup('g:pixela_token','Develop/Pixela')
+   call Pass_get_startup('g:pixela_token','Develop/Pixela')
    " startup-time countup do not correct work.
    " It work or does not work depending on the processing order of events
  '''
@@ -96,7 +96,7 @@ Plugin password and other setup.
  depends = ['vim-fugitive','vim-pass']
  # on_if= 'executable("hub")'
  hook_add = '''
-   call pass#get_startup('g:RHUBARB_TOKEN','Develop/Github')
+   call Pass_get_startup('g:RHUBARB_TOKEN','Develop/Github')
  '''
  
  [[plugins]]
@@ -104,7 +104,7 @@ Plugin password and other setup.
  depends = ['vim-pass']
  hook_add = '''
    let g:docbase = []
-   call pass#get_startup_funcall(
+   call Pass_get_startup_funcall(
          \ { v ->
          \ add(g:docbase,
          \   {
@@ -115,7 +115,7 @@ Plugin password and other setup.
          \ },
          \ 'Develop/DocBase1'
          \)
-   call pass#get_startup_funcall(
+   call Pass_get_startup_funcall(
          \ { v ->
          \ add(g:docbase,
          \   {
@@ -134,9 +134,9 @@ Plugin password and other setup.
  hook_add = '''
    " let g:slackstatus_token = '<YOUR_SLACK_TOKEN>'
    " my hoge
-   call pass#get_startup('g:slackstatus_token','Message/Slack/myhoge.legacy')
+   call Pass_get_startup('g:slackstatus_token','Message/Slack/myhoge.legacy')
    " vim-jp
-   " call pass#get_startup('g:slackstatus_token',
+   " call Pass_get_startup('g:slackstatus_token',
    "      \                'Message/Slack/vim-jp.legacy')
  
    function! s:slack_list(A,L,P) abort
@@ -159,7 +159,7 @@ Plugin password and other setup.
  hook_add = '''
    " mstdn.jp
    " let g:mastodon_host = 'mstdn.jp'
-   " call pass#get_startup('g:mastodon_access_token',
+   " call Pass_get_startup('g:mastodon_access_token',
    "      \                'Message/Mastodon/mstdn.jp')
  
    function! s:mastodon_completion(A,L,P) abort
@@ -281,6 +281,7 @@ It will disappear from the register as time passes.
 
 						    *pass#get_startup()*
 pass#get_startup({set-variable},{entry}, {...})
+deprecated API
 
 Password get API, startup specific; value set to set-variable
 entry is password-store style.
@@ -289,6 +290,7 @@ set-variable is scoped-variable string.(ex. 'g:hoge_fuga')
 
 						    *pass#get_startup_scope()*
 pass#get_startup_scope({scope},{set-variable},{entry}, {...})
+deprecated API
 
 Password get API, startup specific; value set to set-variable
 entry is password-store style.
@@ -298,6 +300,7 @@ set-variable is non-scoped-variable string.(ex. 'hoge_fuga')
 
 						    *pass#get_startup_funcall()*
 pass#get_startup_funcall({funcref},{entry}, {...})
+deprecated API
 
 Password get API, startup specific; call {funcref} with value.
 entry is password-store style.
@@ -305,9 +308,36 @@ Optionally item name.
 {funcref} call with one arg, that value as resolved Password entry.
 
 pass#resolve_startup()				    *pass#resolve_startup()*
+deprecated API
 
 Use at autocmd specific function.
 Resolve get_startup process at startup time.
+
+						    *Pass_get_startup()*
+Pass_get_startup({set-variable},{entry}, {...})
+
+Password get API, startup specific; value set to set-variable
+entry is password-store style.
+Optionally item name.
+set-variable is scoped-variable string.(ex. 'g:hoge_fuga')
+
+						    *Pass_get_startup_scope()*
+Pass_get_startup_scope({scope},{set-variable},{entry}, {...})
+
+Password get API, startup specific; value set to set-variable
+entry is password-store style.
+Optionally item name.
+scope is value of g:, w: or other scope signature like as |get()|
+set-variable is non-scoped-variable string.(ex. 'hoge_fuga')
+
+						    *Pass_get_startup_funcall()*
+Pass_get_startup_funcall({funcref},{entry}, {...})
+
+Password get API, startup specific; call {funcref} with value.
+entry is password-store style.
+Optionally item name.
+{funcref} call with one arg, that value as resolved Password entry.
+
 
 ==============================================================================
 TODO						*pass-todo*

@@ -57,8 +57,8 @@ Clapのプラグインとしては |clap-pass| を参照してください。
 >
  " in vimrc
  " configured at end of vim startup
- call pass#get_startup('g:test_gh_token','Develop/Github')
- call pass#get_startup('g:test_gh_username','Develop/Github','username')
+ call Pass_get_startup('g:test_gh_token','Develop/Github')
+ call Pass_get_startup('g:test_gh_username','Develop/Github','username')
  
  function! s:test() abort
    let password = pass#get('Service/foobar')
@@ -84,9 +84,9 @@ Clapのプラグインとしては |clap-pass| を参照してください。
    " let g:pixela_username = 'user'
    " let g:pixela_token    = 'token'
  
-   call pass#get_startup('g:pixela_username','Develop/Pixela','username')
+   call Pass_get_startup('g:pixela_username','Develop/Pixela','username')
    " VimPixela work OK
-   call pass#get_startup('g:pixela_token','Develop/Pixela')
+   call Pass_get_startup('g:pixela_token','Develop/Pixela')
    " startup-time countup do not correct work.
    " It work or does not work depending on the processing order of events
  '''
@@ -96,7 +96,7 @@ Clapのプラグインとしては |clap-pass| を参照してください。
  depends = ['vim-fugitive','vim-pass']
  # on_if= 'executable("hub")'
  hook_add = '''
-   call pass#get_startup('g:RHUBARB_TOKEN','Develop/Github')
+   call Pass_get_startup('g:RHUBARB_TOKEN','Develop/Github')
  '''
  
  [[plugins]]
@@ -104,7 +104,7 @@ Clapのプラグインとしては |clap-pass| を参照してください。
  depends = ['vim-pass']
  hook_add = '''
    let g:docbase = []
-   call pass#get_startup_funcall(
+   call Pass_get_startup_funcall(
          \ { v ->
          \ add(g:docbase,
          \   {
@@ -115,7 +115,7 @@ Clapのプラグインとしては |clap-pass| を参照してください。
          \ },
          \ 'Develop/DocBase1'
          \)
-   call pass#get_startup_funcall(
+   call Pass_get_startup_funcall(
          \ { v ->
          \ add(g:docbase,
          \   {
@@ -134,9 +134,9 @@ Clapのプラグインとしては |clap-pass| を参照してください。
  hook_add = '''
    " let g:slackstatus_token = '<YOUR_SLACK_TOKEN>'
    " my hoge
-   call pass#get_startup('g:slackstatus_token','Message/Slack/myhoge.legacy')
+   call Pass_get_startup('g:slackstatus_token','Message/Slack/myhoge.legacy')
    " vim-jp
-   " call pass#get_startup('g:slackstatus_token',
+   " call Pass_get_startup('g:slackstatus_token',
    "      \                'Message/Slack/vim-jp.legacy')
  
    function! s:slack_list(A,L,P) abort
@@ -159,7 +159,7 @@ Clapのプラグインとしては |clap-pass| を参照してください。
  hook_add = '''
    " mstdn.jp
    " let g:mastodon_host = 'mstdn.jp'
-   " call pass#get_startup('g:mastodon_access_token',
+   " call Pass_get_startup('g:mastodon_access_token',
    "      \                'Message/Mastodon/mstdn.jp')
  
    function! s:mastodon_completion(A,L,P) abort
@@ -276,6 +276,7 @@ entryはpassword-storeのエントリ形式。
 
 						   *pass#get_startup()*
 pass#get_startup({set-variable},{entry}, {...})
+廃止予定API
 
 パスワード取得API、起動時前専用で、set-variableに値を設定します。
 entryはpassword-storeのエントリ形式。
@@ -284,6 +285,7 @@ set-variableはスコープ付きの変数を表す文字列です(ex. 'g:hoge_f
 
 						    *pass#get_startup_scope()*
 pass#get_startup_scope({scope},{set-variable},{entry}, {...})
+廃止予定API
 
 パスワード取得API、起動時前専用で、set-variableに値を設定します。
 entryはpassword-storeのエントリ形式。
@@ -293,6 +295,7 @@ set-variableはスコープなしの変数を表す文字列です(ex. 'hoge_fug
 
 						    *pass#get_startup_funcall()*
 pass#get_startup_funcall({funcref},{entry}, {...})
+廃止予定API
 
 パスワード取得API、起動時前専用で、値付きで{funcref}を呼びます。
 entryはpassword-storeのエントリ形式。
@@ -300,9 +303,36 @@ entryはpassword-storeのエントリ形式。
 解決したパスワードを引数として、{funcref}を実行します。
 
 pass#resolve_startup()				    *pass#resolve_startup()*
+廃止予定API
 
 autocmdで利用する専用関数。
 起動時のget_startupの解決を実施します。
+
+						    *Pass_get_startup()*
+Pass_get_startup({set-variable},{entry}, {...})
+
+パスワード取得API、起動時前専用で、set-variableに値を設定します。
+entryはpassword-storeのエントリ形式。
+オプションでパスワード以外の項目を指定できます。
+set-variableはスコープ付きの変数を表す文字列です(ex. 'g:hoge_fuga')
+
+						    *Pass_get_startup_scope()*
+Pass_get_startup_scope({scope},{set-variable},{entry}, {...})
+
+パスワード取得API、起動時前専用で、set-variableに値を設定します。
+entryはpassword-storeのエントリ形式。
+オプションでパスワード以外の項目を指定できます。
+scopeには |get()| と同じように、g:やw:などのスコープを設定します。
+set-variableはスコープなしの変数を表す文字列です(ex. 'hoge_fuga')
+
+						    *Pass_get_startup_funcall()*
+Pass_get_startup_funcall({funcref},{entry}, {...})
+
+パスワード取得API、起動時前専用で、値付きで{funcref}を呼びます。
+entryはpassword-storeのエントリ形式。
+オプションでパスワード以外の項目を指定できます。
+解決したパスワードを引数として、{funcref}を実行します。
+
 
 ==============================================================================
 TODO						*pass-todo*

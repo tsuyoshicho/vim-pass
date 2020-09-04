@@ -54,6 +54,7 @@ function! pass#get_otp_register(entry) abort
   endif
 endfunction
 
+" deprecated API
 " API get_startup_funcall
 " use only while startup.at end of start up,invoke passphrase input once.
 " all waited process execute
@@ -66,6 +67,7 @@ function! pass#get_startup_funcall(func,entry, ...) abort
   endif
 endfunction
 
+" deprecated API
 " API get_startup_scope
 " use only while startup.at end of start up,invoke passphrase input once.
 " all waited process execute
@@ -78,6 +80,7 @@ function! pass#get_startup_scope(scope,set_variable,entry, ...) abort
   endif
 endfunction
 
+" deprecated API
 " API get_startup
 " use only while startup.at end of start up,invoke passphrase input once.
 " all waited process execute
