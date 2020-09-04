@@ -82,8 +82,6 @@ function! s:pass_startup_entry_setup_funcall(func, entry, keyword) abort
 endfunction
 
 function! s:pass_startup_resolve() abort
-  echomsg 'plugin type pass startup:' s:pass_startup_request
-
   if len(s:pass_startup_request) == 0
     return
   endif
