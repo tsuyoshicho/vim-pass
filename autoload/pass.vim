@@ -90,10 +90,5 @@ function! pass#get_startup(set_variable,entry, ...) abort
   endif
 endfunction
 
-" API resolve_startup(autocmd use)
-function! pass#resolve_startup()
-  call pass#startup#resolve()
-endfunction
-
 let &cpo = s:save_cpo
 unlet s:save_cpo

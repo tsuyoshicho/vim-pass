@@ -310,10 +310,6 @@ Optionally item name.
 Note: StartUp API is autoload function that is callable at before other plugin
 sourced support (using adaptive autoload loading).
 
-pass#resolve_startup()				    *pass#resolve_startup()*
-
-Use at autocmd specific function.
-Resolve get_startup process at startup time.
 
 ==============================================================================
 TODO						*pass-todo*

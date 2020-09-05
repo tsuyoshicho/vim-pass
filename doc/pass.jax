@@ -307,8 +307,6 @@ Note: StartUp API はオートロード関数で、他のプラグインのsourc
 
 pass#resolve_startup()				    *pass#resolve_startup()*
 
-autocmdで利用する専用関数。
-起動時のget_startupの解決を実施します。
 
 ==============================================================================
 TODO						*pass-todo*
