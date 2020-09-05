@@ -53,10 +53,10 @@ hook_add = '''
 ```vim
 " in vimrc
 " configured at end of vim startup
-call Pass_get_startup('g:test_gh_token','Develop/Github')
-call Pass_get_startup('g:test_gh_username','Develop/Github','username')
+call pass#get_startup('g:test_gh_token','Develop/Github')
+call pass#get_startup('g:test_gh_username','Develop/Github','username')
 
-function! s:test() abort
+function! test() abort
   let password = pass#get('Service/foobar')
   " ...
 endfunction
@@ -66,11 +66,6 @@ endfunction
 # in plugin setting(dein's toml)
 [[plugins]]
 repo = 'tsuyoshicho/vim-pass'
-depends = ['ctrlp']
-hook_add = '''
-  let g:ctrlp_extensions = get(g:, 'ctrlp_extensions', [])
-        \ + ['pass']
-'''
 
 [[plugins]] # https://pixe.la/
 repo = 'mattn/vim-pixela'
@@ -79,9 +74,9 @@ hook_add = '''
   " let g:pixela_username = 'user'
   " let g:pixela_token    = 'token'
 
-  call Pass_get_startup('g:pixela_username','Develop/Pixela','username')
+  call pass#get_startup('g:pixela_username','Develop/Pixela','username')
   " VimPixela work OK
-  call Pass_get_startup('g:pixela_token','Develop/Pixela')
+  call pass#get_startup('g:pixela_token','Develop/Pixela')
   " startup-time countup do not correct work.
   " It work or does not work depending on the processing order of events
 '''
@@ -91,7 +86,7 @@ repo = 'tpope/vim-rhubarb'
 depends = ['vim-fugitive','vim-pass']
 # on_if= 'executable("hub")'
 hook_add = '''
-  call Pass_get_startup('g:RHUBARB_TOKEN','Develop/Github')
+  call pass#get_startup('g:RHUBARB_TOKEN','Develop/Github')
 '''
 
 [[plugins]]
@@ -99,7 +94,7 @@ repo = 'kyoh86/vim-docbase'
 depends = ['vim-pass']
 hook_add = '''
   let g:docbase = []
-  call Pass_get_startup_funcall(
+  call pass#get_startup_funcall(
         \ { v ->
         \ add(g:docbase,
         \   {
@@ -110,7 +105,7 @@ hook_add = '''
         \ },
         \ 'Develop/DocBase1'
         \)
-  call Pass_get_startup_funcall(
+  call pass#get_startup_funcall(
         \ { v ->
         \ add(g:docbase,
         \   {
@@ -129,11 +124,10 @@ depends = ['webapi-vim','vim-pass']
 hook_add = '''
   " let g:slackstatus_token = '<YOUR_SLACK_TOKEN>'
   " my hoge
-  call Pass_get_startup('g:slackstatus_token','Message/Slack/myhoge.legacy')
+  call pass#get_startup('g:slackstatus_token','Message/Slack/myhoge.legacy')
   " vim-jp
-  " call Pass_get_startup('g:slackstatus_token',
-  "      \                'Message/Slack/vim-jp.legacy')
-
+  " call pass#get_startup('g:slackstatus_token','Message/Slack/vim-jp.legacy')
+  "
   function! s:slack_list(A,L,P) abort
     let slacklist = ['myhoge','vim-jp']
     return slacklist
@@ -144,8 +138,7 @@ hook_add = '''
     let g:slackstatus_token = pass#get(path)
   endfunction
 
-  command! -nargs=1 -complete=customlist,<SID>slack_list
-    \ SlackStatusChange :call <SID>slackstatus_change_token(<f-args>)
+  command! -nargs=1 -complete=customlist,<SID>slack_list SlackStatusChange :call <SID>slackstatus_change_token(<f-args>)
 '''
 
 [[plugins]] # Mastodon
@@ -154,8 +147,7 @@ depends = ['webapi-vim','vim-pass']
 hook_add = '''
   " mstdn.jp
   " let g:mastodon_host = 'mstdn.jp'
-  " call Pass_get_startup('g:mastodon_access_token',
-  "      \                'Message/Mastodon/mstdn.jp')
+  " call pass#get_startup('g:mastodon_access_token','Message/Mastodon/mstdn.jp')
 
   function! s:mastodon_completion(A,L,P) abort
     let host_list = ['mstdn.jp']
@@ -168,9 +160,9 @@ hook_add = '''
     let g:mastodon_access_token = pass#get(path)
   endfunction
 
-  command! -nargs=1 -complete=custom,<SID>mastodon_completion
-    \ MastodonHostChange :call <SID>mastodon_change_hosttoken(<f-args>)
+  command! -nargs=1 -complete=custom,<SID>mastodon_completion MastodonHostChange :call <SID>mastodon_change_hosttoken(<f-args>)
 '''
+
 ```
 
 ## limitation
