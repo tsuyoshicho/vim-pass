@@ -18,6 +18,7 @@ body { font-family: monospace; color: #24292e; background-color: #ffffff; }
 .helpExample { font-weight: bold; }
 .PreProc { color: #d73a49; }
 .String { color: #032f62; }
+.Todo { color: #6f42c1; text-decoration: underline; }
 .Special { color: #6f42c1; }
 .Ignore { color: #babbbc; background-color: #ffffff; padding-bottom: 1px; }
 .Statement { color: #d73a49; }
@@ -89,8 +90,8 @@ Password and other setup.
 
 <span class="helpExample"> &quot; in vimrc</span>
 <span class="helpExample"> &quot; configured at end of vim startup</span>
-<span class="helpExample"> call Pass_get_startup('g:test_gh_token','Develop/Github')</span>
-<span class="helpExample"> call Pass_get_startup('g:test_gh_username','Develop/Github','username')</span>
+<span class="helpExample"> call pass#get_startup('g:test_gh_token','Develop/Github')</span>
+<span class="helpExample"> call pass#get_startup('g:test_gh_username','Develop/Github','username')</span>
 <span class="helpExample"> </span>
 <span class="helpExample"> function! s:test() abort</span>
 <span class="helpExample">   let password = pass#get('Service/foobar')</span>
@@ -116,9 +117,9 @@ Plugin password and other setup.
 <span class="helpExample">   &quot; let g:pixela_username = 'user'</span>
 <span class="helpExample">   &quot; let g:pixela_token    = 'token'</span>
 <span class="helpExample"> </span>
-<span class="helpExample">   call Pass_get_startup('g:pixela_username','Develop/Pixela','username')</span>
+<span class="helpExample">   call pass#get_startup('g:pixela_username','Develop/Pixela','username')</span>
 <span class="helpExample">   &quot; VimPixela work OK</span>
-<span class="helpExample">   call Pass_get_startup('g:pixela_token','Develop/Pixela')</span>
+<span class="helpExample">   call pass#get_startup('g:pixela_token','Develop/Pixela')</span>
 <span class="helpExample">   &quot; startup-time countup do not correct work.</span>
 <span class="helpExample">   &quot; It work or does not work depending on the processing order of events</span>
 <span class="helpExample"> '''</span>
@@ -128,7 +129,7 @@ Plugin password and other setup.
 <span class="helpExample"> depends = ['vim-fugitive','vim-pass']</span>
 <span class="helpExample"> # on_if= 'executable(&quot;hub&quot;)'</span>
 <span class="helpExample"> hook_add = '''</span>
-<span class="helpExample">   call Pass_get_startup('g:RHUBARB_TOKEN','Develop/Github')</span>
+<span class="helpExample">   call pass#get_startup('g:RHUBARB_TOKEN','Develop/Github')</span>
 <span class="helpExample"> '''</span>
 <span class="helpExample"> </span>
 <span class="helpExample"> [[plugins]]</span>
@@ -136,7 +137,7 @@ Plugin password and other setup.
 <span class="helpExample"> depends = ['vim-pass']</span>
 <span class="helpExample"> hook_add = '''</span>
 <span class="helpExample">   let g:docbase = []</span>
-<span class="helpExample">   call Pass_get_startup_funcall(</span>
+<span class="helpExample">   call pass#get_startup_funcall(</span>
 <span class="helpExample">         \ { v -&gt;</span>
 <span class="helpExample">         \ add(g:docbase,</span>
 <span class="helpExample">         \   {</span>
@@ -147,7 +148,7 @@ Plugin password and other setup.
 <span class="helpExample">         \ },</span>
 <span class="helpExample">         \ 'Develop/DocBase1'</span>
 <span class="helpExample">         \)</span>
-<span class="helpExample">   call Pass_get_startup_funcall(</span>
+<span class="helpExample">   call pass#get_startup_funcall(</span>
 <span class="helpExample">         \ { v -&gt;</span>
 <span class="helpExample">         \ add(g:docbase,</span>
 <span class="helpExample">         \   {</span>
@@ -166,9 +167,9 @@ Plugin password and other setup.
 <span class="helpExample"> hook_add = '''</span>
 <span class="helpExample">   &quot; let g:slackstatus_token = '&lt;YOUR_SLACK_TOKEN&gt;'</span>
 <span class="helpExample">   &quot; my hoge</span>
-<span class="helpExample">   call Pass_get_startup('g:slackstatus_token','Message/Slack/myhoge.legacy')</span>
+<span class="helpExample">   call pass#get_startup('g:slackstatus_token','Message/Slack/myhoge.legacy')</span>
 <span class="helpExample">   &quot; vim-jp</span>
-<span class="helpExample">   &quot; call Pass_get_startup('g:slackstatus_token',</span>
+<span class="helpExample">   &quot; call pass#get_startup('g:slackstatus_token',</span>
 <span class="helpExample">   &quot;      \                'Message/Slack/vim-jp.legacy')</span>
 <span class="helpExample"> </span>
 <span class="helpExample">   function! s:slack_list(A,L,P) abort</span>
@@ -191,7 +192,7 @@ Plugin password and other setup.
 <span class="helpExample"> hook_add = '''</span>
 <span class="helpExample">   &quot; mstdn.jp</span>
 <span class="helpExample">   &quot; let g:mastodon_host = 'mstdn.jp'</span>
-<span class="helpExample">   &quot; call Pass_get_startup('g:mastodon_access_token',</span>
+<span class="helpExample">   &quot; call pass#get_startup('g:mastodon_access_token',</span>
 <span class="helpExample">   &quot;      \                'Message/Mastodon/mstdn.jp')</span>
 <span class="helpExample"> </span>
 <span class="helpExample">   function! s:mastodon_completion(A,L,P) abort</span>
@@ -313,62 +314,34 @@ It will disappear from the register as time passes.
 
                                                     <a class="String" href="././pass.html#pass#get_startup()" name="pass#get_startup()">pass#get_startup()</a>
 pass#get_startup(<span class="Special">{set-variable}</span>,<span class="Special">{entry}</span>, <span class="Special">{...}</span>)
-deprecated API
 
 Password get API, startup specific; value set to set-variable
 entry is password-store style.
 Optionally item name.
 set-variable is scoped-variable string.(ex. 'g:hoge_fuga')
+<span class="Todo">Note</span>: StartUp API is autoload function that is callable at before other plugin
+sourced support (using adaptive autoload loading).
 
                                                     <a class="String" href="././pass.html#pass#get_startup_scope()" name="pass#get_startup_scope()">pass#get_startup_scope()</a>
 pass#get_startup_scope(<span class="Special">{scope}</span>,<span class="Special">{set-variable}</span>,<span class="Special">{entry}</span>, <span class="Special">{...}</span>)
-deprecated API
 
 Password get API, startup specific; value set to set-variable
 entry is password-store style.
 Optionally item name.
 scope is value of g:, w: or other scope signature like as <a href="https://www.google.com/search?q=vim+%22get()%22&lr=lang_en"><span class="MissingTag">get()</span></a>
 set-variable is non-scoped-variable string.(ex. 'hoge_fuga')
+<span class="Todo">Note</span>: StartUp API is autoload function that is callable at before other plugin
+sourced support (using adaptive autoload loading).
 
                                                     <a class="String" href="././pass.html#pass#get_startup_funcall()" name="pass#get_startup_funcall()">pass#get_startup_funcall()</a>
 pass#get_startup_funcall(<span class="Special">{funcref}</span>,<span class="Special">{entry}</span>, <span class="Special">{...}</span>)
-deprecated API
 
 Password get API, startup specific; call <span class="Special">{funcref}</span> with value.
 entry is password-store style.
 Optionally item name.
 <span class="Special">{funcref}</span> call with one arg, that value as resolved Password entry.
-
-pass#resolve_startup()                              <a class="String" href="././pass.html#pass#resolve_startup()" name="pass#resolve_startup()">pass#resolve_startup()</a>
-deprecated API
-
-Use at autocmd specific function.
-Resolve get_startup process at startup time.
-
-                                                    <a class="String" href="././pass.html#Pass_get_startup()" name="Pass_get_startup()">Pass_get_startup()</a>
-Pass_get_startup(<span class="Special">{set-variable}</span>,<span class="Special">{entry}</span>, <span class="Special">{...}</span>)
-
-Password get API, startup specific; value set to set-variable
-entry is password-store style.
-Optionally item name.
-set-variable is scoped-variable string.(ex. 'g:hoge_fuga')
-
-                                                    <a class="String" href="././pass.html#Pass_get_startup_scope()" name="Pass_get_startup_scope()">Pass_get_startup_scope()</a>
-Pass_get_startup_scope(<span class="Special">{scope}</span>,<span class="Special">{set-variable}</span>,<span class="Special">{entry}</span>, <span class="Special">{...}</span>)
-
-Password get API, startup specific; value set to set-variable
-entry is password-store style.
-Optionally item name.
-scope is value of g:, w: or other scope signature like as <a href="https://www.google.com/search?q=vim+%22get()%22&lr=lang_en"><span class="MissingTag">get()</span></a>
-set-variable is non-scoped-variable string.(ex. 'hoge_fuga')
-
-                                                    <a class="String" href="././pass.html#Pass_get_startup_funcall()" name="Pass_get_startup_funcall()">Pass_get_startup_funcall()</a>
-Pass_get_startup_funcall(<span class="Special">{funcref}</span>,<span class="Special">{entry}</span>, <span class="Special">{...}</span>)
-
-Password get API, startup specific; call <span class="Special">{funcref}</span> with value.
-entry is password-store style.
-Optionally item name.
-<span class="Special">{funcref}</span> call with one arg, that value as resolved Password entry.
+<span class="Todo">Note</span>: StartUp API is autoload function that is callable at before other plugin
+sourced support (using adaptive autoload loading).
 
 
 <span class="PreProc">==============================================================================</span>
@@ -382,7 +355,7 @@ see Ja help.
 see gitlog
 
 <span class="PreProc">==============================================================================</span>
-vim&#0058;tw=78:fo=tcq2mM:ts=8:ft=help:norl:noet:fen:
+vim&#0058;tw=78:fo=tcq2mM:ts=8:ft=help:norl:noet:
 </pre>
 <hr>
 <a href="#top">top</a> - <a href="./index.html">main help file</a> - <a href="./tags.html">tag index</a> <br>
