@@ -286,6 +286,8 @@ Password get API, startup specific; value set to set-variable
 entry is password-store style.
 Optionally item name.
 set-variable is scoped-variable string.(ex. 'g:hoge_fuga')
+Note: StartUp API is autoload function that is callable at before other plugin
+sourced support (using adaptive autoload loading).
 
 						    *pass#get_startup_scope()*
 pass#get_startup_scope({scope},{set-variable},{entry}, {...})
@@ -295,6 +297,8 @@ entry is password-store style.
 Optionally item name.
 scope is value of g:, w: or other scope signature like as |get()|
 set-variable is non-scoped-variable string.(ex. 'hoge_fuga')
+Note: StartUp API is autoload function that is callable at before other plugin
+sourced support (using adaptive autoload loading).
 
 						    *pass#get_startup_funcall()*
 pass#get_startup_funcall({funcref},{entry}, {...})
@@ -303,6 +307,8 @@ Password get API, startup specific; call {funcref} with value.
 entry is password-store style.
 Optionally item name.
 {funcref} call with one arg, that value as resolved Password entry.
+Note: StartUp API is autoload function that is callable at before other plugin
+sourced support (using adaptive autoload loading).
 
 pass#resolve_startup()				    *pass#resolve_startup()*
 
