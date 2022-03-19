@@ -41,8 +41,12 @@ function! pass#startup#resolve() abort
   endtry
 
   " resolved all promises
+  call timer_start(0, { -> s:async_resolver() })
+endfunction
+
+function! s:async_resolver() abort
   for idx in range(s:resolved_count, len(s:pass_startup_request) - 1)
-    call timer_start(0, { -> s:pass_startup_request[idx]() })
+    call s::pass_startup_request[idx]()
   endfor
   let s:resolved_count = len(s:pass_startup_request)
 endfunction
