@@ -31,6 +31,7 @@ License : MIT license  {{{
   変数						  |pass-variables|
   コマンド					  |pass-commands|
   関数						  |pass-functions|
+  自動コマンド					  |pass-autocommands|
 TODO						|pass-todo|
 更新履歴					|pass-changelog|
 
@@ -307,6 +308,13 @@ Note: StartUp API はオートロード関数で、他のプラグインのsourc
 
 pass#resolve_startup()				    *pass#resolve_startup()*
 
+------------------------------------------------------------------------------
+自動コマンド					  *pass-autocommands*
+
+User VimPassStartUpResolve			    *VimPassStartUpResolve*
+
+処理された |pass#resolve_startup()| が完了したときにイベントを呼び出します(複
+数)。
 
 ==============================================================================
 TODO						*pass-todo*

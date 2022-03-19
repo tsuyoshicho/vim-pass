@@ -31,6 +31,7 @@ INTERFACE					|pass-interface|
   VARIABLES					  |pass-variables|
   COMMANDS					  |pass-commands|
   FUNCTIONS					  |pass-functions|
+  AUTOCOMMANDS					  |pass-autocommands|
 TODO						|pass-todo|
 CHANGELOG					|pass-changelog|
 
@@ -59,7 +60,7 @@ Password and other setup.
  " configured at end of vim startup
  call pass#get_startup('g:test_gh_token','Develop/Github')
  call pass#get_startup('g:test_gh_username','Develop/Github','username')
- 
+
  function! s:test() abort
    let password = pass#get('Service/foobar')
    " ...
@@ -76,21 +77,21 @@ Plugin password and other setup.
    let g:ctrlp_extensions = get(g:, 'ctrlp_extensions', [])
          \ + ['pass']
  '''
- 
+
  [[plugins]] # https://pixe.la/
  repo = 'mattn/vim-pixela'
  depends = ['open-browser.vim','vim-pass']
  hook_add = '''
    " let g:pixela_username = 'user'
    " let g:pixela_token    = 'token'
- 
+
    call pass#get_startup('g:pixela_username','Develop/Pixela','username')
    " VimPixela work OK
    call pass#get_startup('g:pixela_token','Develop/Pixela')
    " startup-time countup do not correct work.
    " It work or does not work depending on the processing order of events
  '''
- 
+
  [[plugins]]
  repo = 'tpope/vim-rhubarb'
  depends = ['vim-fugitive','vim-pass']
@@ -98,7 +99,7 @@ Plugin password and other setup.
  hook_add = '''
    call pass#get_startup('g:RHUBARB_TOKEN','Develop/Github')
  '''
- 
+
  [[plugins]]
  repo = 'kyoh86/vim-docbase'
  depends = ['vim-pass']
@@ -127,7 +128,7 @@ Plugin password and other setup.
          \ 'Develop/DocBase2'
          \)
  '''
- 
+
  [[plugins]] # Slack
  repo = 'mizukmb/slackstatus.vim'
  depends = ['webapi-vim','vim-pass']
@@ -138,21 +139,21 @@ Plugin password and other setup.
    " vim-jp
    " call pass#get_startup('g:slackstatus_token',
    "      \                'Message/Slack/vim-jp.legacy')
- 
+
    function! s:slack_list(A,L,P) abort
      let slacklist = ['myhoge','vim-jp']
      return slacklist
    endfunction
- 
+
    function s:slackstatus_change_token(team) abort
      let path = 'Message/Slack/' . a:team . '.legacy'
      let g:slackstatus_token = pass#get(path)
    endfunction
- 
+
    command! -nargs=1 -complete=customlist,<SID>slack_list
       \ SlackStatusChange :call <SID>slackstatus_change_token(<f-args>)
  '''
- 
+
  [[plugins]] # Mastodon
  repo = 'mattn/vim-mastodon'
  depends = ['webapi-vim','vim-pass']
@@ -161,18 +162,18 @@ Plugin password and other setup.
    " let g:mastodon_host = 'mstdn.jp'
    " call pass#get_startup('g:mastodon_access_token',
    "      \                'Message/Mastodon/mstdn.jp')
- 
+
    function! s:mastodon_completion(A,L,P) abort
      let host_list = ['mstdn.jp']
      return join(host_list,"\n")
    endfunction
- 
+
    function s:mastodon_change_hosttoken(host) abort
      let path = 'Message/Mastodon/' . a:host
      let g:mastodon_host = a:host
      let g:mastodon_access_token = pass#get(path)
    endfunction
- 
+
    command! -nargs=1 -complete=custom,<SID>mastodon_completion
       \ MastodonHostChange :call <SID>mastodon_change_hosttoken(<f-args>)
  '''
@@ -217,7 +218,6 @@ alternative entry name list. "password" is special entry label. This mean as
 default password info. "password" label entry use inner defined value. "otp"
 is special entry label. only use OTP param; alternative name nothing. Define
 g:pass_entry_altmap at before loading, add above setting
-
 
 ------------------------------------------------------------------------------
 COMMANDS					  *pass-commands*
@@ -310,6 +310,12 @@ Optionally item name.
 Note: StartUp API is autoload function that is callable at before other plugin
 sourced support (using adaptive autoload loading).
 
+------------------------------------------------------------------------------
+AUTOCOMMANDS					  *pass-autocommands*
+
+User VimPassStartUpResolve			    *VimPassStartUpResolve*
+
+Invoke event when processed |pass#resolve_startup()| was done(multiple).
 
 ==============================================================================
 TODO						*pass-todo*

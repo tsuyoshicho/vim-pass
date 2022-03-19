@@ -16,6 +16,12 @@ let s:List = vital#vimpass#import('Data.List')
 let s:pass_startup_request = []
 let s:resolved_count = 0
 
+" event
+augroup vim-pass-startup
+  autocmd!
+  autocmd User VimPassStartUpResolve :
+augroup END
+
 function! pass#startup#entry_setup_letval(scope, set_variable, entry, keyword) abort
   let Fn = function('s:letval_resolver',[a:scope,a:set_variable,a:entry,a:keyword])
   call s:List.push(s:pass_startup_request, Fn)
@@ -49,6 +55,9 @@ function! s:async_resolver() abort
     call s:pass_startup_request[idx]()
   endfor
   let s:resolved_count = len(s:pass_startup_request)
+
+  " invoke event
+  doautocmd User VimPassStartUpResolve
 endfunction
 
 function! s:letval_resolver(scope,set_variable, entry, keyword) abort
