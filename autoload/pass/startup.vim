@@ -43,8 +43,6 @@ function! pass#startup#resolve() abort
   for s:index in range(len(s:pass_startup_request))
     call timer_start(0, { -> s:pass_startup_request[s:index]() })
   endfor
-
-  let s:pass_startup_request = []
 endfunction
 
 function! s:letval_resolver(scope,set_variable, entry, keyword) abort
