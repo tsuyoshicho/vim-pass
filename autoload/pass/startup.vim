@@ -40,8 +40,8 @@ function! pass#startup#resolve() abort
   endtry
 
   " resolved all promises
-  for Fn in s:pass_startup_request
-    call Fn()
+  for s:index in range(len(s:pass_startup_request))
+    call timer_start(0, { -> s:pass_startup_request[s:index]() })
   endfor
 
   let s:pass_startup_request = []
