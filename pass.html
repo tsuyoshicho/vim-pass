@@ -64,6 +64,7 @@ INTERFACE                                       <a class="Identifier" href="././
   VARIABLES                                       <a class="Identifier" href="././pass.html#pass-variables">pass-variables</a>
   COMMANDS                                        <a class="Identifier" href="././pass.html#pass-commands">pass-commands</a>
   FUNCTIONS                                       <a class="Identifier" href="././pass.html#pass-functions">pass-functions</a>
+  AUTOCOMMANDS                                    <a class="Identifier" href="././pass.html#pass-autocommands">pass-autocommands</a>
 TODO                                            <a class="Identifier" href="././pass.html#pass-todo">pass-todo</a>
 CHANGELOG                                       <a class="Identifier" href="././pass.html#pass-changelog">pass-changelog</a>
 
@@ -92,7 +93,7 @@ Password and other setup.
 <span class="helpExample"> &quot; configured at end of vim startup</span>
 <span class="helpExample"> call pass#get_startup('g:test_gh_token','Develop/Github')</span>
 <span class="helpExample"> call pass#get_startup('g:test_gh_username','Develop/Github','username')</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample"> function! s:test() abort</span>
 <span class="helpExample">   let password = pass#get('Service/foobar')</span>
 <span class="helpExample">   &quot; ...</span>
@@ -109,21 +110,21 @@ Plugin password and other setup.
 <span class="helpExample">   let g:ctrlp_extensions = get(g:, 'ctrlp_extensions', [])</span>
 <span class="helpExample">         \ + ['pass']</span>
 <span class="helpExample"> '''</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample"> [[plugins]] # <a href="https://pixe.la/">https://pixe.la/</a></span>
 <span class="helpExample"> repo = 'mattn/vim-pixela'</span>
 <span class="helpExample"> depends = ['open-browser.vim','vim-pass']</span>
 <span class="helpExample"> hook_add = '''</span>
 <span class="helpExample">   &quot; let g:pixela_username = 'user'</span>
 <span class="helpExample">   &quot; let g:pixela_token    = 'token'</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample">   call pass#get_startup('g:pixela_username','Develop/Pixela','username')</span>
 <span class="helpExample">   &quot; VimPixela work OK</span>
 <span class="helpExample">   call pass#get_startup('g:pixela_token','Develop/Pixela')</span>
 <span class="helpExample">   &quot; startup-time countup do not correct work.</span>
 <span class="helpExample">   &quot; It work or does not work depending on the processing order of events</span>
 <span class="helpExample"> '''</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample"> [[plugins]]</span>
 <span class="helpExample"> repo = 'tpope/vim-rhubarb'</span>
 <span class="helpExample"> depends = ['vim-fugitive','vim-pass']</span>
@@ -131,7 +132,7 @@ Plugin password and other setup.
 <span class="helpExample"> hook_add = '''</span>
 <span class="helpExample">   call pass#get_startup('g:RHUBARB_TOKEN','Develop/Github')</span>
 <span class="helpExample"> '''</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample"> [[plugins]]</span>
 <span class="helpExample"> repo = 'kyoh86/vim-docbase'</span>
 <span class="helpExample"> depends = ['vim-pass']</span>
@@ -160,7 +161,7 @@ Plugin password and other setup.
 <span class="helpExample">         \ 'Develop/DocBase2'</span>
 <span class="helpExample">         \)</span>
 <span class="helpExample"> '''</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample"> [[plugins]] # Slack</span>
 <span class="helpExample"> repo = 'mizukmb/slackstatus.vim'</span>
 <span class="helpExample"> depends = ['webapi-vim','vim-pass']</span>
@@ -171,21 +172,21 @@ Plugin password and other setup.
 <span class="helpExample">   &quot; vim-jp</span>
 <span class="helpExample">   &quot; call pass#get_startup('g:slackstatus_token',</span>
 <span class="helpExample">   &quot;      \                'Message/Slack/vim-jp.legacy')</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample">   function! s:slack_list(A,L,P) abort</span>
 <span class="helpExample">     let slacklist = ['myhoge','vim-jp']</span>
 <span class="helpExample">     return slacklist</span>
 <span class="helpExample">   endfunction</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample">   function s:slackstatus_change_token(team) abort</span>
 <span class="helpExample">     let path = 'Message/Slack/' . a:team . '.legacy'</span>
 <span class="helpExample">     let g:slackstatus_token = pass#get(path)</span>
 <span class="helpExample">   endfunction</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample">   command! -nargs=1 -complete=customlist,&lt;SID&gt;slack_list</span>
 <span class="helpExample">      \ SlackStatusChange :call &lt;SID&gt;slackstatus_change_token(&lt;f-args&gt;)</span>
 <span class="helpExample"> '''</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample"> [[plugins]] # Mastodon</span>
 <span class="helpExample"> repo = 'mattn/vim-mastodon'</span>
 <span class="helpExample"> depends = ['webapi-vim','vim-pass']</span>
@@ -194,18 +195,18 @@ Plugin password and other setup.
 <span class="helpExample">   &quot; let g:mastodon_host = 'mstdn.jp'</span>
 <span class="helpExample">   &quot; call pass#get_startup('g:mastodon_access_token',</span>
 <span class="helpExample">   &quot;      \                'Message/Mastodon/mstdn.jp')</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample">   function! s:mastodon_completion(A,L,P) abort</span>
 <span class="helpExample">     let host_list = ['mstdn.jp']</span>
 <span class="helpExample">     return join(host_list,&quot;\n&quot;)</span>
 <span class="helpExample">   endfunction</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample">   function s:mastodon_change_hosttoken(host) abort</span>
 <span class="helpExample">     let path = 'Message/Mastodon/' . a:host</span>
 <span class="helpExample">     let g:mastodon_host = a:host</span>
 <span class="helpExample">     let g:mastodon_access_token = pass#get(path)</span>
 <span class="helpExample">   endfunction</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample">   command! -nargs=1 -complete=custom,&lt;SID&gt;mastodon_completion</span>
 <span class="helpExample">      \ MastodonHostChange :call &lt;SID&gt;mastodon_change_hosttoken(&lt;f-args&gt;)</span>
 <span class="helpExample"> '''</span>
@@ -250,7 +251,6 @@ alternative entry name list. &quot;password&quot; is special entry label. This m
 default password info. &quot;password&quot; label entry use inner defined value. &quot;otp&quot;
 is special entry label. only use OTP param; alternative name nothing. Define
 g:pass_entry_altmap at before loading, add above setting
-
 
 <span class="PreProc">------------------------------------------------------------------------------</span>
 <span class="Statement">COMMANDS</span>                                          <a class="String" href="././pass.html#pass-commands" name="pass-commands">pass-commands</a>
@@ -343,6 +343,12 @@ Optionally item name.
 <span class="Todo">Note</span>: StartUp API is autoload function that is callable at before other plugin
 sourced support (using adaptive autoload loading).
 
+<span class="PreProc">------------------------------------------------------------------------------</span>
+<span class="Statement">AUTOCOMMANDS</span>                                      <a class="String" href="././pass.html#pass-autocommands" name="pass-autocommands">pass-autocommands</a>
+
+User VimPassStartUpResolve                          <a class="String" href="././pass.html#VimPassStartUpResolve" name="VimPassStartUpResolve">VimPassStartUpResolve</a>
+
+Invoke event when processed <a href="https://www.google.com/search?q=vim+%22pass#resolve_startup()%22&lr=lang_en"><span class="MissingTag">pass#resolve_startup()</span></a> was done(multiple).
 
 <span class="PreProc">==============================================================================</span>
 <span class="Statement">TODO</span>                                            <a class="String" href="././pass.html#pass-todo" name="pass-todo">pass-todo</a>
