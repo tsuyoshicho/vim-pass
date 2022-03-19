@@ -46,7 +46,7 @@ endfunction
 
 function! s:async_resolver() abort
   for idx in range(s:resolved_count, len(s:pass_startup_request) - 1)
-    call s::pass_startup_request[idx]()
+    call s:pass_startup_request[idx]()
   endfor
   let s:resolved_count = len(s:pass_startup_request)
 endfunction
