@@ -14,6 +14,7 @@ let s:List = vital#vimpass#import('Data.List')
 
 " variable
 let s:pass_startup_request = []
+let s:resolved_count = 0
 
 function! pass#startup#entry_setup_letval(scope, set_variable, entry, keyword) abort
   let Fn = function('s:letval_resolver',[a:scope,a:set_variable,a:entry,a:keyword])
@@ -27,7 +28,7 @@ endfunction
 
 " API resolve_startup(autocmd use)
 function! pass#startup#resolve() abort
-  if len(s:pass_startup_request) == 0
+  if len(s:pass_startup_request) == s:resolved_count
     return
   endif
 
@@ -40,11 +41,14 @@ function! pass#startup#resolve() abort
   endtry
 
   " resolved all promises
-  for Fn in s:pass_startup_request
-    call Fn()
-  endfor
+  call timer_start(0, { -> s:async_resolver() })
+endfunction
 
-  let s:pass_startup_request = []
+function! s:async_resolver() abort
+  for idx in range(s:resolved_count, len(s:pass_startup_request) - 1)
+    call s:pass_startup_request[idx]()
+  endfor
+  let s:resolved_count = len(s:pass_startup_request)
 endfunction
 
 function! s:letval_resolver(scope,set_variable, entry, keyword) abort
