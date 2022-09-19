@@ -18,7 +18,10 @@ set cpo&vim
 let g:pass_store_path = get(g:, 'pass_store_path', '~/.password-store')
 let g:pass_gpg_path   = get(g:, 'pass_gpg_path',   'gpg')
 
-if ($SSH_CONNECTION != '' || ((has('win32') || has('win64')) == 0 && $DISPLAY == ''))
+" CLI using check(or)
+" ssh connect (safty)
+" non-windows/non-mac do not have DISPLAY
+if (exists('$SSH_CONNECTION') || (!(has('win32') || has('mac')) && !exists('$DISPLAY')))
   let g:pass_use_agent = 0 " remote/non-gui force set : input only
 endif
 let g:pass_use_agent = get(g:, 'pass_use_agent', 1)
