@@ -135,7 +135,7 @@ endfunction
 
 " execute command
 " CRUD : (check)
-" return bool (1 success)
+" return bool (v:true like: success/v:false like: failed)
 function! s:check_entry_gpg_passphrase(gpgid, entrypath, passphrase) abort
   " execute get entry
   let cmd = s:build_gpg_command(a:gpgid, a:entrypath, a:passphrase, ['--dry-run']) " with decrypt (default)
@@ -149,7 +149,8 @@ function! s:check_entry_gpg_passphrase(gpgid, entrypath, passphrase) abort
         \ 'on_exit': function('s:on_exit'),
         \})
   call job.wait()
-  return job.exit_status
+  " shell exitcode 0 is success
+  return (job.exit_status == 0)
 endfunction
 
 " select entry value
