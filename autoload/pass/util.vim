@@ -32,8 +32,6 @@ function! pass#util#list() abort
   if exists('cs')
     let &completeslash = cs
   endif
-  unlet ss
-  unlet cs
 
   " /dir/entry.gpg to dir/entry
   call map(keylist, { idx, val -> substitute(val, escape(root,'\'), '',  "" ) })
