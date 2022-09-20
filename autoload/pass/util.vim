@@ -144,9 +144,9 @@ function! s:check_entry_gpg_passphrase(gpgid, entrypath, passphrase) abort
         \ 'stdout': [''],
         \ 'stderr': [''],
         \ 'exit_status': -1,
-        \ 'on_stdout': function('on_stdout'),
-        \ 'on_stderr': function('on_stderr'),
-        \ 'on_exit': function('on_exit'),
+        \ 'on_stdout': function('s:on_stdout'),
+        \ 'on_stderr': function('s:on_stderr'),
+        \ 'on_exit': function('s:on_exit'),
         \})
   call job.wait()
   return job.exit_status
