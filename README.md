@@ -7,24 +7,25 @@ see [Pass: The Standard Unix Password Manager](https://www.passwordstore.org/)
 Currenlty *get* support. usable like `auth-source` at emacs.
 
 ## Feature
+
 * "Pass" style data get / get_startup (and other variant) support.
 * [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim) plugin : selection support.
-  - `<C-x>` : only copy to register
-  - `<CR>`  : put before cursor, 'P'
-  - `<C-v>` : put after  cursor, 'p'
+  * `<C-x>` : only copy to register
+  * `<CR>`  : put before cursor, 'P'
+  * `<C-v>` : put after  cursor, 'p'
 * [vim-clap](https://github.com/liuchengxu/vim-clap) plugin : selection support.
-  - only work put like 'gP'.
+  * only work put like 'gP'.
 * Limited support OTP(HOTP).
 
 ## Require
 
-- gpg
-  - agent configuired as loopback enable
-- password-store like saved data
-- ctrlp.vim plugin
-  - if use selection feature.
-- vim-clap plugin
-  - if use selection feature.
+* gpg
+  * agent configuired as loopback enable
+* password-store like saved data
+* ctrlp.vim plugin
+  * if use selection feature.
+* vim-clap plugin
+  * if use selection feature.
 
 ## Installation
 
@@ -167,7 +168,7 @@ hook_add = '''
 
 ## limitation
 
-- Currently support API:get(default password/entry select) only
-- Entry select require exact match
-- When plugin's variable configure at load/starup time,sometimes it works not correctly like above Pixela startup-time countup
-- *nix non-GUI environment,need `g:pass_use_agent` set as 0 manually.
+* Currently support API:get(default password/entry select) only
+* Entry select require exact match
+* When plugin's variable configure at load/starup time,sometimes it works not correctly like above Pixela startup-time countup
+* some environment, need `g:pass_use_agent` set as 0 manually (ssh connect cli and non-X11 are automatic set to 0).
