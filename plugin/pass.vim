@@ -22,7 +22,8 @@ let g:pass_gpg_path   = get(g:, 'pass_gpg_path',   'gpg')
 " ssh connect (safty)
 " non-windows/non-mac do not have DISPLAY
 if (exists('$SSH_CONNECTION') || (!(has('win32') || has('mac')) && !exists('$DISPLAY')))
-  let g:pass_use_agent = 0 " remote/non-gui force set : input only
+  " remote/non-gui set to 0 by default
+  let g:pass_use_agent = get(g:, 'pass_use_agent', 0)
 endif
 let g:pass_use_agent = get(g:, 'pass_use_agent', 1)
 
