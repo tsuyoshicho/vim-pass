@@ -16,11 +16,11 @@ pre { font-family: monospace; color: #24292e; background-color: #ffffff; }
 body { font-family: monospace; color: #24292e; background-color: #ffffff; }
 * { font-size: 1em; }
 .Ignore { color: #babbbc; background-color: #ffffff; padding-bottom: 1px; }
-.Statement { color: #d73a49; }
+.helpExample { font-weight: bold; }
 .Todo { color: #6f42c1; text-decoration: underline; }
 .String { color: #032f62; }
 .PreProc { color: #d73a49; }
-.helpExample { font-weight: bold; }
+.Statement { color: #d73a49; }
 .Special { color: #6f42c1; }
 -->
 </style>
@@ -49,10 +49,10 @@ License : MIT license  {{{
     THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS
     OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
     MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-<span class="Statement">    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY</span>
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
     CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-<span class="Statement">    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</span>
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 }}}
 
 <span class="PreProc">==============================================================================</span>
@@ -93,7 +93,7 @@ Clapのプラグインとしては <a class="Identifier" href="././clap-pass.ja.
 <span class="helpExample"> &quot; configured at end of vim startup</span>
 <span class="helpExample"> call pass#get_startup('g:test_gh_token','Develop/Github')</span>
 <span class="helpExample"> call pass#get_startup('g:test_gh_username','Develop/Github','username')</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample"> function! s:test() abort</span>
 <span class="helpExample">   let password = pass#get('Service/foobar')</span>
 <span class="helpExample">   &quot; ...</span>
@@ -110,21 +110,21 @@ Clapのプラグインとしては <a class="Identifier" href="././clap-pass.ja.
 <span class="helpExample">   let g:ctrlp_extensions = get(g:, 'ctrlp_extensions', [])</span>
 <span class="helpExample">         \ + ['pass']</span>
 <span class="helpExample"> '''</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample"> [[plugins]] # <a href="https://pixe.la/">https://pixe.la/</a></span>
 <span class="helpExample"> repo = 'mattn/vim-pixela'</span>
 <span class="helpExample"> depends = ['open-browser.vim','vim-pass']</span>
 <span class="helpExample"> hook_add = '''</span>
 <span class="helpExample">   &quot; let g:pixela_username = 'user'</span>
 <span class="helpExample">   &quot; let g:pixela_token    = 'token'</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample">   call pass#get_startup('g:pixela_username','Develop/Pixela','username')</span>
 <span class="helpExample">   &quot; VimPixela work OK</span>
 <span class="helpExample">   call pass#get_startup('g:pixela_token','Develop/Pixela')</span>
 <span class="helpExample">   &quot; startup-time countup do not correct work.</span>
 <span class="helpExample">   &quot; It work or does not work depending on the processing order of events</span>
 <span class="helpExample"> '''</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample"> [[plugins]]</span>
 <span class="helpExample"> repo = 'tpope/vim-rhubarb'</span>
 <span class="helpExample"> depends = ['vim-fugitive','vim-pass']</span>
@@ -132,7 +132,7 @@ Clapのプラグインとしては <a class="Identifier" href="././clap-pass.ja.
 <span class="helpExample"> hook_add = '''</span>
 <span class="helpExample">   call pass#get_startup('g:RHUBARB_TOKEN','Develop/Github')</span>
 <span class="helpExample"> '''</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample"> [[plugins]]</span>
 <span class="helpExample"> repo = 'kyoh86/vim-docbase'</span>
 <span class="helpExample"> depends = ['vim-pass']</span>
@@ -161,7 +161,7 @@ Clapのプラグインとしては <a class="Identifier" href="././clap-pass.ja.
 <span class="helpExample">         \ 'Develop/DocBase2'</span>
 <span class="helpExample">         \)</span>
 <span class="helpExample"> '''</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample"> [[plugins]] # Slack</span>
 <span class="helpExample"> repo = 'mizukmb/slackstatus.vim'</span>
 <span class="helpExample"> depends = ['webapi-vim','vim-pass']</span>
@@ -172,21 +172,21 @@ Clapのプラグインとしては <a class="Identifier" href="././clap-pass.ja.
 <span class="helpExample">   &quot; vim-jp</span>
 <span class="helpExample">   &quot; call pass#get_startup('g:slackstatus_token',</span>
 <span class="helpExample">   &quot;      \                'Message/Slack/vim-jp.legacy')</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample">   function! s:slack_list(A,L,P) abort</span>
 <span class="helpExample">     let slacklist = ['myhoge','vim-jp']</span>
 <span class="helpExample">     return slacklist</span>
 <span class="helpExample">   endfunction</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample">   function s:slackstatus_change_token(team) abort</span>
 <span class="helpExample">     let path = 'Message/Slack/' . a:team . '.legacy'</span>
 <span class="helpExample">     let g:slackstatus_token = pass#get(path)</span>
 <span class="helpExample">   endfunction</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample">   command! -nargs=1 -complete=customlist,&lt;SID&gt;slack_list</span>
 <span class="helpExample">      \ SlackStatusChange :call &lt;SID&gt;slackstatus_change_token(&lt;f-args&gt;)</span>
 <span class="helpExample"> '''</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample"> [[plugins]] # Mastodon</span>
 <span class="helpExample"> repo = 'mattn/vim-mastodon'</span>
 <span class="helpExample"> depends = ['webapi-vim','vim-pass']</span>
@@ -195,18 +195,18 @@ Clapのプラグインとしては <a class="Identifier" href="././clap-pass.ja.
 <span class="helpExample">   &quot; let g:mastodon_host = 'mstdn.jp'</span>
 <span class="helpExample">   &quot; call pass#get_startup('g:mastodon_access_token',</span>
 <span class="helpExample">   &quot;      \                'Message/Mastodon/mstdn.jp')</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample">   function! s:mastodon_completion(A,L,P) abort</span>
 <span class="helpExample">     let host_list = ['mstdn.jp']</span>
 <span class="helpExample">     return join(host_list,&quot;\n&quot;)</span>
 <span class="helpExample">   endfunction</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample">   function s:mastodon_change_hosttoken(host) abort</span>
 <span class="helpExample">     let path = 'Message/Mastodon/' . a:host</span>
 <span class="helpExample">     let g:mastodon_host = a:host</span>
 <span class="helpExample">     let g:mastodon_access_token = pass#get(path)</span>
 <span class="helpExample">   endfunction</span>
-<span class="helpExample"> </span>
+
 <span class="helpExample">   command! -nargs=1 -complete=custom,&lt;SID&gt;mastodon_completion</span>
 <span class="helpExample">      \ MastodonHostChange :call &lt;SID&gt;mastodon_change_hosttoken(&lt;f-args&gt;)</span>
 <span class="helpExample"> '''</span>
@@ -230,10 +230,49 @@ gpg(gnupg)実行ファイルのパスです。
 単純にはコマンドだけ書けばよいです。
 
 g:pass_use_agent                                    <a class="String" href="././pass.ja.html#g:pass_use_agent" name="g:pass_use_agent">g:pass_use_agent</a>
-        既定値: 1 (0 リモート接続の場合は強制設定されます)
+        既定値:
+                0 (SSH接続 あるいは 非Windows/MacでGUIがないシステム)
+                1 (それ以外)
 
 gpg-agentが利用できるか/利用するかの設定です。
 1でgpg-agentのpinentryでのパスフレーズ問い合せ、0でvim上での問い合せになります。
+
+リモートや非GUI環境でgpg-agentが使える場合、以下のようなシェルスクリプトが便利
+です:
+<span class="helpExample">        !/bin/bash</span>
+<span class="helpExample">        vim_with_gpg_check () {</span>
+<span class="helpExample">          local result=0</span>
+<span class="helpExample">          # Run test decoding and use gpg-agent</span>
+<span class="helpExample">          local output=$(&lt;gpg password-store decode test using same key&gt;) || result=$?</span>
+<span class="helpExample">          if [[ &quot;$result&quot; == &quot;0&quot; ]]; then</span>
+<span class="helpExample">            export VIM_PASS_AGENT=1</span>
+<span class="helpExample">          else</span>
+<span class="helpExample">            export VIM_PASS_AGENT=0</span>
+<span class="helpExample">          fi</span>
+
+<span class="helpExample">          # run vim</span>
+<span class="helpExample">          vim &quot;$@&quot;</span>
+
+<span class="helpExample">          # delete environment variable</span>
+<span class="helpExample">          export -n VIM_PASS_AGENT</span>
+<span class="helpExample">        }</span>
+
+<span class="helpExample">        if type vim_with_gpg_check &amp;&gt;/dev/null; then</span>
+<span class="helpExample">          alias vim='vim_with_gpg_check'</span>
+<span class="helpExample">        fi</span>
+
+
+その値を受け取る Vim script は以下になります:
+<span class="helpExample">        &quot; Check gpg-agent support</span>
+<span class="helpExample">        if exists('$VIM_PASS_AGENT')</span>
+<span class="helpExample">            &quot; When '1', using agent enabled</span>
+<span class="helpExample">            let g:pass_use_agent = ($VIM_PASS_AGENT ==? '1') ? 1 : 0</span>
+<span class="helpExample">        endif</span>
+
+
+シェルスクリプトを使うのは、プラグインはVimの中から gpg-agent へパスフレーズを
+渡せないためです。事前に pinentry-curses などで gpg-agent のパスフレーズ入力を
+すると、他の操作でも利用されます。
 
 g:pass_entry_altmap                                 <a class="String" href="././pass.ja.html#g:pass_entry_altmap" name="g:pass_entry_altmap">g:pass_entry_altmap</a>
         既定値:
@@ -358,7 +397,7 @@ User VimPassStartUpResolve                          <a class="String" href="././
 <span class="PreProc">==============================================================================</span>
 更新履歴                                        <a class="String" href="././pass.ja.html#pass-changelog" name="pass-changelog">pass-changelog</a>
 
-see gitlog
+see git log
 
 <span class="PreProc">==============================================================================</span>
 vim&#0058;tw=78:fo=tcq2mM:ts=8:ft=help:norl:noet:

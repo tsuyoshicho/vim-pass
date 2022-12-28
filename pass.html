@@ -49,10 +49,10 @@ License : MIT license  {{{
     THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS
     OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
     MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-<span class="Statement">    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY</span>
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
     CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-<span class="Statement">    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</span>
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 }}}
 
 <span class="PreProc">==============================================================================</span>
@@ -230,12 +230,50 @@ gpg(gnupg) execution path.
 Simply, command name write.
 
 g:pass_use_agent                                    <a class="String" href="././pass.html#g:pass_use_agent" name="g:pass_use_agent">g:pass_use_agent</a>
-        default value: 1 (0 remote connection foce set)
+        default value:
+                0 (SSH remote or non-Windows/Mac without GUI system)
+                1 (otherwise)
 
 Usable gpg-agent setting.
 1 as passphrase request use gpg-agent's pinentry;
 0 as passphrase request on Vim.
 
+If remote or non-GUI system has gpg-agent enabled, the following shell script
+is useful:
+<span class="helpExample">        !/bin/bash</span>
+<span class="helpExample">        vim_with_gpg_check () {</span>
+<span class="helpExample">          local result=0</span>
+<span class="helpExample">          # Run test decoding and use gpg-agent</span>
+<span class="helpExample">          local output=$(&lt;gpg password-store decode test using same key&gt;) || result=$?</span>
+<span class="helpExample">          if [[ &quot;$result&quot; == &quot;0&quot; ]]; then</span>
+<span class="helpExample">            export VIM_PASS_AGENT=1</span>
+<span class="helpExample">          else</span>
+<span class="helpExample">            export VIM_PASS_AGENT=0</span>
+<span class="helpExample">          fi</span>
+
+<span class="helpExample">          # run vim</span>
+<span class="helpExample">          vim &quot;$@&quot;</span>
+
+<span class="helpExample">          # delete environment variable</span>
+<span class="helpExample">          export -n VIM_PASS_AGENT</span>
+<span class="helpExample">        }</span>
+
+<span class="helpExample">        if type vim_with_gpg_check &amp;&gt;/dev/null; then</span>
+<span class="helpExample">          alias vim='vim_with_gpg_check'</span>
+<span class="helpExample">        fi</span>
+
+
+The following Vim script that is received these value:
+<span class="helpExample">        &quot; Check gpg-agent support</span>
+<span class="helpExample">        if exists('$VIM_PASS_AGENT')</span>
+<span class="helpExample">            &quot; When '1', using agent enabled</span>
+<span class="helpExample">            let g:pass_use_agent = ($VIM_PASS_AGENT ==? '1') ? 1 : 0</span>
+<span class="helpExample">        endif</span>
+
+
+The shell script is used because the plugin cannot pass the passphrase to
+gpg-agent from within Vim. If you enter the gpg-agent passphrase with
+pinentry-curses etc. in advance, it will be used for other operations.
 
 g:pass_entry_altmap                                 <a class="String" href="././pass.html#g:pass_entry_altmap" name="g:pass_entry_altmap">g:pass_entry_altmap</a>
         default value:
