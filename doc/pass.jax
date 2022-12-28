@@ -197,8 +197,9 @@ gpg(gnupg)実行ファイルのパスです。
 単純にはコマンドだけ書けばよいです。
 
 g:pass_use_agent				    *g:pass_use_agent*
-	既定値: 0 (SSH接続 あるいは 非Windows/MacでGUIがないシステム)
-	        1 (それ以外)
+	既定値:
+		0 (SSH接続 あるいは 非Windows/MacでGUIがないシステム)
+		1 (それ以外)
 
 gpg-agentが利用できるか/利用するかの設定です。
 1でgpg-agentのpinentryでのパスフレーズ問い合せ、0でvim上での問い合せになります。

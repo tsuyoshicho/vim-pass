@@ -197,8 +197,9 @@ gpg(gnupg) execution path.
 Simply, command name write.
 
 g:pass_use_agent				    *g:pass_use_agent*
-	default value: 0 (SSH remote or non-Windows/Mac without GUI system)
-		       1 (otherwise)
+	default value:
+		0 (SSH remote or non-Windows/Mac without GUI system)
+		1 (otherwise)
 
 Usable gpg-agent setting.
 1 as passphrase request use gpg-agent's pinentry;
