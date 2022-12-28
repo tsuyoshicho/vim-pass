@@ -197,12 +197,49 @@ gpg(gnupg) execution path.
 Simply, command name write.
 
 g:pass_use_agent				    *g:pass_use_agent*
-	default value: 1 (0 remote connection foce set)
+	default value: 0 (SSH remote or non-Windows/Mac without GUI system)
+		       1 (otherwise)
 
 Usable gpg-agent setting.
 1 as passphrase request use gpg-agent's pinentry;
 0 as passphrase request on Vim.
 
+If remote or non-GUI system has gpg-agent enabled, the following shell script
+is useful: >
+	!/bin/bash
+	vim_with_gpg_check () {
+	  local result=0
+	  # Run test decoding and use gpg-agent
+	  local output=$(<gpg password-store decode test using same key>) || result=$?
+	  if [[ "$result" == "0" ]]; then
+	    export VIM_PASS_AGENT=1
+	  else
+	    export VIM_PASS_AGENT=0
+	  fi
+
+	  # run vim
+	  vim "$@"
+
+	  # delete environment variable
+	  export -n VIM_PASS_AGENT
+	}
+
+	if type vim_with_gpg_check &>/dev/null; then
+	  alias vim='vim_with_gpg_check'
+	fi
+<
+
+The following Vim script that is received these value: >
+	" Check gpg-agent support
+	if exists('$VIM_PASS_AGENT')
+	    " When '1', using agent enabled
+	    let g:pass_use_agent = ($VIM_PASS_AGENT ==? '1') ? 1 : 0
+	endif
+<
+
+The shell script is used because the plugin cannot pass the passphrase to
+gpg-agent from within Vim. If you enter the gpg-agent passphrase with
+pinentry-curses etc. in advance, it will be used for other operations.
 
 g:pass_entry_altmap				    *g:pass_entry_altmap*
 	default value: >
