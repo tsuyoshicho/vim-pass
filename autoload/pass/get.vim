@@ -69,27 +69,37 @@ endfunction
 
 " '' or passphrase
 function! pass#get#passphrase() abort
-  if exists('s:_passphrase')
-    return s:_passphrase
+  if exists('s:_get_passphrase')
+    return s:_get_passphrase()
   endif
 
   " passphrase detect
-  let s:_passphrase = ''
   if g:pass_use_agent
     " work pinentry
-    return s:_passphrase
+    return ''
   endif
 
   " check loop
+  let s:_passphrase = ''
+
   for i in range(g:pass_passphrase_verify_retry)
     let s:_passphrase = inputsecret('passphrase: ')
     " verify
     if pass#util#passphrase_verify(pass#get#id(), s:_passphrase)
       " success
       redraw!
+      " setup passphrase closure
+      function s:_generate_get_passphrase_closure(_passphrase)
+        return {-> a:_passphrase}
+      endfunction
+
+      let s:_get_passphrase = s:_generate_get_passphrase_closure(s:_passphrase)
+      unlet s:_passphrase
       " exit
       break
     endif
+
+    unlet s:_passphrase
 
     " failure
     redraw!
@@ -98,7 +108,6 @@ function! pass#get#passphrase() abort
             \ string(i + 1) . '/' .
             \ string(g:pass_passphrase_verify_retry) . ']' .
             \ ' abort'
-      unlet s:_passphrase
       throw 'vim-pss: passphrase verify all failed'
     else
       echo 'passphrase verify failed [' .
