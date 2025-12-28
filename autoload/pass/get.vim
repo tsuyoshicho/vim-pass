@@ -89,11 +89,12 @@ function! pass#get#passphrase() abort
       " success
       redraw!
       " setup passphrase closure
-      function s:_generate_get_passphrase_closure(_passphrase)
-        return {-> a:_passphrase}
+      function! s:_generate_get_passphrase_closure(passphrase)
+        return {-> a:passphrase}
       endfunction
 
       let s:_get_passphrase = s:_generate_get_passphrase_closure(s:_passphrase)
+
       unlet s:_passphrase
       " exit
       break
@@ -119,7 +120,10 @@ function! pass#get#passphrase() abort
     endif
   endfor
 
-  return get(s:, '_passphrase', '')
+  if exists('s:_get_passphrase')
+    return s:_get_passphrase()
+  endif
+  return ''
 endfunction
 
 " path
