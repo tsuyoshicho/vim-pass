@@ -109,6 +109,7 @@ function! pass#get#passphrase() abort
             \ string(i + 1) . '/' .
             \ string(g:pass_passphrase_verify_retry) . ']' .
             \ ' abort'
+      " All failed, throw exception
       throw 'vim-pss: passphrase verify all failed'
     else
       echo 'passphrase verify failed [' .
@@ -120,10 +121,8 @@ function! pass#get#passphrase() abort
     endif
   endfor
 
-  if exists('s:_get_passphrase')
-    return s:_get_passphrase()
-  endif
-  return ''
+  " Passed verification
+  return s:_get_passphrase()
 endfunction
 
 " path
